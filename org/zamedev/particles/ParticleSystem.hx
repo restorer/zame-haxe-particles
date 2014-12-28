@@ -1,30 +1,15 @@
 package org.zamedev.particles;
 
-import openfl.Assets;
 import openfl.Lib;
 import openfl.display.BitmapData;
-import openfl.display.Sprite;
-import openfl.display.Tilesheet;
-import openfl.errors.ArgumentError;
-import openfl.errors.Error;
-import openfl.events.Event;
-import openfl.geom.Point;
-import openfl.gl.GL;
-import org.zamedev.lib.FileUtils;
 
-using StringTools;
-using org.zamedev.lib.DynamicTools;
-using org.zamedev.lib.XmlExt;
-
-class ParticleSystem extends Sprite {
+class ParticleSystem {
     public static inline var EMITTER_TYPE_GRAVITY:Int = 0;
     public static inline var EMITTER_TYPE_RADIAL:Int = 1;
 
     public static inline var POSITION_TYPE_FREE:Int = 0;
     public static inline var POSITION_TYPE_RELATIVE:Int = 1;
     public static inline var POSITION_TYPE_GROUPED:Int = 2;
-
-    private static inline var TILE_DATA_FIELDS = 9; // x, y, tileId, scale, rotation, red, green, blue, alpha
 
     public var emitterType:Int;
     public var maxParticles:Int;
@@ -61,8 +46,8 @@ class ParticleSystem extends Sprite {
     public var tangentialAccelerationVariance:Float;
     public var rotatePerSecond:Float;
     public var rotatePerSecondVariance:Float;
-    public var blendFuncDestination:Int;
     public var blendFuncSource:Int;
+    public var blendFuncDestination:Int;
     public var textureBitmapData:BitmapData;
     public var active:Bool;
     public var restart:Bool;
@@ -70,72 +55,74 @@ class ParticleSystem extends Sprite {
     public var particleScaleY:Float;
     public var particleScaleSize:Float;
 
-    private var initialized:Bool;
-    private var particleList:Array<Particle>;
-    private var particleCount:Int;
+    private var prevTime:Int;
     private var emissionRate:Float;
     private var emitCounter:Float;
-    private var prevTime:Int;
     private var elapsedTime:Float;
-    private var tilesheet:Tilesheet;
-    private var tileData:Array<Float>;
+    private var renderer:ParticleSystemRenderer;
+
+    public var __particleList:Array<Particle>;
+    public var __particleCount:Int;
 
     public function new() {
-        super();
-
         active = false;
         restart = false;
         particleScaleX = 1.0;
         particleScaleY = 1.0;
         particleScaleSize = 1.0;
-        initialized = false;
-        addEventListener(Event.ENTER_FRAME, onEnterFrame);
     }
 
-    public function initialize():Void {
-        initialized = true;
+    public function setRenderer(renderer:ParticleSystemRenderer):ParticleSystem {
         prevTime = -1;
-
-        particleList = new Array<Particle>();
-        particleCount = 0;
         emissionRate = maxParticles / particleLifespan;
         emitCounter = 0.0;
         elapsedTime = 0.0;
 
+        __particleList = new Array<Particle>();
+        __particleCount = 0;
+
         for (i in 0 ... maxParticles) {
-            particleList[i] = new Particle();
+            __particleList[i] = new Particle();
         }
 
-        tilesheet = new Tilesheet(textureBitmapData);
-        tilesheet.addTileRect(textureBitmapData.rect.clone(), new Point(textureBitmapData.rect.width / 2, textureBitmapData.rect.height / 2));
+        if (this.renderer != null) {
+            this.renderer.destroy();
+        }
 
-        tileData = new Array<Float>();
-        tileData[maxParticles * TILE_DATA_FIELDS - 1] = 0.0;
+        this.renderer = renderer;
+        renderer.init(this);
+
+        return this;
     }
 
-    private function onEnterFrame(_):Void {
-        if (!initialized) {
-            return;
-        }
+    public function getRenderer<T>():T {
+        return cast renderer;
+    }
 
+    public function __update():Bool {
         var currentTime = Lib.getTimer();
 
         if (prevTime < 0) {
             prevTime = currentTime;
-            return;
+            return false;
         }
 
         var dt:Float = (currentTime - prevTime) / 1000.0;
+
+        if (dt < 0.0001) {
+            return false;
+        }
+
         prevTime = currentTime;
 
         if (active && emissionRate > 0.0) {
             var rate:Float = 1.0 / emissionRate;
             emitCounter += dt;
 
-            while (particleCount < maxParticles && emitCounter > rate) {
-                if (particleCount < maxParticles) {
-                    particleList[particleCount].init(this);
-                    particleCount++;
+            while (__particleCount < maxParticles && emitCounter > rate) {
+                if (__particleCount < maxParticles) {
+                    initParticle(__particleList[__particleCount]);
+                    __particleCount++;
                 }
 
                 emitCounter -= rate;
@@ -148,33 +135,76 @@ class ParticleSystem extends Sprite {
             }
         }
 
-        if (particleCount > 0) {
-            graphics.clear();
+        var updated:Bool = false;
+
+        if (__particleCount > 0) {
+            updated = true;
         }
 
         var index:Int = 0;
 
-        while (index < particleCount) {
-            var particle = particleList[index];
+        while (index < __particleCount) {
+            var particle = __particleList[index];
 
             if (particle.update(this, dt)) {
                 index++;
             } else {
-                if (index != particleCount - 1) {
-                    var tmp = particleList[index];
-                    particleList[index] = particleList[particleCount - 1];
-                    particleList[particleCount - 1] = tmp;
+                if (index != __particleCount - 1) {
+                    var tmp = __particleList[index];
+                    __particleList[index] = __particleList[__particleCount - 1];
+                    __particleList[__particleCount - 1] = tmp;
                 }
 
-                particleCount--;
+                __particleCount--;
             }
         }
 
-        if (particleCount > 0) {
-            render();
+        if (__particleCount > 0) {
+            updated = true;
         } else if (restart) {
             active = true;
         }
+
+        return updated;
+    }
+
+    private function initParticle(p:Particle):Void {
+        p.timeToLive = Math.max(0.0001, particleLifespan + particleLifespanVariance * rnd());
+
+        var directionAngle = angle + angleVariance * rnd();
+        var directionSpeed = speed + speedVariance * rnd();
+
+        p.startPos.x = sourcePosition.x / particleScaleX;
+        p.startPos.y = sourcePosition.y / particleScaleY;
+        p.position.x = p.startPos.x + sourcePositionVariance.x * rnd();
+        p.position.y = p.startPos.y + sourcePositionVariance.y * rnd();
+        p.direction.x = Math.cos(directionAngle) * directionSpeed;
+        p.direction.y = Math.sin(directionAngle) * directionSpeed;
+        p.radius = maxRadius + maxRadiusVariance * rnd();
+        p.radiusDelta = (minRadius + minRadiusVariance * rnd() - p.radius) / p.timeToLive;
+        p.angle = angle + angleVariance * rnd();
+        p.angleDelta = rotatePerSecond + rotatePerSecondVariance * rnd();
+        p.radialAcceleration = radialAcceleration;
+        p.particleSize = Math.max(0.0, startParticleSize + startParticleSizeVariance * rnd());
+        p.particleSizeDelta = (Math.max(0.0, startParticleSize + startParticleSizeVariance * rnd()) - p.particleSize) / p.timeToLive;
+        p.rotation = rotationStart + rotationStartVariance * rnd();
+        p.rotationDelta = (rotationEnd + rotationEndVariance * rnd() - p.rotation) / p.timeToLive;
+        p.radialAcceleration = radialAcceleration + radialAccelerationVariance * rnd();
+        p.tangentialAcceleration = tangentialAcceleration + tangentialAccelerationVariance * rnd();
+
+        p.color = {
+            r: clamp(startColor.r + startColorVariance.r * rnd()),
+            g: clamp(startColor.g + startColorVariance.g * rnd()),
+            b: clamp(startColor.b + startColorVariance.b * rnd()),
+            a: clamp(startColor.a + startColorVariance.a * rnd()),
+        };
+
+        p.colorDelta = {
+            r: (clamp(finishColor.r + finishColorVariance.r * rnd()) - p.color.r) / p.timeToLive,
+            g: (clamp(finishColor.g + finishColorVariance.g * rnd()) - p.color.g) / p.timeToLive,
+            b: (clamp(finishColor.b + finishColorVariance.b * rnd()) - p.color.b) / p.timeToLive,
+            a: (clamp(finishColor.a + finishColorVariance.a * rnd()) - p.color.a) / p.timeToLive,
+        };
     }
 
     public function emit(sourcePositionX:Null<Float> = null, sourcePositionY:Null<Float> = null):Void {
@@ -198,173 +228,16 @@ class ParticleSystem extends Sprite {
     public function reset():Void {
         stop();
 
-        for (i in 0 ... particleCount) {
-            particleList[i].timeToLive = 0.0;
+        for (i in 0 ... __particleCount) {
+            __particleList[i].timeToLive = 0.0;
         }
     }
 
-    private function render():Void {
-        var index:Int = 0;
-        var ethalonSize:Float = textureBitmapData.width;
-
-        var flags = (blendFuncSource == GL.SRC_ALPHA && blendFuncDestination == GL.ONE
-            ? Tilesheet.TILE_BLEND_ADD
-            : Tilesheet.TILE_BLEND_NORMAL
-        );
-
-        for (i in 0 ... particleCount) {
-            var particle = particleList[i];
-
-            tileData[index] = particle.position.x * particleScaleX; // x
-            tileData[index + 1] = particle.position.y * particleScaleY; // y
-            tileData[index + 2] = 0.0; // tileId
-            tileData[index + 3] = particle.particleSize / ethalonSize * particleScaleSize; // scale
-            tileData[index + 4] = particle.rotation; // rotation
-            tileData[index + 5] = particle.color.r;
-            tileData[index + 6] = particle.color.g;
-            tileData[index + 7] = particle.color.b;
-            tileData[index + 8] = particle.color.a;
-
-            index += TILE_DATA_FIELDS;
-        }
-
-        tilesheet.drawTiles(
-            graphics,
-            tileData,
-            true,
-            Tilesheet.TILE_SCALE | Tilesheet.TILE_ROTATION | Tilesheet.TILE_RGB | Tilesheet.TILE_ALPHA | flags,
-            index
-        );
-
-        // removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+    private inline static function rnd():Float {
+        return Math.random() * 2.0 - 1.0;
     }
 
-    public static function createFromFile(path:String):ParticleSystem {
-        return createFromXml(Xml.parse(Assets.getText(path)), FileUtils.dirname(path));
-    }
-
-    public static function createFromXml(xml:Xml, basePath:String):ParticleSystem {
-        var root = xml.firstElement().firstElement();
-
-        if (root.nodeName != "dict") {
-            throw new Error('Expecting element "dict", but "${root.nodeName}" found');
-        }
-
-        var key:String = null;
-        var map:Map<String, Dynamic> = new Map<String, Dynamic>();
-
-        for (node in root.elements()) {
-            if (key == null) {
-                if (node.nodeName == "key") {
-                    key = node.innerText().trim().toLowerCase();
-
-                    if (key == "") {
-                        throw new ArgumentError("Empty key is not supported");
-                    }
-
-                    continue;
-                }
-
-                throw new Error('Expecting element "key", but "${node.nodeName}" found');
-            }
-
-            var textValue = node.innerText().trim();
-
-            switch (node.nodeName) {
-                case "false":
-                    map[key] = false;
-
-                case "true":
-                    map[key] = true;
-
-                case "real":
-                    var value = Std.parseFloat(textValue);
-
-                    if (Math.isNaN(value)) {
-                        throw new ArgumentError('Could not parse "${textValue}" as real (for key "${key}")');
-                    }
-
-                    map[key] = value;
-
-                case "integer":
-                    var value = Std.parseInt(textValue);
-
-                    if (value == null) {
-                        throw new ArgumentError('Could not parse "${textValue}" as integer (for key "${key}")');
-                    }
-
-                case "string":
-                    map[key] = textValue;
-
-                default:
-                    throw new Error('Unsupported element "${node.nodeName}"');
-            }
-
-            key = null;
-        }
-
-        return createFromMap(map, basePath);
-    }
-
-    public static function createFromMap(map:Map<String, Dynamic>, basePath:String):ParticleSystem {
-        var result = new ParticleSystem();
-
-        result.emitterType = map["emitterType".toLowerCase()].asInt();
-        result.maxParticles = map["maxParticles".toLowerCase()].asInt();
-        result.positionType = map["positionType".toLowerCase()].asInt();
-        result.duration = map["duration".toLowerCase()].asFloat();
-        result.gravity = asVector(map, "gravity");
-        result.particleLifespan = map["particleLifespan".toLowerCase()].asFloat();
-        result.particleLifespanVariance = map["particleLifespanVariance".toLowerCase()].asFloat();
-        result.speed = map["speed".toLowerCase()].asFloat();
-        result.speedVariance = map["speedVariance".toLowerCase()].asFloat();
-        result.sourcePosition = asVector(map, "sourcePosition");
-        result.sourcePositionVariance = asVector(map, "sourcePositionVariance");
-        result.angle = map["angle".toLowerCase()].asFloat() / 180.0 * Math.PI;
-        result.angleVariance = map["angleVariance".toLowerCase()].asFloat() / 180.0 * Math.PI;
-        result.startParticleSize = map["startParticleSize".toLowerCase()].asFloat();
-        result.startParticleSizeVariance = map["startParticleSizeVariance".toLowerCase()].asFloat();
-        result.finishParticleSize = map["finishParticleSize".toLowerCase()].asFloat();
-        result.finishParticleSizeVariance = map["finishParticleSizeVariance".toLowerCase()].asFloat();
-        result.startColor = asColor(map, "startColor");
-        result.startColorVariance = asColor(map, "startColorVariance");
-        result.finishColor = asColor(map, "finishColor");
-        result.finishColorVariance = asColor(map, "finishColorVariance");
-        result.minRadius = map["minRadius".toLowerCase()].asFloat();
-        result.minRadiusVariance = map["minRadiusVariance".toLowerCase()].asFloat();
-        result.maxRadius = map["maxRadius".toLowerCase()].asFloat();
-        result.maxRadiusVariance = map["maxRadiusVariance".toLowerCase()].asFloat();
-        result.rotationStart = map["rotationStart".toLowerCase()].asFloat();
-        result.rotationStartVariance = map["rotationStartVariance".toLowerCase()].asFloat();
-        result.rotationEnd = map["rotationEnd".toLowerCase()].asFloat();
-        result.rotationEndVariance = map["rotationEndVariance".toLowerCase()].asFloat();
-        result.rotatePerSecond = map["rotatePerSecond".toLowerCase()].asFloat() / 180.0 * Math.PI;
-        result.rotatePerSecondVariance = map["rotatePerSecondVariance".toLowerCase()].asFloat() / 180.0 * Math.PI;
-        result.radialAcceleration = map["radialAcceleration".toLowerCase()].asFloat();
-        result.radialAccelerationVariance = map["radialAccelVariance".toLowerCase()].asFloat();
-        result.tangentialAcceleration = map["tangentialAcceleration".toLowerCase()].asFloat();
-        result.tangentialAccelerationVariance = map["tangentialAccelVariance".toLowerCase()].asFloat();
-        result.blendFuncSource = map["blendFuncSource".toLowerCase()].asInt();
-        result.blendFuncDestination = map["blendFuncDestination".toLowerCase()].asInt();
-        result.textureBitmapData = Assets.getBitmapData(basePath + "/" + map["textureFileName".toLowerCase()].asString());
-
-        result.initialize();
-        return result;
-    }
-
-    private static function asVector(map:Map<String, Dynamic>, prefix:String):ParticleVector {
-        return {
-            x: map['${prefix}x'.toLowerCase()].asFloat(),
-            y: map['${prefix}y'.toLowerCase()].asFloat(),
-        };
-    }
-
-    private static function asColor(map:Map<String, Dynamic>, prefix:String):ParticleColor {
-        return {
-            r: map['${prefix}Red'.toLowerCase()].asFloat(),
-            g: map['${prefix}Green'.toLowerCase()].asFloat(),
-            b: map['${prefix}Blue'.toLowerCase()].asFloat(),
-            a: map['${prefix}Alpha'.toLowerCase()].asFloat(),
-        };
+    private static function clamp(value:Float):Float {
+        return (value < 0.0 ? 0.0 : (value < 1.0 ? value : 1.0));
     }
 }

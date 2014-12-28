@@ -38,45 +38,6 @@ class Particle {
         colorDelta = { r: 0.0, g: 0.0, b: 0.0, a: 0.0 };
     }
 
-    public function init(ps:ParticleSystem):Void {
-        timeToLive = Math.max(0.0001, ps.particleLifespan + ps.particleLifespanVariance * rnd());
-
-        var directionAngle = ps.angle + ps.angleVariance * rnd();
-        var directionSpeed = ps.speed + ps.speedVariance * rnd();
-
-        startPos.x = ps.sourcePosition.x / ps.particleScaleX;
-        startPos.y = ps.sourcePosition.y / ps.particleScaleY;
-        position.x = startPos.x + ps.sourcePositionVariance.x * rnd();
-        position.y = startPos.y + ps.sourcePositionVariance.y * rnd();
-        direction.x = Math.cos(directionAngle) * directionSpeed;
-        direction.y = Math.sin(directionAngle) * directionSpeed;
-        radius = ps.maxRadius + ps.maxRadiusVariance * rnd();
-        radiusDelta = (ps.minRadius + ps.minRadiusVariance * rnd() - radius) / timeToLive;
-        angle = ps.angle + ps.angleVariance * rnd();
-        angleDelta = ps.rotatePerSecond + ps.rotatePerSecondVariance * rnd();
-        radialAcceleration = ps.radialAcceleration;
-        particleSize = Math.max(0.0, ps.startParticleSize + ps.startParticleSizeVariance * rnd());
-        particleSizeDelta = (Math.max(0.0, ps.startParticleSize + ps.startParticleSizeVariance * rnd()) - particleSize) / timeToLive;
-        rotation = ps.rotationStart + ps.rotationStartVariance * rnd();
-        rotationDelta = (ps.rotationEnd + ps.rotationEndVariance * rnd() - rotation) / timeToLive;
-        radialAcceleration = ps.radialAcceleration + ps.radialAccelerationVariance * rnd();
-        tangentialAcceleration = ps.tangentialAcceleration + ps.tangentialAccelerationVariance * rnd();
-
-        color = {
-            r: clamp(ps.startColor.r + ps.startColorVariance.r * rnd()),
-            g: clamp(ps.startColor.g + ps.startColorVariance.g * rnd()),
-            b: clamp(ps.startColor.b + ps.startColorVariance.b * rnd()),
-            a: clamp(ps.startColor.a + ps.startColorVariance.a * rnd()),
-        };
-
-        colorDelta = {
-            r: (clamp(ps.finishColor.r + ps.finishColorVariance.r * rnd()) - color.r) / timeToLive,
-            g: (clamp(ps.finishColor.g + ps.finishColorVariance.g * rnd()) - color.g) / timeToLive,
-            b: (clamp(ps.finishColor.b + ps.finishColorVariance.b * rnd()) - color.b) / timeToLive,
-            a: (clamp(ps.finishColor.a + ps.finishColorVariance.a * rnd()) - color.a) / timeToLive,
-        };
-    }
-
     public function update(ps:ParticleSystem, dt:Float):Bool {
         timeToLive -= dt;
 
@@ -130,13 +91,5 @@ class Particle {
         rotation += rotationDelta * dt;
 
         return true;
-    }
-
-    private inline static function rnd():Float {
-        return Math.random() * 2.0 - 1.0;
-    }
-
-    private static function clamp(value:Float):Float {
-        return (value < 0.0 ? 0.0 : (value < 1.0 ? value : 1.0));
     }
 }
