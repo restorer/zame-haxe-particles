@@ -50,7 +50,7 @@ class Particle {
             radius += radiusDelta * dt;
 
             position.x = ps.sourcePosition.x - Math.cos(angle) * radius;
-            position.y = ps.sourcePosition.y - Math.sin(angle) * radius;
+            position.y = ps.sourcePosition.y - Math.sin(angle) * radius * ps.yCoordMultiplier;
         } else {
             var radial = { x: 0.0, y: 0.0 };
 
@@ -79,7 +79,7 @@ class Particle {
             direction.y += (radial.y + tangential.y + ps.gravity.y) * dt;
 
             position.x += direction.x * dt + startPos.x;
-            position.y += direction.y * dt + startPos.y;
+            position.y += direction.y * dt * ps.yCoordMultiplier + startPos.y;
         }
 
         color.r += colorDelta.r * dt;

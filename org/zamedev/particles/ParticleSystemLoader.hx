@@ -1,6 +1,7 @@
 package org.zamedev.particles;
 
 import openfl.Assets;
+import openfl.gl.GL;
 import openfl.errors.ArgumentError;
 import openfl.errors.Error;
 import org.zamedev.lib.FileUtils;
@@ -113,8 +114,11 @@ class ParticleSystemLoader {
         ps.blendFuncSource = map["blendFuncSource".toLowerCase()].asInt();
         ps.blendFuncDestination = map["blendFuncDestination".toLowerCase()].asInt();
         ps.textureBitmapData = Assets.getBitmapData(basePath + "/" + map["textureFileName".toLowerCase()].asString());
+        ps.yCoordMultiplier = (map["yCoordFlipped".toLowerCase()].asInt() == 1 ? -1.0 : 1.0);
 
-        trace(map["blendFuncSource".toLowerCase()]);
+        if (ps.blendFuncDestination == GL.DST_ALPHA) {
+            ps.blendFuncDestination = GL.ONE;
+        }
 
         return ps;
     }

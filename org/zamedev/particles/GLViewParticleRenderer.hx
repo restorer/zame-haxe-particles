@@ -1,5 +1,7 @@
 package org.zamedev.particles;
 
+#if !flash
+
 import openfl.geom.Rectangle;
 import openfl.gl.GL;
 import openfl.gl.GLBuffer;
@@ -8,11 +10,14 @@ import openfl.gl.GLTexture;
 import openfl.gl.GLUniformLocation;
 import openfl.utils.Float32Array;
 import openfl.utils.Int16Array;
-import openfl.utils.UInt8Array;
 import org.zamedev.particles.internal.GLUtils;
+import org.zamedev.particles.internal.GLUtilsExt;
 import org.zamedev.particles.internal.Matrix4;
 import org.zamedev.particles.internal.OpenGLViewExt;
 import org.zamedev.particles.internal.SizeUtils;
+
+// http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/display/Stage3D.html
+// https://github.com/openfl/openfl-samples/blob/master/SimpleOpenGLView/Source/Main.hx
 
 class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRenderer {
     private static inline var VERTEX_XYZ = 0;
@@ -46,10 +51,6 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
     }
 
     public function initGl() {
-        var bitmapData = ps.textureBitmapData;
-
-        // vColor = aColor;
-
         var vertexShaderSource = "
             varying vec4 vColor;
             varying vec2 vTexCoord;
@@ -75,13 +76,9 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
 
             vec4 color;
 
-            void main(void) {" +
-                #if lime_legacy
-                    "color = texture2D(uImage, vTexCoord).gbar;"
-                #else
-                    "color = texture2D(uImage, vTexCoord);"
-                #end
-            + "
+            void main(void) {
+                color = texture2D(uImage, vTexCoord).gbar;
+
                 gl_FragColor = vec4(
                     color.r * color.a * vColor.r,
                     color.g * color.a * vColor.g,
@@ -91,13 +88,11 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
             }
         ";
 
-        program = GLUtils.createProgram(vertexShaderSource, fragmentShaderSource);
-        GL.useProgram(program);
+        program = GLUtilsExt.createAndUseProgram(vertexShaderSource, fragmentShaderSource);
 
         vertexAttrLocation = GL.getAttribLocation(program, "aPosition");
         textureAttrLocation = GL.getAttribLocation(program, "aTexCoord");
         colorAttrLocation = GL.getAttribLocation(program, "aColor");
-
         matrixUniformLocation = GL.getUniformLocation(program, "uMatrix");
         imageUniformLocation = GL.getUniformLocation(program, "uImage");
 
@@ -106,22 +101,7 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
         GL.enableVertexAttribArray(colorAttrLocation);
         GL.uniform1i(imageUniformLocation, 0);
 
-        texture = GL.createTexture();
-        GL.bindTexture(GL.TEXTURE_2D, texture);
-        GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.CLAMP_TO_EDGE);
-        GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.CLAMP_TO_EDGE);
-
-        #if js
-            var pixelData = bitmapData.getPixels(bitmapData.rect).byteView;
-        #else
-            var pixelData = new UInt8Array(bitmapData.getPixels(bitmapData.rect));
-        #end
-
-        GL.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, bitmapData.width, bitmapData.height, 0, GL.RGBA, GL.UNSIGNED_BYTE, pixelData);
-
-        GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.LINEAR);
-        GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.LINEAR);
-        GL.bindTexture(GL.TEXTURE_2D, null);
+        texture = GLUtilsExt.createTexture(ps.textureBitmapData);
 
         vertexBuffer = GL.createBuffer();
         vertexData = new Float32Array(VERTEX_SIZE * 4 * ps.maxParticles);
@@ -270,8 +250,14 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
         GL.bufferData(GL.ELEMENT_ARRAY_BUFFER, indicesData, GL.DYNAMIC_DRAW);
         GL.drawElements(GL.TRIANGLES, ps.__particleCount * INDEX_SIZE, GL.UNSIGNED_SHORT, 0);
 
+        #if desktop
+            GL.disable(GL.TEXTURE_2D);
+        #end
+
         GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, null);
         GL.bindBuffer(GL.ARRAY_BUFFER, null);
         GL.useProgram(null);
     }
 }
+
+#end

@@ -54,6 +54,7 @@ class ParticleSystem {
     public var particleScaleX:Float;
     public var particleScaleY:Float;
     public var particleScaleSize:Float;
+    public var yCoordMultiplier:Float;
 
     private var prevTime:Int;
     private var emissionRate:Float;
