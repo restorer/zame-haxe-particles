@@ -1,6 +1,6 @@
 package org.zamedev.particles;
 
-#if !flash
+#if (html5 || openfl_next)
 
 import openfl.geom.Rectangle;
 import openfl.gl.GL;
