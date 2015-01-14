@@ -187,7 +187,7 @@ class ParticleSystem {
         p.angleDelta = rotatePerSecond + rotatePerSecondVariance * rnd();
         p.radialAcceleration = radialAcceleration;
         p.particleSize = Math.max(0.0, startParticleSize + startParticleSizeVariance * rnd());
-        p.particleSizeDelta = (Math.max(0.0, startParticleSize + startParticleSizeVariance * rnd()) - p.particleSize) / p.timeToLive;
+        p.particleSizeDelta = (Math.max(0.0, finishParticleSize + finishParticleSizeVariance * rnd()) - p.particleSize) / p.timeToLive;
         p.rotation = rotationStart + rotationStartVariance * rnd();
         p.rotationDelta = (rotationEnd + rotationEndVariance * rnd() - p.rotation) / p.timeToLive;
         p.radialAcceleration = radialAcceleration + radialAccelerationVariance * rnd();
