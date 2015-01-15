@@ -23,7 +23,7 @@ class DrawTilesParticleRenderer extends Sprite implements ParticleSystemRenderer
         );
 
         tileData = new Array<Float>();
-        tileData[ps.maxParticles * TILE_DATA_FIELDS - 1] = 0.0;
+        tileData[Std.int(ps.maxParticles * TILE_DATA_FIELDS - 1)] = 0.0; // Std.int(...) required for neko
 
         addEventListener(Event.ENTER_FRAME, onEnterFrame);
     }
