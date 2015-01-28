@@ -60,7 +60,6 @@ class ParticleSystem {
     private var emissionRate:Float;
     private var emitCounter:Float;
     private var elapsedTime:Float;
-    private var renderer:ParticleSystemRenderer;
 
     public var __particleList:Array<Particle>;
     public var __particleCount:Int;
@@ -73,7 +72,7 @@ class ParticleSystem {
         particleScaleSize = 1.0;
     }
 
-    public function setRenderer(renderer:ParticleSystemRenderer):ParticleSystem {
+    public function __initialize():ParticleSystem {
         prevTime = -1;
         emissionRate = maxParticles / particleLifespan;
         emitCounter = 0.0;
@@ -86,18 +85,7 @@ class ParticleSystem {
             __particleList[i] = new Particle();
         }
 
-        if (this.renderer != null) {
-            this.renderer.destroy();
-        }
-
-        this.renderer = renderer;
-        renderer.init(this);
-
         return this;
-    }
-
-    public function getRenderer<T>():T {
-        return cast renderer;
     }
 
     public function __update():Bool {

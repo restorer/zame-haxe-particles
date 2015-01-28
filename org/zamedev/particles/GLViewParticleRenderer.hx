@@ -19,6 +19,16 @@ import org.zamedev.particles.internal.SizeUtils;
 // http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/display/Stage3D.html
 // https://github.com/openfl/openfl-samples/blob/master/SimpleOpenGLView/Source/Main.hx
 
+typedef GLViewParticleRendererData = {
+    ps:ParticleSystem,
+    texture:GLTexture,
+    vertexBuffer:GLBuffer,
+    vertexData:Float32Array,
+    indicesBuffer:GLBuffer,
+    indicesData:Int16Array,
+    updated:Bool,
+};
+
 class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRenderer {
     private static inline var VERTEX_XYZ = 0;
     private static inline var VERTEX_UV = 3;
@@ -26,31 +36,99 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
     private static inline var VERTEX_SIZE = 9;
     private static inline var INDEX_SIZE = 6;
 
-    private var ps:ParticleSystem;
+    private var initialized:Bool = false;
+    private var dataList:Array<GLViewParticleRendererData> = [];
     private var program:GLProgram;
     private var vertexAttrLocation:Int;
     private var textureAttrLocation:Int;
     private var colorAttrLocation:Int;
     private var matrixUniformLocation:GLUniformLocation;
     private var imageUniformLocation:GLUniformLocation;
-    private var texture:GLTexture;
-    private var vertexBuffer:GLBuffer;
-    private var vertexData:Float32Array;
-    private var indicesBuffer:GLBuffer;
-    private var indicesData:Int16Array;
 
-    public function init(ps:ParticleSystem):Void {
-        this.ps = ps;
+    public function addParticleSystem(ps:ParticleSystem):Void {
+        if (!initialized) {
+            initGl();
+            initialized = true;
+        }
 
-        initGl();
-        render = renderGl;
+        ps.__initialize();
+
+        var texture = GLUtilsExt.createTexture(ps.textureBitmapData);
+
+        var vertexBuffer = GL.createBuffer();
+        var vertexData = new Float32Array(VERTEX_SIZE * 4 * ps.maxParticles);
+
+        var indicesBuffer = GL.createBuffer();
+        var indicesData = new Int16Array(INDEX_SIZE * ps.maxParticles);
+
+        var vertexPos:Int = 0;
+        var indexPos:Int = 0;
+        var quadIdx:Int = 0;
+
+        for (i in 0 ... ps.maxParticles) {
+            vertexData[vertexPos + VERTEX_XYZ + 3] = 0.0;
+            vertexData[vertexPos + VERTEX_UV + 0] = 1.0;
+            vertexData[vertexPos + VERTEX_UV + 1] = 1.0;
+            vertexPos += VERTEX_SIZE;
+
+            vertexData[vertexPos + VERTEX_XYZ + 3] = 0.0;
+            vertexData[vertexPos + VERTEX_UV + 0] = 0.0;
+            vertexData[vertexPos + VERTEX_UV + 1] = 1.0;
+            vertexPos += VERTEX_SIZE;
+
+            vertexData[vertexPos + VERTEX_XYZ + 3] = 0.0;
+            vertexData[vertexPos + VERTEX_UV + 0] = 1.0;
+            vertexData[vertexPos + VERTEX_UV + 1] = 0.0;
+            vertexPos += VERTEX_SIZE;
+
+            vertexData[vertexPos + VERTEX_XYZ + 3] = 0.0;
+            vertexData[vertexPos + VERTEX_UV + 0] = 0.0;
+            vertexData[vertexPos + VERTEX_UV + 1] = 0.0;
+            vertexPos += VERTEX_SIZE;
+
+            indicesData[indexPos + 0] = quadIdx + 0;
+            indicesData[indexPos + 1] = quadIdx + 1;
+            indicesData[indexPos + 2] = quadIdx + 2;
+            indicesData[indexPos + 3] = quadIdx + 2;
+            indicesData[indexPos + 4] = quadIdx + 3;
+            indicesData[indexPos + 5] = quadIdx + 1;
+
+            indexPos += INDEX_SIZE;
+            quadIdx += 4;
+        }
+
+        if (dataList.length == 0) {
+            render = renderGl;
+        }
+
+        dataList.push({
+            ps: ps,
+            texture: texture,
+            vertexBuffer: vertexBuffer,
+            vertexData: vertexData,
+            indicesBuffer: indicesBuffer,
+            indicesData: indicesData,
+            updated: false,
+        });
     }
 
-    public function destroy():Void {
-        render = null;
+    public function removeParticleSystem(ps:ParticleSystem):Void {
+        var index = 0;
+
+        while (index < dataList.length) {
+            if (dataList[index].ps == ps) {
+                dataList.splice(index, 1);
+            } else {
+                index++;
+            }
+        }
+
+        if (dataList.length == 0) {
+            render = null;
+        }
     }
 
-    public function initGl() {
+    public function initGl():Void {
         var vertexShaderSource = "
             varying vec4 vColor;
             varying vec2 vTexCoord;
@@ -101,55 +179,19 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
         GL.enableVertexAttribArray(colorAttrLocation);
         GL.uniform1i(imageUniformLocation, 0);
 
-        texture = GLUtilsExt.createTexture(ps.textureBitmapData);
-
-        vertexBuffer = GL.createBuffer();
-        vertexData = new Float32Array(VERTEX_SIZE * 4 * ps.maxParticles);
-
-        indicesBuffer = GL.createBuffer();
-        indicesData = new Int16Array(INDEX_SIZE * ps.maxParticles);
-
-        var vertexPos:Int = 0;
-        var indexPos:Int = 0;
-        var quadIdx:Int = 0;
-
-        for (i in 0 ... ps.maxParticles) {
-            vertexData[vertexPos + VERTEX_XYZ + 3] = 0.0;
-            vertexData[vertexPos + VERTEX_UV + 0] = 1.0;
-            vertexData[vertexPos + VERTEX_UV + 1] = 1.0;
-            vertexPos += VERTEX_SIZE;
-
-            vertexData[vertexPos + VERTEX_XYZ + 3] = 0.0;
-            vertexData[vertexPos + VERTEX_UV + 0] = 0.0;
-            vertexData[vertexPos + VERTEX_UV + 1] = 1.0;
-            vertexPos += VERTEX_SIZE;
-
-            vertexData[vertexPos + VERTEX_XYZ + 3] = 0.0;
-            vertexData[vertexPos + VERTEX_UV + 0] = 1.0;
-            vertexData[vertexPos + VERTEX_UV + 1] = 0.0;
-            vertexPos += VERTEX_SIZE;
-
-            vertexData[vertexPos + VERTEX_XYZ + 3] = 0.0;
-            vertexData[vertexPos + VERTEX_UV + 0] = 0.0;
-            vertexData[vertexPos + VERTEX_UV + 1] = 0.0;
-            vertexPos += VERTEX_SIZE;
-
-            indicesData[indexPos + 0] = quadIdx + 0;
-            indicesData[indexPos + 1] = quadIdx + 1;
-            indicesData[indexPos + 2] = quadIdx + 2;
-            indicesData[indexPos + 3] = quadIdx + 2;
-            indicesData[indexPos + 4] = quadIdx + 3;
-            indicesData[indexPos + 5] = quadIdx + 1;
-
-            indexPos += INDEX_SIZE;
-            quadIdx += 4;
-        }
-
         GL.useProgram(null);
     }
 
     private function renderGl(rect:Rectangle):Void {
-        if (!ps.__update()) {
+        var updated = false;
+
+        for (data in dataList) {
+            if (data.updated = data.ps.__update()) {
+                updated = true;
+            }
+        }
+
+        if (!updated) {
             return;
         }
 
@@ -157,55 +199,14 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
         GL.clearColor(0.0, 0.0, 0.0, 0.0);
         GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
 
-        var vertexPos:Int = 0;
-
-        for (i in 0 ... ps.__particleCount) {
-            var particle = ps.__particleList[i];
-
-            var tx = particle.position.x;
-            var ty = particle.position.y;
-            var cr = particle.color.r;
-            var cg = particle.color.g;
-            var cb = particle.color.b;
-            var ca = particle.color.a;
-            var sn = Math.sin(particle.rotation);
-            var cs = Math.cos(particle.rotation);
-            var halfSize = particle.particleSize * ps.particleScaleSize * 0.5;
-
-            vertexData[vertexPos + VERTEX_XYZ + 0] = halfSize * cs - halfSize * sn + tx;
-            vertexData[vertexPos + VERTEX_XYZ + 1] = halfSize * sn + halfSize * cs + ty;
-            vertexData[vertexPos + VERTEX_RGBA + 0] = cr;
-            vertexData[vertexPos + VERTEX_RGBA + 1] = cg;
-            vertexData[vertexPos + VERTEX_RGBA + 2] = cb;
-            vertexData[vertexPos + VERTEX_RGBA + 3] = ca;
-            vertexPos += VERTEX_SIZE;
-
-            vertexData[vertexPos + VERTEX_XYZ + 0] = (-halfSize) * cs - halfSize * sn + tx;
-            vertexData[vertexPos + VERTEX_XYZ + 1] = (-halfSize) * sn + halfSize * cs + ty;
-            vertexData[vertexPos + VERTEX_RGBA + 0] = cr;
-            vertexData[vertexPos + VERTEX_RGBA + 1] = cg;
-            vertexData[vertexPos + VERTEX_RGBA + 2] = cb;
-            vertexData[vertexPos + VERTEX_RGBA + 3] = ca;
-            vertexPos += VERTEX_SIZE;
-
-            vertexData[vertexPos + VERTEX_XYZ + 0] = halfSize * cs - (-halfSize) * sn + tx;
-            vertexData[vertexPos + VERTEX_XYZ + 1] = halfSize * sn + (-halfSize) * cs + ty;
-            vertexData[vertexPos + VERTEX_RGBA + 0] = cr;
-            vertexData[vertexPos + VERTEX_RGBA + 1] = cg;
-            vertexData[vertexPos + VERTEX_RGBA + 2] = cb;
-            vertexData[vertexPos + VERTEX_RGBA + 3] = ca;
-            vertexPos += VERTEX_SIZE;
-
-            vertexData[vertexPos + VERTEX_XYZ + 0] = (-halfSize) * cs - (-halfSize) * sn + tx;
-            vertexData[vertexPos + VERTEX_XYZ + 1] = (-halfSize) * sn + (-halfSize) * cs + ty;
-            vertexData[vertexPos + VERTEX_RGBA + 0] = cr;
-            vertexData[vertexPos + VERTEX_RGBA + 1] = cg;
-            vertexData[vertexPos + VERTEX_RGBA + 2] = cb;
-            vertexData[vertexPos + VERTEX_RGBA + 3] = ca;
-            vertexPos += VERTEX_SIZE;
-        }
-
         GL.useProgram(program);
+        GL.activeTexture(GL.TEXTURE0);
+        GL.disable(GL.CULL_FACE);
+        GL.enable(GL.BLEND);
+
+        #if desktop
+            GL.enable(GL.TEXTURE_2D);
+        #end
 
         var worldMatrix = __getTransform();
         var worldMatrixInv = worldMatrix.clone();
@@ -230,25 +231,74 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
 
         GL.uniformMatrix4fv(matrixUniformLocation, false, matrix);
 
-        GL.activeTexture(GL.TEXTURE0);
-        GL.bindTexture(GL.TEXTURE_2D, texture);
+        for (data in dataList) {
+            if (!data.updated) {
+                continue;
+            }
 
-        #if desktop
-            GL.enable(GL.TEXTURE_2D);
-        #end
+            var ps = data.ps;
+            var vertexData = data.vertexData;
+            var indicesData = data.indicesData;
+            var vertexPos:Int = 0;
 
-        GL.disable(GL.CULL_FACE);
-        GL.enable(GL.BLEND);
-        GL.blendFunc(ps.blendFuncSource, ps.blendFuncDestination);
+            for (i in 0 ... ps.__particleCount) {
+                var particle = ps.__particleList[i];
 
-        GL.bindBuffer(GL.ARRAY_BUFFER, vertexBuffer);
-        GL.bufferData(GL.ARRAY_BUFFER, vertexData, GL.DYNAMIC_DRAW);
-        GL.vertexAttribPointer(vertexAttrLocation, 3, GL.FLOAT, false, VERTEX_SIZE * SizeUtils.SIZE_FLOAT32, VERTEX_XYZ);
-        GL.vertexAttribPointer(textureAttrLocation, 2, GL.FLOAT, false, VERTEX_SIZE * SizeUtils.SIZE_FLOAT32, VERTEX_UV * SizeUtils.SIZE_FLOAT32);
-        GL.vertexAttribPointer(colorAttrLocation, 4, GL.FLOAT, false, VERTEX_SIZE * SizeUtils.SIZE_FLOAT32, VERTEX_RGBA * SizeUtils.SIZE_FLOAT32);
-        GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, indicesBuffer);
-        GL.bufferData(GL.ELEMENT_ARRAY_BUFFER, indicesData, GL.DYNAMIC_DRAW);
-        GL.drawElements(GL.TRIANGLES, ps.__particleCount * INDEX_SIZE, GL.UNSIGNED_SHORT, 0);
+                var tx = particle.position.x;
+                var ty = particle.position.y;
+                var cr = particle.color.r;
+                var cg = particle.color.g;
+                var cb = particle.color.b;
+                var ca = particle.color.a;
+                var sn = Math.sin(particle.rotation);
+                var cs = Math.cos(particle.rotation);
+                var halfSize = particle.particleSize * ps.particleScaleSize * 0.5;
+
+                vertexData[vertexPos + VERTEX_XYZ + 0] = halfSize * cs - halfSize * sn + tx;
+                vertexData[vertexPos + VERTEX_XYZ + 1] = halfSize * sn + halfSize * cs + ty;
+                vertexData[vertexPos + VERTEX_RGBA + 0] = cr;
+                vertexData[vertexPos + VERTEX_RGBA + 1] = cg;
+                vertexData[vertexPos + VERTEX_RGBA + 2] = cb;
+                vertexData[vertexPos + VERTEX_RGBA + 3] = ca;
+                vertexPos += VERTEX_SIZE;
+
+                vertexData[vertexPos + VERTEX_XYZ + 0] = (-halfSize) * cs - halfSize * sn + tx;
+                vertexData[vertexPos + VERTEX_XYZ + 1] = (-halfSize) * sn + halfSize * cs + ty;
+                vertexData[vertexPos + VERTEX_RGBA + 0] = cr;
+                vertexData[vertexPos + VERTEX_RGBA + 1] = cg;
+                vertexData[vertexPos + VERTEX_RGBA + 2] = cb;
+                vertexData[vertexPos + VERTEX_RGBA + 3] = ca;
+                vertexPos += VERTEX_SIZE;
+
+                vertexData[vertexPos + VERTEX_XYZ + 0] = halfSize * cs - (-halfSize) * sn + tx;
+                vertexData[vertexPos + VERTEX_XYZ + 1] = halfSize * sn + (-halfSize) * cs + ty;
+                vertexData[vertexPos + VERTEX_RGBA + 0] = cr;
+                vertexData[vertexPos + VERTEX_RGBA + 1] = cg;
+                vertexData[vertexPos + VERTEX_RGBA + 2] = cb;
+                vertexData[vertexPos + VERTEX_RGBA + 3] = ca;
+                vertexPos += VERTEX_SIZE;
+
+                vertexData[vertexPos + VERTEX_XYZ + 0] = (-halfSize) * cs - (-halfSize) * sn + tx;
+                vertexData[vertexPos + VERTEX_XYZ + 1] = (-halfSize) * sn + (-halfSize) * cs + ty;
+                vertexData[vertexPos + VERTEX_RGBA + 0] = cr;
+                vertexData[vertexPos + VERTEX_RGBA + 1] = cg;
+                vertexData[vertexPos + VERTEX_RGBA + 2] = cb;
+                vertexData[vertexPos + VERTEX_RGBA + 3] = ca;
+                vertexPos += VERTEX_SIZE;
+            }
+
+            GL.bindTexture(GL.TEXTURE_2D, data.texture);
+            GL.blendFunc(ps.blendFuncSource, ps.blendFuncDestination);
+
+            GL.bindBuffer(GL.ARRAY_BUFFER, data.vertexBuffer);
+            GL.bufferData(GL.ARRAY_BUFFER, vertexData, GL.DYNAMIC_DRAW);
+            GL.vertexAttribPointer(vertexAttrLocation, 3, GL.FLOAT, false, VERTEX_SIZE * SizeUtils.SIZE_FLOAT32, VERTEX_XYZ);
+            GL.vertexAttribPointer(textureAttrLocation, 2, GL.FLOAT, false, VERTEX_SIZE * SizeUtils.SIZE_FLOAT32, VERTEX_UV * SizeUtils.SIZE_FLOAT32);
+            GL.vertexAttribPointer(colorAttrLocation, 4, GL.FLOAT, false, VERTEX_SIZE * SizeUtils.SIZE_FLOAT32, VERTEX_RGBA * SizeUtils.SIZE_FLOAT32);
+            GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, data.indicesBuffer);
+            GL.bufferData(GL.ELEMENT_ARRAY_BUFFER, indicesData, GL.DYNAMIC_DRAW);
+            GL.drawElements(GL.TRIANGLES, ps.__particleCount * INDEX_SIZE, GL.UNSIGNED_SHORT, 0);
+        }
 
         #if desktop
             GL.disable(GL.TEXTURE_2D);
