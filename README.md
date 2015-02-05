@@ -25,7 +25,18 @@ For all other targets use drawTiles renderer:
 
 ## How to use
 
+Open terminal, go to some folder (if you want to), than:
+
 ```
+git clone git@github.com:restorer/zame-haxe-particles.git
+haxelib dev zame-particles ./zame-haxe-particles
+```
+
+This library depends on zame-miscutils. If you don't have them:
+
+```
+git clone git@github.com:restorer/zame-haxe-miscutils.git
+haxelib dev zame-miscutils ./zame-haxe-miscutils
 ```
 
 ## Roadmap for future
