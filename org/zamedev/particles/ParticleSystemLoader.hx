@@ -1,10 +1,10 @@
 package org.zamedev.particles;
 
+import haxe.io.Path;
 import openfl.Assets;
-import openfl.gl.GL;
 import openfl.errors.ArgumentError;
 import openfl.errors.Error;
-import org.zamedev.lib.FileUtils;
+import openfl.gl.GL;
 
 using StringTools;
 using org.zamedev.lib.DynamicTools;
@@ -20,7 +20,7 @@ class ParticleSystemLoader {
 
         var key:String = null;
         var map:Map<String, Dynamic> = new Map<String, Dynamic>();
-        var basePath:String = FileUtils.dirname(path);
+        var basePath:String = Path.directory(path);
 
         for (node in root.elements()) {
             if (key == null) {

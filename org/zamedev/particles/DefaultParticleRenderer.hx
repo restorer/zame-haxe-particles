@@ -1,6 +1,6 @@
 package org.zamedev.particles;
 
-#if (html5 || openfl_next)
+#if (html5 && dom)
     typedef DefaultParticleRenderer = GLViewParticleRenderer;
 #else
     typedef DefaultParticleRenderer = DrawTilesParticleRenderer;

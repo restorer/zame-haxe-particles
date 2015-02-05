@@ -1,17 +1,5 @@
 package org.zamedev.particles;
 
-import openfl.Assets;
-import openfl.Lib;
-import openfl.display.BitmapData;
-import openfl.display.Sprite;
-import openfl.errors.ArgumentError;
-import openfl.errors.Error;
-import org.zamedev.lib.FileUtils;
-
-using StringTools;
-using org.zamedev.lib.DynamicTools;
-using org.zamedev.lib.XmlExt;
-
 class Particle {
     public var startPos:ParticleVector;
     public var position:ParticleVector;
