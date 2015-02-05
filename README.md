@@ -23,6 +23,11 @@ For all other targets use drawTiles renderer:
   - native - fast, support color effects, hovewer in some cases GL renderer looks better.
   - flash - slow, can be buggy (due to drawTiles implementation in openfl). [flash demo](http://blog.zame-dev.org/pub/particles/flash.swf)
 
+## How to use
+
+```
+```
+
 ## Roadmap for future
 
   - Support lime directly, without openfl
