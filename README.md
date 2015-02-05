@@ -5,7 +5,7 @@ Features:
  - Can load .plist files from Particle Designer or [Particle Designer 2](https://71squared.com/en/particledesigner).
  - Has drawTiles renderer along with GL renderer.
 
-**NOTE: work in progress, more features will be added.**
+**NOTE: work in progress, more features coming.**
 
 ## Export notes
 
