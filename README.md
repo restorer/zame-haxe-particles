@@ -33,7 +33,7 @@ git clone git@github.com:restorer/zame-haxe-particles.git
 haxelib dev zame-particles ./zame-haxe-particles
 ```
 
-This library depends on zame-miscutils. If you don't have them:
+This library depends on zame-miscutils. If you don't have then:
 
 ```
 git clone git@github.com:restorer/zame-haxe-miscutils.git
@@ -45,3 +45,4 @@ haxelib dev zame-miscutils ./zame-haxe-miscutils
   - Support lime directly, without openfl
   - Support for snow
   - Create component for luxe engine
+  - Support for HaxeFlixel and / or HaxePunk?
