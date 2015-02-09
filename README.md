@@ -42,7 +42,10 @@ haxelib dev zame-miscutils ./zame-haxe-miscutils
 
 ## Roadmap for future
 
-  - Support lime directly, without openfl
-  - Support for snow
-  - Create component for luxe engine
-  - Support for HaxeFlixel and / or HaxePunk?
+[ ] Support for .json output format
+[ ] Support for .lap and .pex output formats
+[ ] Create component for luxe engine
+[ ] Support for embedded textures
+[ ] Support for snow
+[ ] Support lime directly, without openfl
+[ ] Support for HaxeFlixel and / or HaxePunk?
