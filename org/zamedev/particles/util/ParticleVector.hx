@@ -1,4 +1,4 @@
-package org.zamedev.particles;
+package org.zamedev.particles.util;
 
 typedef ParticleVector = {
     x:Float,

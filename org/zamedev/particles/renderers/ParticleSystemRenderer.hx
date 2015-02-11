@@ -1,4 +1,4 @@
-package org.zamedev.particles;
+package org.zamedev.particles.renderers;
 
 interface ParticleSystemRenderer {
     public function addParticleSystem(ps:ParticleSystem):Void;

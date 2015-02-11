@@ -30,6 +30,5 @@
 
 	<source path="source" />
 
-	<assets path="assets/font" rename="font" />
 	<assets path="assets/particle" rename="particle" />
 </project>

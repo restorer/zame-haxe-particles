@@ -2,6 +2,9 @@ package org.zamedev.particles;
 
 import openfl.Lib;
 import openfl.display.BitmapData;
+import openfl.gl.GL;
+import org.zamedev.particles.util.ParticleColor;
+import org.zamedev.particles.util.ParticleVector;
 
 class ParticleSystem {
     public static inline var EMITTER_TYPE_GRAVITY:Int = 0;
@@ -73,6 +76,10 @@ class ParticleSystem {
     }
 
     public function __initialize():ParticleSystem {
+        if (blendFuncDestination == GL.DST_ALPHA) {
+            blendFuncDestination = GL.ONE;
+        }
+
         prevTime = -1;
         emissionRate = maxParticles / particleLifespan;
         emitCounter = 0.0;

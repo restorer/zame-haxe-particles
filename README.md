@@ -2,7 +2,7 @@
 
 Features:
 
- - Can load .plist files from Particle Designer or [Particle Designer 2](https://71squared.com/en/particledesigner).
+ - Can load files from Particle Designer or [Particle Designer 2](https://71squared.com/en/particledesigner).
  - Has drawTiles renderer along with GL renderer.
 
 **NOTE: work in progress, more features coming.**
@@ -14,15 +14,15 @@ Embedded textures is not supported, so you must **uncheck** "embed" before expor
 
 ## Renderer notes
 
-GL renderer is the best choise for html5 (with -Ddom) - it support many features and super fast. It use "hacked" version of OpenGLView to be able to add canvas with proper z-index. [html5-dom demo](http://blog.zame-dev.org/pub/particles/html5-dom/).
+GL renderer is the best choise for html5 (with -Ddom) - it support many features and super fast. It use "hacked" version of OpenGLView to be able to add canvas with proper z-index. [html5-dom demo](http://blog.zame-dev.org/pub/particles/html5-dom-v2/).
 
-However GL renderer is available **only** for html with -Ddom.
+However GL renderer is available **only** for html with `-Ddom`.
 
 For all other targets use drawTiles renderer:
 
-  - html5 in canvas mode - still pretty fast, doesn't support color effects. Can render incorrectly due to bug in openfl, please apply [this patch](https://github.com/openfl/openfl/pull/434) if you encounter it. [html5-canvas demo](http://blog.zame-dev.org/pub/particles/html5-canvas/).
+  - html5 in canvas mode - still pretty fast, doesn't support color effects. Can render incorrectly due to bug in openfl, please apply [this patch](https://github.com/openfl/openfl/pull/434) if you encounter it. [html5-canvas demo](http://blog.zame-dev.org/pub/particles/html5-canvas-v2/).
   - native - fast, support color effects, hovewer in some cases GL renderer looks better.
-  - flash - slow, can be buggy (due to drawTiles implementation in openfl). [flash demo](http://blog.zame-dev.org/pub/particles/flash.swf).
+  - flash - slow, can be buggy (due to drawTiles implementation in openfl). [flash demo](http://blog.zame-dev.org/pub/particles/flash-v2.swf).
 
 ## How to use
 
@@ -33,19 +33,55 @@ git clone git@github.com:restorer/zame-haxe-particles.git
 haxelib dev zame-particles ./zame-haxe-particles
 ```
 
-This library depends on zame-miscutils. If you don't have then:
+This library depends on zame-miscutils. If you don't have them, do this:
 
 ```
 git clone git@github.com:restorer/zame-haxe-miscutils.git
 haxelib dev zame-miscutils ./zame-haxe-miscutils
 ```
 
+#### Now you can create beautiful things
+
+First of all, append following to your project.xml:
+
+```xml
+<haxelib name="zame-miscutils" />
+<haxelib name="zame-particles" />
+```
+
+If you plan to load particles from .json, append also:
+
+```xml
+<haxedef name="haxeJSON" />
+```
+
+Next, in code, create particle renderer and add it as child to container:
+
+```haxe
+var renderer = new DefaultParticleRenderer();
+addChild(cast renderer);
+```
+
+Than load particle emitter config from file, and add loaded particle system to renderer:
+
+```haxe
+var ps = ParticleLoader.load("particle/fire.plist");
+renderer.addParticleSystem(ps);
+```
+
+Finally, call emit() where you need:
+
+```
+ps.emit(stage.stageWidth / 2, stage.stageHeight / 2);
+```
+
+**There is minimal example under samples/minimal.**
+
 ## Roadmap for future
 
-- [ ] Support for .json output format
-- [ ] Support for .lap and .pex output formats
-- [ ] Create component for luxe engine
+- [x] Support for .json output format
+- [x] Support for .lap and .pex output formats
 - [ ] Support for embedded textures
-- [ ] Support for snow
-- [ ] Support lime directly, without openfl
+- [ ] Create importer for particles in luxeengine
+- [ ] Support for lime / snow directly without openfl / luxeengine
 - [ ] Support for HaxeFlixel and / or HaxePunk?

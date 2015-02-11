@@ -1,6 +1,6 @@
-package org.zamedev.particles;
+package org.zamedev.particles.renderers;
 
-#if (html5 || openfl_next)
+#if (html5 && dom)
 
 import openfl.geom.Rectangle;
 import openfl.gl.GL;

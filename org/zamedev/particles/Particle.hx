@@ -1,5 +1,8 @@
 package org.zamedev.particles;
 
+import org.zamedev.particles.util.ParticleColor;
+import org.zamedev.particles.util.ParticleVector;
+
 class Particle {
     public var startPos:ParticleVector;
     public var position:ParticleVector;
@@ -76,6 +79,8 @@ class Particle {
         color.a += colorDelta.a * dt;
 
         particleSize += particleSizeDelta * dt;
+        particleSize = Math.max(0, particleSize);
+
         rotation += rotationDelta * dt;
 
         return true;
