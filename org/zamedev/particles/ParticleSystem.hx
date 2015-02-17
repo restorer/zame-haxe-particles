@@ -116,11 +116,8 @@ class ParticleSystem {
             emitCounter += dt;
 
             while (__particleCount < maxParticles && emitCounter > rate) {
-                if (__particleCount < maxParticles) {
-                    initParticle(__particleList[__particleCount]);
-                    __particleCount++;
-                }
-
+                initParticle(__particleList[__particleCount]);
+                __particleCount++;
                 emitCounter -= rate;
             }
 
@@ -165,28 +162,11 @@ class ParticleSystem {
     }
 
     private function initParticle(p:Particle):Void {
+        // Common
         p.timeToLive = Math.max(0.0001, particleLifespan + particleLifespanVariance * rnd());
-
-        var directionAngle = angle + angleVariance * rnd();
-        var directionSpeed = speed + speedVariance * rnd();
 
         p.startPos.x = sourcePosition.x / particleScaleX;
         p.startPos.y = sourcePosition.y / particleScaleY;
-        p.position.x = p.startPos.x + sourcePositionVariance.x * rnd();
-        p.position.y = p.startPos.y + sourcePositionVariance.y * rnd();
-        p.direction.x = Math.cos(directionAngle) * directionSpeed;
-        p.direction.y = Math.sin(directionAngle) * directionSpeed;
-        p.radius = maxRadius + maxRadiusVariance * rnd();
-        p.radiusDelta = (minRadius + minRadiusVariance * rnd() - p.radius) / p.timeToLive;
-        p.angle = angle + angleVariance * rnd();
-        p.angleDelta = rotatePerSecond + rotatePerSecondVariance * rnd();
-        p.radialAcceleration = radialAcceleration;
-        p.particleSize = Math.max(0.0, startParticleSize + startParticleSizeVariance * rnd());
-        p.particleSizeDelta = (Math.max(0.0, finishParticleSize + finishParticleSizeVariance * rnd()) - p.particleSize) / p.timeToLive;
-        p.rotation = rotationStart + rotationStartVariance * rnd();
-        p.rotationDelta = (rotationEnd + rotationEndVariance * rnd() - p.rotation) / p.timeToLive;
-        p.radialAcceleration = radialAcceleration + radialAccelerationVariance * rnd();
-        p.tangentialAcceleration = tangentialAcceleration + tangentialAccelerationVariance * rnd();
 
         p.color = {
             r: clamp(startColor.r + startColorVariance.r * rnd()),
@@ -201,6 +181,29 @@ class ParticleSystem {
             b: (clamp(finishColor.b + finishColorVariance.b * rnd()) - p.color.b) / p.timeToLive,
             a: (clamp(finishColor.a + finishColorVariance.a * rnd()) - p.color.a) / p.timeToLive,
         };
+
+        p.particleSize = Math.max(0.0, startParticleSize + startParticleSizeVariance * rnd());
+        p.particleSizeDelta = (Math.max(0.0, finishParticleSize + finishParticleSizeVariance * rnd()) - p.particleSize) / p.timeToLive;
+        p.rotation = rotationStart + rotationStartVariance * rnd();
+        p.rotationDelta = (rotationEnd + rotationEndVariance * rnd() - p.rotation) / p.timeToLive;
+
+        var computedAngle = angle + angleVariance * rnd();
+
+        // For gravity emitter type
+        var directionSpeed = speed + speedVariance * rnd();
+
+        p.position.x = p.startPos.x + sourcePositionVariance.x * rnd();
+        p.position.y = p.startPos.y + sourcePositionVariance.y * rnd();
+        p.direction.x = Math.cos(computedAngle) * directionSpeed;
+        p.direction.y = Math.sin(computedAngle) * directionSpeed;
+        p.radialAcceleration = radialAcceleration + radialAccelerationVariance * rnd();
+        p.tangentialAcceleration = tangentialAcceleration + tangentialAccelerationVariance * rnd();
+
+        // For radial emitter type
+        p.angle = computedAngle;
+        p.angleDelta = (rotatePerSecond + rotatePerSecondVariance * rnd()) / p.timeToLive;
+        p.radius = maxRadius + maxRadiusVariance * rnd();
+        p.radiusDelta = (minRadius + minRadiusVariance * rnd() - p.radius) / p.timeToLive;
     }
 
     public function emit(sourcePositionX:Null<Float> = null, sourcePositionY:Null<Float> = null):Void {

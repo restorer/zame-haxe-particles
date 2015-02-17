@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<meta title="Particles" package="sample" version="1.0.0" company="ZameDev" />
+
+	<app main="sample.App" path="export" file="sample" />
+	<icon path="assets/icon.png" />
+
+	<haxelib name="openfl" />
+	<haxelib name="zame-miscutils" />
+	<haxelib name="zame-particles" />
+
+	<haxedef name="haxeJSON" />
+
+	<window
+		hardware="true"
+		background="#0a0b29"
+		resizable="false"
+		vsync="true"
+		width="800"
+		height="600"
+	/>
+
+	<window width="0" height="0" if="dom || mobile" />
+	<window width="800" height="600" unless="dom || mobile" />
+
+	<window fullscreen="true" orientation="landscape" if="mobile" />
+
+	<window fps="0" if="web" />
+	<window fps="60" unless="web" />
+
+	<source path="source" />
+
+	<assets path="assets/particle" rename="particle" />
+</project>

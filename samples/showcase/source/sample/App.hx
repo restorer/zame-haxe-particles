@@ -1,6 +1,7 @@
 package sample;
 
 import openfl.Assets;
+import openfl.display.FPS;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
@@ -24,6 +25,8 @@ class App extends Sprite {
         addInterface();
         loadAndAddParticles();
         updateInfo();
+
+        addChild(new FPS(0, 0, 0xff0000));
 
         addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
         addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
@@ -102,7 +105,7 @@ class App extends Sprite {
     private function onMouseDown(e:Event):Void {
         var me:MouseEvent = cast e;
 
-        if (me.stageX >= 20 && me.stageY <= #if flash 50 #else 45 #end) {
+        if (me.stageY >= 20 && me.stageY <= #if flash 50 #else 45 #end) {
             if (me.stageX >= 20 && me.stageX <= 120) {
                 particleSystemList[currentIndex].stop();
                 currentIndex = (currentIndex - 1 + particleSystemList.length) % particleSystemList.length;

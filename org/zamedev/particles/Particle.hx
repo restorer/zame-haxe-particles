@@ -40,8 +40,8 @@ class Particle {
             angle += angleDelta * dt;
             radius += radiusDelta * dt;
 
-            position.x = ps.sourcePosition.x - Math.cos(angle) * radius;
-            position.y = ps.sourcePosition.y - Math.sin(angle) * radius * ps.yCoordMultiplier;
+            position.x = startPos.x - Math.cos(angle) * radius;
+            position.y = startPos.y - Math.sin(angle) * radius * ps.yCoordMultiplier;
         } else {
             var radial = { x: 0.0, y: 0.0 };
 
