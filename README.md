@@ -74,7 +74,7 @@ All other targets should use drawTiles renderer:
 - [x] Support for .json output format
 - [x] Support for .lap and .pex output formats
 - [ ] Support for embedded textures
-- [ ] Create importer for particles in luxeengine
+- [x] Create importer for particles in luxeengine
 - [ ] Implement SpritesRenderer
 - [ ] Support for lime / snow directly without openfl / luxeengine
 - [ ] Support for HaxeFlixel and / or HaxePunk?

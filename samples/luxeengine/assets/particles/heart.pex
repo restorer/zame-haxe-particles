@@ -1,0 +1,42 @@
+
+<particleEmitterConfig>
+    <absolutePosition value="0"></absolutePosition>
+    <yCoordFlipped value="1"></yCoordFlipped>
+    <sourcePosition x="150.00" y="50.00"></sourcePosition>
+    <sourcePositionVariance x="7.00" y="7.00"></sourcePositionVariance>
+    <speed value="98.68"></speed>
+    <speedVariance value="269.74"></speedVariance>
+    <particleLifeSpan value="1.5132"></particleLifeSpan>
+    <particleLifespanVariance value="0.1974"></particleLifespanVariance>
+    <angle value="90.00"></angle>
+    <angleVariance value="0.00"></angleVariance>
+    <gravity x="1.76" y="1.51"></gravity>
+    <radialAcceleration value="-328.95"></radialAcceleration>
+    <tangentialAcceleration value="65.79"></tangentialAcceleration>
+    <radialAccelVariance value="60.83"></radialAccelVariance>
+    <tangentialAccelVariance value="61.83"></tangentialAccelVariance>
+    <startColor red="0.64" green="0.12" blue="0.45" alpha="0.07"></startColor>
+    <startColorVariance red="0.27" green="0.37" blue="0.56" alpha="0.75"></startColorVariance>
+    <finishColor red="0.26" green="0.02" blue="0.17" alpha="0.15"></finishColor>
+    <finishColorVariance red="0.15" green="0.70" blue="0.40" alpha="0.03"></finishColorVariance>
+    <maxParticles value="1223"></maxParticles>
+    <startParticleSize value="3.79"></startParticleSize>
+    <startParticleSizeVariance value="8.00"></startParticleSizeVariance>
+    <finishParticleSize value="13.00"></finishParticleSize>
+    <finishParticleSizeVariance value="0.00"></finishParticleSizeVariance>
+    <duration value="-1.00"></duration>
+    <emitterType value="1"></emitterType>
+    <maxRadius value="180.00"></maxRadius>
+    <maxRadiusVariance value="0.00"></maxRadiusVariance>
+    <minRadius value="0.00"></minRadius>
+    <minRadiusVariance value="0.00"></minRadiusVariance>
+    <rotatePerSecond value="0.00"></rotatePerSecond>
+    <rotatePerSecondVariance value="153.95"></rotatePerSecondVariance>
+    <blendFuncSource value="1"></blendFuncSource>
+    <blendFuncDestination value="771"></blendFuncDestination>
+    <rotationStart value="0.00"></rotationStart>
+    <rotationStartVariance value="0.00"></rotationStartVariance>
+    <rotationEnd value="0.00"></rotationEnd>
+    <rotationEndVariance value="0.00"></rotationEndVariance>
+    <texture name="heart.png" data=""></texture>
+</particleEmitterConfig>

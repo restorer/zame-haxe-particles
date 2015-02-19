@@ -1,0 +1,33 @@
+{
+    project: {
+        name: 'particles',
+        version: '1.0.0',
+        author: 'zamedev',
+
+        app: {
+            name: 'particles',
+            package: 'org.zamedev.particles'
+        },
+
+        build: {
+            dependencies: {
+                luxe: '*',
+            }
+        },
+
+        files: {
+            assets: 'assets/'
+        }
+    },
+
+    luxe: {
+        window: {
+            width: 800,
+            height: 600,
+            title: 'Particles',
+            fullscreen: false,
+            resizable: true,
+            borderless: false
+        }
+    }
+}
