@@ -63,7 +63,7 @@ Embedded textures is **supported**, hovewer it is not recommended to use them fo
 
   - html5 with `-Ddom` (GL renderer) - [link](http://blog.zame-dev.org/pub/particles/html5-dom-v2/)
   - html5 in canvas mode (drawTiles renderer) - [link](http://blog.zame-dev.org/pub/particles/html5-canvas-v2/)
-  - flash (drawTiles renderer) - [link](http://blog.zame-dev.org/pub/particles/flash-v2.swf)
+  - flash (sprites renderer) - [obsolete link with drawTiles renderer](http://blog.zame-dev.org/pub/particles/flash-v2.swf)
 
 GL renderer is the best choise for html5 (with `-Ddom`) - it support many features and super fast. It use "hacked" version of OpenGLView to be able to add canvas with proper z-index. However GL renderer is available **only** for html with `-Ddom`.
 
@@ -71,7 +71,7 @@ All other targets should use drawTiles renderer:
 
   - html5 in canvas mode - still pretty fast, doesn't support color effects. Can render incorrectly due to bug in openfl, please apply [this patch](https://github.com/openfl/openfl/pull/434) if you encounter it.
   - native - fast, support color effects, hovewer in some cases GL renderer looks better.
-  - flash - slow, can be buggy (due to drawTiles implementation in openfl).
+  - flash - slow, support some color effects, can be buggy.
 
 ## Roadmap for future
 
@@ -79,6 +79,6 @@ All other targets should use drawTiles renderer:
 - [x] Support for .lap and .pex output formats
 - [x] Support for embedded textures
 - [x] Create importer for particles in luxeengine
-- [ ] Implement SpritesRenderer
+- [x] Implement SpritesRenderer
 - [ ] Support for lime / snow directly without openfl / luxeengine
 - [ ] Support for HaxeFlixel and / or HaxePunk?
