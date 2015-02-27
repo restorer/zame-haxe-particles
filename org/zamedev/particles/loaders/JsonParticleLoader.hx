@@ -1,7 +1,6 @@
 package org.zamedev.particles.loaders;
 
 import haxe.Json;
-import haxe.io.Path;
 import openfl.Assets;
 import org.zamedev.lib.DynamicExt;
 import org.zamedev.particles.ParticleSystem;
@@ -53,7 +52,7 @@ class JsonParticleLoader {
         ps.tangentialAccelerationVariance = map["tangentialAccelVariance"].asFloat();
         ps.blendFuncSource = map["blendFuncSource"].asInt();
         ps.blendFuncDestination = map["blendFuncDestination"].asInt();
-        ps.textureBitmapData = Assets.getBitmapData(Path.directory(path) + "/" + map["textureFileName"].asString());
+        ps.textureBitmapData = ParticleLoader.loadTexture(map["textureImageData"].asString(), map["textureFileName"].asString(), path);
         ps.yCoordMultiplier = (map["yCoordFlipped"].asInt() == 1 ? -1.0 : 1.0);
 
         return ps;

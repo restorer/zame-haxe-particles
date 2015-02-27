@@ -80,6 +80,12 @@ class App extends Sprite {
         var particlesRenderer = new DefaultParticleRenderer();
         addChild(cast particlesRenderer);
 
+        particleSystemList.push(ParticleLoader.load("particle/galaxy.pex"));
+        particleSystemList.push(ParticleLoader.load("particle/duman-2.plist"));
+        particleSystemList.push(ParticleLoader.load("particle/ex.plist"));
+        particleSystemList.push(ParticleLoader.load("particle/snow.lap"));
+        particleSystemList.push(ParticleLoader.load("particle/fancyflame.json"));
+        particleSystemList.push(ParticleLoader.load("particle/fire-4.json"));
         particleSystemList.push(ParticleLoader.load("particle/heart.pex"));
         particleSystemList.push(ParticleLoader.load("particle/fountain.lap"));
         particleSystemList.push(ParticleLoader.load("particle/bubbles.json"));

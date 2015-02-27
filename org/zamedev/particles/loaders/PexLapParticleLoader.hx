@@ -61,7 +61,7 @@ class PexLapParticleLoader {
         ps.tangentialAccelerationVariance = parseFloatNode(map["tangentialAccelVariance"]);
         ps.blendFuncSource = parseIntNode(map["blendFuncSource"]);
         ps.blendFuncDestination = parseIntNode(map["blendFuncDestination"]);
-        ps.textureBitmapData = Assets.getBitmapData(Path.directory(path) + "/" + map["texture"].get("name"));
+        ps.textureBitmapData = ParticleLoader.loadTexture(map["texture"].get("data"), map["texture"].get("name"), path);
         ps.yCoordMultiplier = (parseIntNode(map["yCoordFlipped"]) == 1 ? -1.0 : 1.0);
 
         return ps;

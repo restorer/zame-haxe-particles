@@ -7,6 +7,8 @@
 Features:
 
  - Can load files from Particle Designer or [Particle Designer 2](https://71squared.com/en/particledesigner).
+ - Support for embedded textures, both zipped or not.
+ - Can load files from [Starling Particle Editor](http://onebyonedesign.com/flash/particleeditor/).
  - Has drawTiles renderer along with GL renderer.
 
 **NOTE: work in progress, more features coming.**
@@ -23,6 +25,7 @@ haxelib git zame-miscutils https://github.com/restorer/zame-haxe-miscutils.git
 First of all, append following to your project.xml:
 
 ```xml
+<haxelib name="format" />
 <haxelib name="zame-miscutils" />
 <haxelib name="zame-particles" />
 <haxedef name="haxeJSON" />
@@ -52,7 +55,8 @@ ps.emit(stage.stageWidth / 2, stage.stageHeight / 2);
 
 ## Export notes
 
-Embedded textures is not supported, so you must **uncheck** "embed" before export.
+Embedded textures is **supported**, hovewer it is not recommended to use them for large images. For large texture images it is recommended to **uncheck** "embed" before export.
+
 ![](http://blog.zame-dev.org/wp-content/uploads/2015/02/particledesigner.png)
 
 ## Renderer notes
@@ -73,7 +77,7 @@ All other targets should use drawTiles renderer:
 
 - [x] Support for .json output format
 - [x] Support for .lap and .pex output formats
-- [ ] Support for embedded textures
+- [x] Support for embedded textures
 - [x] Create importer for particles in luxeengine
 - [ ] Implement SpritesRenderer
 - [ ] Support for lime / snow directly without openfl / luxeengine

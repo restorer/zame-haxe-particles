@@ -46,7 +46,7 @@ class Particle {
             var radial = { x: 0.0, y: 0.0 };
 
             position.x -= startPos.x;
-            position.y -= startPos.y;
+            position.y = (position.y - startPos.y) * ps.yCoordMultiplier;
 
             if (position.x != 0.0 || position.y != 0.0) {
                 var length = Math.sqrt(position.x * position.x + position.y * position.y);
@@ -70,7 +70,7 @@ class Particle {
             direction.y += (radial.y + tangential.y + ps.gravity.y) * dt;
 
             position.x += direction.x * dt + startPos.x;
-            position.y += direction.y * dt * ps.yCoordMultiplier + startPos.y;
+            position.y = (position.y + direction.y * dt) * ps.yCoordMultiplier + startPos.y;
         }
 
         color.r += colorDelta.r * dt;

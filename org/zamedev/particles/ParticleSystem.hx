@@ -76,6 +76,10 @@ class ParticleSystem {
     }
 
     public function __initialize():ParticleSystem {
+        if (blendFuncSource == GL.DST_ALPHA) {
+            blendFuncSource = GL.ONE;
+        }
+
         if (blendFuncDestination == GL.DST_ALPHA) {
             blendFuncDestination = GL.ONE;
         }
