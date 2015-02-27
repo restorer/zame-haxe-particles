@@ -6,6 +6,7 @@
 	<icon path="assets/icon.png" />
 
 	<haxelib name="openfl" />
+	<haxelib name="format" />
 	<haxelib name="zame-miscutils" />
 	<haxelib name="zame-particles" />
 
