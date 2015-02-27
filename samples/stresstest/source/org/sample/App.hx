@@ -1,4 +1,4 @@
-package sample;
+package org.sample;
 
 import openfl.display.FPS;
 import openfl.display.Sprite;

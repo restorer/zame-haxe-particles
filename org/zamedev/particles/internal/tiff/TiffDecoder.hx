@@ -151,8 +151,13 @@ class TiffDecoder {
             }
         }
 
-        var pixels = new ByteArray();
-        pixels.length = computedSize;
+        #if flash
+            var pixels = new ByteArray();
+            pixels.length = computedSize;
+        #else
+            var pixels = new ByteArray(computedSize);
+        #end
+
         pixels.position = 0;
 
         #if js
@@ -179,26 +184,12 @@ class TiffDecoder {
                 var offset = stripOffsets[i];
                 var count = Std.int(stripByteCounts[i] / 4);
 
-                if (extraSampleValue == cast ExtraSamples.AssociatedAlpha) {
-                    for (j in 0 ... count) {
-                        pixels.writeByte(data.get(offset + 3));
-                        pixels.writeByte(data.get(offset + 0));
-                        pixels.writeByte(data.get(offset + 1));
-                        pixels.writeByte(data.get(offset + 2));
-                        offset += 4;
-                    }
-                } else {
-                    for (j in 0 ... count) {
-                        var alpha:Int = data.get(offset + 3);
-                        var mult = alpha / 256;
-
-                        pixels.writeByte(alpha);
-                        pixels.writeByte(Std.int(data.get(offset + 0) * mult));
-                        pixels.writeByte(Std.int(data.get(offset + 1) * mult));
-                        pixels.writeByte(Std.int(data.get(offset + 2) * mult));
-
-                        offset += 4;
-                    }
+                for (j in 0 ... count) {
+                    pixels.writeByte(data.get(offset + 3));
+                    pixels.writeByte(data.get(offset + 0));
+                    pixels.writeByte(data.get(offset + 1));
+                    pixels.writeByte(data.get(offset + 2));
+                    offset += 4;
                 }
             }
         #end

@@ -1,4 +1,4 @@
-package sample;
+package org.sample;
 
 import openfl.display.Sprite;
 import org.zamedev.particles.loaders.ParticleLoader;

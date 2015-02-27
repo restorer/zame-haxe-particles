@@ -1,4 +1,4 @@
-package sample;
+package org.sample;
 
 import openfl.Assets;
 import openfl.display.FPS;
@@ -52,7 +52,7 @@ class App extends Sprite {
         textField.x = x;
         textField.y = y;
         textField.width = width;
-        textField.height = #if flash 30 #else 25 #end;
+        textField.height = #if !html5 30 #else 25 #end;
         textField.embedFonts = true;
 
         if (backgroundColor >= 0) {
@@ -111,7 +111,7 @@ class App extends Sprite {
     private function onMouseDown(e:Event):Void {
         var me:MouseEvent = cast e;
 
-        if (me.stageY >= 20 && me.stageY <= #if flash 50 #else 45 #end) {
+        if (me.stageY >= 20 && me.stageY <= #if !html5 50 #else 45 #end) {
             if (me.stageX >= 20 && me.stageX <= 120) {
                 particleSystemList[currentIndex].stop();
                 currentIndex = (currentIndex - 1 + particleSystemList.length) % particleSystemList.length;

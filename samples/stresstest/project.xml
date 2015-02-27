@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
-	<meta title="Particles" package="sample" version="1.0.0" company="ZameDev" />
+	<meta title="Particles" package="org.sample" version="1.0.0" company="ZameDev" />
 
-	<app main="sample.App" path="export" file="sample" />
+	<app main="org.sample.App" path="export" file="sample" />
 	<icon path="assets/icon.png" />
 
 	<haxelib name="openfl" />
@@ -32,4 +32,7 @@
 	<source path="source" />
 
 	<assets path="assets/particle" rename="particle" />
+
+	<!-- <architecture name="armv6" if="android" /> -->
+	<architecture name="x86" if="android" />
 </project>
