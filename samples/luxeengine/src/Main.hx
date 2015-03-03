@@ -19,6 +19,9 @@ import temp.Particles;
 import temp.importers.particledesigner.ParticleDesigner;
 import Luxe.Ev;
 
+// TODO:
+// show.platform.web.utils.ByteArray::set_length - ... else if (allocated > value) { snowResizeBuffer(allocated = value); } - remove
+
 class Main extends luxe.Game {
     var is_loaded:Bool = false;
     var is_reset_called:Bool = false;
@@ -29,7 +32,6 @@ class Main extends luxe.Game {
 
     override function ready() {
         Luxe.renderer.clear_color = (new Color()).rgb(0x0a0b29);
-
         var parcel = new Parcel();
 
         for (id in app.app.assets.list.keys()) {
@@ -58,6 +60,12 @@ class Main extends luxe.Game {
     }
 
     function onloaded(_) {
+        add_particle_system("assets/particles/galaxy.pex");
+        add_particle_system("assets/particles/duman-2.plist");
+        add_particle_system("assets/particles/ex.plist");
+        add_particle_system("assets/particles/snow.lap");
+        add_particle_system("assets/particles/fancyflame.json");
+        add_particle_system("assets/particles/fire-4.json");
         add_particle_system("assets/particles/heart.pex");
         add_particle_system("assets/particles/fountain.lap");
         add_particle_system("assets/particles/bubbles.json");
@@ -136,7 +144,7 @@ class Main extends luxe.Game {
         var ps = new ParticleSystem();
         ps.enabled = false;
         ps.paused = true;
-        ps.add_emitter(ParticleDesigner.parse(id, particle_systems.length));
+        ps.add_emitter(ParticleDesigner.parse(id, particle_systems.length + 10));
         particle_systems.push(ps);
     }
 
