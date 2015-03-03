@@ -31,7 +31,7 @@
 
 	<source path="source" />
 
-	<assets path="assets/font" rename="font" />
+	<assets path="assets/font" exclude="*.eot|*.svg|*.woff" rename="font" />
 	<assets path="assets/particle" rename="particle" />
 
 	<!-- <architecture name="armv6" if="android" /> -->

@@ -77,7 +77,7 @@ class App extends Sprite {
     }
 
     private function loadAndAddParticles():Void {
-        var particlesRenderer = new DefaultParticleRenderer();
+        var particlesRenderer = DefaultParticleRenderer.createInstance();
         addChild(cast particlesRenderer);
 
         particleSystemList.push(ParticleLoader.load("particle/galaxy.pex"));

@@ -28,6 +28,7 @@ class OpenGLViewExt extends OpenGLView {
                 __added = true;
 
                 DOMRenderer.initializeElement(this, __canvas, renderSession);
+                __style.setProperty("pointer-events", "none", null);
             }
 
             if (__worldZ != ++renderSession.z) {

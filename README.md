@@ -34,7 +34,7 @@ First of all, append following to your project.xml:
 Next, in code, create particle renderer and add it as child to container:
 
 ```haxe
-var renderer = new DefaultParticleRenderer();
+var renderer = DefaultParticleRenderer.createInstance();
 addChild(cast renderer);
 ```
 

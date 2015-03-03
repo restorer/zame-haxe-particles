@@ -18,6 +18,15 @@ class DrawTilesParticleRenderer extends Sprite implements ParticleSystemRenderer
 
     private var dataList:Array<DrawTilesParticleRendererData> = [];
 
+    #if (html5 && dom)
+        private var styleIsDirty = true;
+    #end
+
+    public function new() {
+        super();
+        mouseEnabled = false;
+    }
+
     public function addParticleSystem(ps:ParticleSystem):Void {
         if (dataList.length == 0) {
             addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -67,6 +76,14 @@ class DrawTilesParticleRenderer extends Sprite implements ParticleSystemRenderer
                 updated = true;
             }
         }
+
+        #if (html5 && dom)
+            if (styleIsDirty && __style != null) {
+                __style.setProperty("pointer-events", "none", null);
+            } else if (!styleIsDirty && __style == null) {
+                styleIsDirty = true;
+            }
+        #end
 
         if (!updated) {
             return;

@@ -8,7 +8,7 @@ class App extends Sprite {
     public function new() {
         super();
 
-        var renderer = new DefaultParticleRenderer();
+        var renderer = DefaultParticleRenderer.createInstance();
         addChild(cast renderer);
 
         var ps = ParticleLoader.load("particle/fire.plist");

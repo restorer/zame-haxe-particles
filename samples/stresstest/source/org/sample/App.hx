@@ -12,7 +12,7 @@ class App extends Sprite {
     public function new() {
         super();
 
-        var particlesRenderer = new DefaultParticleRenderer();
+        var particlesRenderer = DefaultParticleRenderer.createInstance();
         addChild(cast particlesRenderer);
 
         addChild(new FPS(10, 10, 0xff0000));
