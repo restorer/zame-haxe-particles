@@ -9,7 +9,7 @@ Features:
  - Can load files from Particle Designer or [Particle Designer 2](https://71squared.com/en/particledesigner).
  - Support for embedded textures, both zipped or not.
  - Can load files from [Starling Particle Editor](http://onebyonedesign.com/flash/particleeditor/).
- - Has drawTiles renderer along with GL renderer.
+ - Has 3 renderers - sprites, drawTiles, and GL renderer.
 
 **NOTE: work in progress, more features coming.**
 
@@ -61,9 +61,9 @@ Embedded textures is **supported**, hovewer it is not recommended to use them fo
 
 ## Renderer notes
 
-  - html5 with `-Ddom` (GL renderer) - [link](http://blog.zame-dev.org/pub/particles/html5-dom-v2/)
-  - html5 in canvas mode (drawTiles renderer) - [link](http://blog.zame-dev.org/pub/particles/html5-canvas-v2/)
-  - flash (sprites renderer) - [obsolete link with drawTiles renderer](http://blog.zame-dev.org/pub/particles/flash-v2.swf)
+  - html5 with `-Ddom` (GL renderer) - [link](http://blog.zame-dev.org/pub/particles/html5-dom-v3/)
+  - html5 in canvas mode (drawTiles renderer) - [link](http://blog.zame-dev.org/pub/particles/html5-canvas-v3/)
+  - flash (sprites renderer) - [link](http://blog.zame-dev.org/pub/particles/flash-v3.swf)
 
 GL renderer is the best choise for html5 (with `-Ddom`) - it support many features and super fast. It use "hacked" version of OpenGLView to be able to add canvas with proper z-index. However GL renderer is available **only** for html with `-Ddom`.
 
