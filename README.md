@@ -2,7 +2,7 @@
 
 ![](http://blog.zame-dev.org/wp-content/uploads/2015/02/Screen-Shot-2015-02-11-at-17.43.16.png)
 
-[Demo](http://blog.zame-dev.org/pub/particles/html5-dom-v2/)
+[Demo](http://blog.zame-dev.org/pub/particles/html5-dom-v3/)
 
 Features:
 
