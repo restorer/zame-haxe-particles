@@ -67,11 +67,12 @@ Embedded textures is **supported**, hovewer it is not recommended to use them fo
 
 GL renderer is the best choise for html5 (with `-Ddom`) - it support many features and super fast. It use "hacked" version of OpenGLView to be able to add canvas with proper z-index. However GL renderer is available **only** for html with `-Ddom`.
 
+Sprites renderer is best for flash, because it support color effects via ColorTransform. But this renderer is slow.
+
 All other targets should use drawTiles renderer:
 
   - html5 in canvas mode - still pretty fast, doesn't support color effects. Can render incorrectly due to bug in openfl, please apply [this patch](https://github.com/openfl/openfl/pull/434) if you encounter it.
   - native - fast, support color effects, hovewer in some cases GL renderer looks better.
-  - flash - slow, support some color effects, can be buggy.
 
 ## Roadmap for future
 
