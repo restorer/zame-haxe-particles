@@ -37,8 +37,12 @@ class ParticleLoader {
         var data = Base64.decode(textureImageData);
 
         if (data.get(0) == 0x1f && data.get(1) == 0x8b) {
-            var reader = new format.gz.Reader(new BytesInput(data));
-            data = reader.read().data;
+            #if format
+                var reader = new format.gz.Reader(new BytesInput(data));
+                data = reader.read().data;
+            #else
+                throw "haxelib \"format\" is required for compressed embedded textures";
+            #end
         }
 
         var decoded = TiffDecoder.decode(data);
