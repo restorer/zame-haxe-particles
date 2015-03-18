@@ -1,6 +1,6 @@
 # Particle system for OpenFl
 
-![](http://blog.zame-dev.org/wp-content/uploads/2015/02/Screen-Shot-2015-02-11-at-17.43.16.png)
+![](http://blog.zame-dev.org/wp-content/uploads/2015/03/Screen-Shot-2015-03-18-at-12.53.43.png)
 
 [Demo](http://blog.zame-dev.org/pub/particles/html5-dom-v3/)
 
