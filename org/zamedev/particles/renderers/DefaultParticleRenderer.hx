@@ -10,6 +10,8 @@ class DefaultParticleRenderer {
             } else {
                 return new DrawTilesParticleRenderer();
             }
+        #elseif flash11
+            return new Stage3DRenderer();
         #elseif flash
             return new SpritesParticleRenderer();
         #else
