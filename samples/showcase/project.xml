@@ -11,6 +11,7 @@
 	<haxelib name="zame-particles" />
 
 	<haxedef name="haxeJSON" />
+	<haxedef name="zameparticles_stage3d" if="flash" />
 
 	<window
 		hardware="true"
@@ -36,4 +37,6 @@
 
 	<!-- <architecture name="armv6" if="android" /> -->
 	<architecture name="x86" if="android" />
+
+	<set name="SWF_VERSION" value="11.2" if="flash" />
 </project>

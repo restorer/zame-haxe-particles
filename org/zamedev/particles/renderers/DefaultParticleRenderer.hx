@@ -10,7 +10,7 @@ class DefaultParticleRenderer {
             } else {
                 return new DrawTilesParticleRenderer();
             }
-        #elseif flash11
+        #elseif (flash11 && zameparticles_stage3d)
             return new Stage3DRenderer();
         #elseif flash
             return new SpritesParticleRenderer();
