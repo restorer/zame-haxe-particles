@@ -1,6 +1,6 @@
 package org.zamedev.particles.renderers;
 
 interface ParticleSystemRenderer {
-    public function addParticleSystem(ps:ParticleSystem):Void;
-    public function removeParticleSystem(ps:ParticleSystem):Void;
+    public function addParticleSystem(ps:ParticleSystem):ParticleSystemRenderer;
+    public function removeParticleSystem(ps:ParticleSystem):ParticleSystemRenderer;
 }

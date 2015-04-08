@@ -23,7 +23,7 @@ typedef Stage3DRendererData = {
  * @usage Call TilesheetStage3D.init(stage, 0, 5, onInit, Context3DRenderMode.AUTO); before DefaultParticleRenderer.createInstance(); (put this inside onInit function)
  * @author loudo
  */
-class Stage3DRenderer extends Sprite implements ParticleSystemRenderer {
+class Stage3DParticleRenderer extends Sprite implements ParticleSystemRenderer {
     private static inline var TILE_DATA_FIELDS = 9; // x, y, tileId, scale, rotation, red, green, blue, alpha
 
     private var dataList:Array<Stage3DRendererData> = [];
@@ -33,14 +33,15 @@ class Stage3DRenderer extends Sprite implements ParticleSystemRenderer {
         mouseEnabled = false;
     }
 
-    public function addParticleSystem(ps:ParticleSystem):Void {
+    public function addParticleSystem(ps:ParticleSystem):ParticleSystemRenderer {
         if (dataList.length == 0) {
             addEventListener(Event.ENTER_FRAME, onEnterFrame);
         }
 
         ps.__initialize();
 
-        var tilesheet = new TilesheetStage3D(TilesheetStage3D.fixTextureSize(ps.textureBitmapData));
+        // premultipliedAlpha is set to true for reason
+        var tilesheet = new TilesheetStage3D(TilesheetStage3D.fixTextureSize(ps.textureBitmapData), true);
 
         tilesheet.addTileRect(
             ps.textureBitmapData.rect.clone(),
@@ -56,9 +57,11 @@ class Stage3DRenderer extends Sprite implements ParticleSystemRenderer {
             tileData: tileData,
             updated: false,
         });
+
+        return this;
     }
 
-    public function removeParticleSystem(ps:ParticleSystem):Void {
+    public function removeParticleSystem(ps:ParticleSystem):ParticleSystemRenderer {
         var index = 0;
 
         while (index < dataList.length) {
@@ -72,6 +75,8 @@ class Stage3DRenderer extends Sprite implements ParticleSystemRenderer {
         if (dataList.length == 0) {
             removeEventListener(Event.ENTER_FRAME, onEnterFrame);
         }
+
+        return this;
     }
 
     private function onEnterFrame(_):Void {
@@ -107,16 +112,17 @@ class Stage3DRenderer extends Sprite implements ParticleSystemRenderer {
 
             for (i in 0 ... ps.__particleCount) {
                 var particle = ps.__particleList[i];
+                var a = particle.color.a;
 
                 tileData[index] = particle.position.x * ps.particleScaleX; // x
                 tileData[index + 1] = particle.position.y * ps.particleScaleY; // y
                 tileData[index + 2] = 0.0; // tileId
                 tileData[index + 3] = particle.particleSize / ethalonSize * ps.particleScaleSize; // scale
                 tileData[index + 4] = particle.rotation; // rotation
-                tileData[index + 5] = particle.color.r;
-                tileData[index + 6] = particle.color.g;
-                tileData[index + 7] = particle.color.b;
-                tileData[index + 8] = particle.color.a;
+                tileData[index + 5] = particle.color.r * a;
+                tileData[index + 6] = particle.color.g * a;
+                tileData[index + 7] = particle.color.b * a;
+                tileData[index + 8] = a;
 
                 index += TILE_DATA_FIELDS;
             }

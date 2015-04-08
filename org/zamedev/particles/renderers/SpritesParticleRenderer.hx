@@ -2,7 +2,6 @@ package org.zamedev.particles.renderers;
 
 import openfl.display.Bitmap;
 import openfl.display.Sprite;
-import openfl.display.Tilesheet;
 import openfl.events.Event;
 import openfl.geom.ColorTransform;
 import openfl.geom.Point;
@@ -23,7 +22,7 @@ typedef SpritesParticleRendererData = {
 class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
     private var dataList:Array<SpritesParticleRendererData> = [];
 
-    public function addParticleSystem(ps:ParticleSystem):Void {
+    public function addParticleSystem(ps:ParticleSystem):ParticleSystemRenderer {
         if (dataList.length == 0) {
             addEventListener(Event.ENTER_FRAME, onEnterFrame);
         }
@@ -49,16 +48,16 @@ class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
             addChild(sprite);
         }
 
-        var tilesheet = new Tilesheet(ps.textureBitmapData);
-
         dataList.push({
             ps: ps,
             spriteList: spriteList,
             updated: false,
         });
+
+        return this;
     }
 
-    public function removeParticleSystem(ps:ParticleSystem):Void {
+    public function removeParticleSystem(ps:ParticleSystem):ParticleSystemRenderer {
         var index = 0;
 
         while (index < dataList.length) {
@@ -76,6 +75,8 @@ class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
         if (dataList.length == 0) {
             removeEventListener(Event.ENTER_FRAME, onEnterFrame);
         }
+
+        return this;
     }
 
     private function onEnterFrame(_):Void {

@@ -27,7 +27,7 @@ class DrawTilesParticleRenderer extends Sprite implements ParticleSystemRenderer
         mouseEnabled = false;
     }
 
-    public function addParticleSystem(ps:ParticleSystem):Void {
+    public function addParticleSystem(ps:ParticleSystem):ParticleSystemRenderer {
         if (dataList.length == 0) {
             addEventListener(Event.ENTER_FRAME, onEnterFrame);
         }
@@ -50,9 +50,11 @@ class DrawTilesParticleRenderer extends Sprite implements ParticleSystemRenderer
             tileData: tileData,
             updated: false,
         });
+
+        return this;
     }
 
-    public function removeParticleSystem(ps:ParticleSystem):Void {
+    public function removeParticleSystem(ps:ParticleSystem):ParticleSystemRenderer {
         var index = 0;
 
         while (index < dataList.length) {
@@ -66,6 +68,8 @@ class DrawTilesParticleRenderer extends Sprite implements ParticleSystemRenderer
         if (dataList.length == 0) {
             removeEventListener(Event.ENTER_FRAME, onEnterFrame);
         }
+
+        return this;
     }
 
     private function onEnterFrame(_):Void {
@@ -113,7 +117,7 @@ class DrawTilesParticleRenderer extends Sprite implements ParticleSystemRenderer
                 tileData[index + 1] = particle.position.y * ps.particleScaleY; // y
                 tileData[index + 2] = 0.0; // tileId
                 tileData[index + 3] = particle.particleSize / ethalonSize * ps.particleScaleSize; // scale
-                tileData[index + 4] = particle.rotation #if flash + Math.PI * 0.5 #end ; // rotation
+                tileData[index + 4] = particle.rotation; // rotation
                 tileData[index + 5] = particle.color.r;
                 tileData[index + 6] = particle.color.g;
                 tileData[index + 7] = particle.color.b;

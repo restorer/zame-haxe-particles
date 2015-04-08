@@ -45,7 +45,7 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
     private var matrixUniformLocation:GLUniformLocation;
     private var imageUniformLocation:GLUniformLocation;
 
-    public function addParticleSystem(ps:ParticleSystem):Void {
+    public function addParticleSystem(ps:ParticleSystem):ParticleSystemRenderer {
         if (!initialized) {
             initGl();
             initialized = true;
@@ -110,9 +110,11 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
             indicesData: indicesData,
             updated: false,
         });
+
+        return this;
     }
 
-    public function removeParticleSystem(ps:ParticleSystem):Void {
+    public function removeParticleSystem(ps:ParticleSystem):ParticleSystemRenderer {
         var index = 0;
 
         while (index < dataList.length) {
@@ -126,6 +128,8 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
         if (dataList.length == 0) {
             render = null;
         }
+
+        return this;
     }
 
     public function initGl():Void {

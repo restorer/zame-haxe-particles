@@ -9,7 +9,7 @@ Features:
  - Can load files from Particle Designer or [Particle Designer 2](https://71squared.com/en/particledesigner).
  - Support for embedded textures, both zipped or not.
  - Can load files from [Starling Particle Editor](http://onebyonedesign.com/flash/particleeditor/).
- - Has 3 renderers - sprites, drawTiles, and GL renderer.
+ - Has 4 renderers - sprites, drawTiles, stage3d, and GL renderer.
 
 **NOTE: work in progress, more features coming.**
 
@@ -68,6 +68,7 @@ Embedded textures is **supported**, hovewer it is not recommended to use them fo
 GL renderer is the best choise for html5 (with `-Ddom`) - it support many features and super fast. It use "hacked" version of OpenGLView to be able to add canvas with proper z-index. However GL renderer is available **only** for html with `-Ddom`.
 
 Sprites renderer is best for flash, because it support color effects via ColorTransform. But this renderer is slow.
+If you use [TilesheetStage3D](https://github.com/as3boyan/TilesheetStage3D) library you may consider of using stage3d renderer, because it has much better performance.
 
 All other targets should use drawTiles renderer:
 
@@ -81,5 +82,6 @@ All other targets should use drawTiles renderer:
 - [x] Support for embedded textures
 - [x] Create importer for particles in luxeengine
 - [x] Implement SpritesRenderer
+- [x] Implement Stage3DRenderer
 - [ ] Support for lime / snow directly without openfl / luxeengine
 - [ ] Support for HaxeFlixel and / or HaxePunk?
