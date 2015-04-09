@@ -35,7 +35,14 @@ class App extends Sprite {
         #end
     }
 
-    private function ready(_) {
+    private function ready(result:String) {
+        #if (flash11 && zameparticles_stage3d)
+            if (result != "success") {
+                trace("Stage3D error. Probably wrong wmode.");
+                return;
+            }
+        #end
+
         addClickableArea();
         addInterface();
         loadAndAddParticles();

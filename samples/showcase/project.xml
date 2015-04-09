@@ -37,6 +37,5 @@
 
 	<!-- <architecture name="armv6" if="android" /> -->
 	<architecture name="x86" if="android" />
-
 	<set name="SWF_VERSION" value="11.2" if="flash" />
 </project>
