@@ -64,6 +64,7 @@ Embedded textures is **supported**, hovewer it is not recommended to use them fo
   - html5 with `-Ddom` (GL renderer) - [link](http://blog.zame-dev.org/pub/particles/html5-dom-v3/)
   - html5 in canvas mode (drawTiles renderer) - [link](http://blog.zame-dev.org/pub/particles/html5-canvas-v3/)
   - flash (sprites renderer) - [link](http://blog.zame-dev.org/pub/particles/flash-v3.swf)
+  - flash (stage3d renderer) - [link](http://blog.zame-dev.org/pub/particles/flash-stage3d-v3/)
 
 GL renderer is the best choise for html5 (with `-Ddom`) - it support many features and super fast. It use "hacked" version of OpenGLView to be able to add canvas with proper z-index. However GL renderer is available **only** for html with `-Ddom`.
 
