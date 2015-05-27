@@ -1,6 +1,6 @@
 package org.zamedev.particles;
 
-import openfl.Lib;
+import haxe.Timer;
 import openfl.display.BitmapData;
 import openfl.gl.GL;
 import org.zamedev.particles.util.ParticleColor;
@@ -59,7 +59,7 @@ class ParticleSystem {
     public var particleScaleSize:Float;
     public var yCoordMultiplier:Float;
 
-    private var prevTime:Int;
+    private var prevTime:Float;
     private var emissionRate:Float;
     private var emitCounter:Float;
     private var elapsedTime:Float;
@@ -84,7 +84,7 @@ class ParticleSystem {
             blendFuncDestination = GL.ONE;
         }
 
-        prevTime = -1;
+        prevTime = -1.0;
         emissionRate = maxParticles / particleLifespan;
         emitCounter = 0.0;
         elapsedTime = 0.0;
@@ -100,14 +100,14 @@ class ParticleSystem {
     }
 
     public function __update():Bool {
-        var currentTime = Lib.getTimer();
+        var currentTime = Timer.stamp();
 
-        if (prevTime < 0) {
+        if (prevTime < 0.0) {
             prevTime = currentTime;
             return false;
         }
 
-        var dt:Float = (currentTime - prevTime) / 1000.0;
+        var dt:Float = currentTime - prevTime;
 
         if (dt < 0.0001) {
             return false;
