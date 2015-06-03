@@ -26,8 +26,8 @@
 
 	<window fullscreen="true" orientation="landscape" if="mobile" />
 
-	<window fps="0" if="web" />
-	<window fps="60" unless="web" />
+	<window fps="0" if="html5" />
+	<window fps="60" unless="html5" />
 
 	<source path="source" />
 
