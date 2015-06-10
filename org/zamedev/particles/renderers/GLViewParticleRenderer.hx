@@ -248,8 +248,8 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
             for (i in 0 ... ps.__particleCount) {
                 var particle = ps.__particleList[i];
 
-                var tx = particle.position.x;
-                var ty = particle.position.y;
+                var tx = particle.position.x * ps.particleScaleX;
+                var ty = particle.position.y * ps.particleScaleY;
                 var cr = particle.color.r;
                 var cg = particle.color.g;
                 var cb = particle.color.b;

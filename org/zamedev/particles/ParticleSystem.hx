@@ -85,7 +85,7 @@ class ParticleSystem {
         }
 
         prevTime = -1.0;
-        emissionRate = maxParticles / particleLifespan;
+        emissionRate = maxParticles / Math.max(0.0001, particleLifespan);
         emitCounter = 0.0;
         elapsedTime = 0.0;
 
@@ -123,6 +123,10 @@ class ParticleSystem {
                 initParticle(__particleList[__particleCount]);
                 __particleCount++;
                 emitCounter -= rate;
+            }
+
+            if (emitCounter > rate) {
+                emitCounter = (emitCounter % rate);
             }
 
             elapsedTime += dt;
