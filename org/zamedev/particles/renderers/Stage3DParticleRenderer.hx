@@ -41,7 +41,7 @@ class Stage3DParticleRenderer extends Sprite implements ParticleSystemRenderer {
         ps.__initialize();
 
         // premultipliedAlpha is set to true for reason
-        var tilesheet = new TilesheetStage3D(TilesheetStage3D.fixTextureSize(ps.textureBitmapData), true);
+        var tilesheet = new TilesheetStage3D(TilesheetStage3D.fixTextureSize(ps.textureBitmapData, true));
 
         tilesheet.addTileRect(
             ps.textureBitmapData.rect.clone(),
