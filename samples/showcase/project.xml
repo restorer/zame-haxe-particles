@@ -18,17 +18,12 @@
 		background="#0a0b29"
 		resizable="false"
 		vsync="true"
-		width="800"
-		height="600"
+		fps="60"
 	/>
 
 	<window width="0" height="0" if="dom || mobile" />
 	<window width="800" height="600" unless="dom || mobile" />
-
 	<window fullscreen="true" orientation="landscape" if="mobile" />
-
-	<window fps="0" if="html5" />
-	<window fps="60" unless="html5" />
 
 	<source path="source" />
 
