@@ -10,7 +10,7 @@ pushd `dirname "$0"`
 
 zip -r -9 zame-particles.zip * -x submit-to-haxelib.sh
 
-# [ -e zame-particles.zip ] && haxelib submit zame-particles.zip
-# [ -e zame-particles.zip ] && rm zame-particles.zip
+[ -e zame-particles.zip ] && haxelib submit zame-particles.zip
+[ -e zame-particles.zip ] && rm zame-particles.zip
 
 popd
