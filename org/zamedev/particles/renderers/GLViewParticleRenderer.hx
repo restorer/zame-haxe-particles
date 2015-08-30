@@ -10,7 +10,6 @@ import openfl.gl.GLTexture;
 import openfl.gl.GLUniformLocation;
 import openfl.utils.Float32Array;
 import openfl.utils.Int16Array;
-import org.zamedev.particles.internal.GLUtils;
 import org.zamedev.particles.internal.GLUtilsExt;
 import org.zamedev.particles.internal.Matrix4;
 import org.zamedev.particles.internal.OpenGLViewExt;
@@ -20,32 +19,32 @@ import org.zamedev.particles.internal.SizeUtils;
 // https://github.com/openfl/openfl-samples/blob/master/SimpleOpenGLView/Source/Main.hx
 
 typedef GLViewParticleRendererData = {
-    ps:ParticleSystem,
-    texture:GLTexture,
-    vertexBuffer:GLBuffer,
-    vertexData:Float32Array,
-    indicesBuffer:GLBuffer,
-    indicesData:Int16Array,
-    updated:Bool,
+    ps : ParticleSystem,
+    texture : GLTexture,
+    vertexBuffer : GLBuffer,
+    vertexData : Float32Array,
+    indicesBuffer : GLBuffer,
+    indicesData : Int16Array,
+    updated : Bool,
 };
 
 class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRenderer {
-    private static inline var VERTEX_XYZ = 0;
-    private static inline var VERTEX_UV = 3;
-    private static inline var VERTEX_RGBA = 5;
-    private static inline var VERTEX_SIZE = 9;
-    private static inline var INDEX_SIZE = 6;
+    private static inline var VERTEX_XYZ : Int = 0;
+    private static inline var VERTEX_UV : Int = 3;
+    private static inline var VERTEX_RGBA : Int = 5;
+    private static inline var VERTEX_SIZE : Int = 9;
+    private static inline var INDEX_SIZE : Int = 6;
 
-    private var initialized:Bool = false;
-    private var dataList:Array<GLViewParticleRendererData> = [];
-    private var program:GLProgram;
-    private var vertexAttrLocation:Int;
-    private var textureAttrLocation:Int;
-    private var colorAttrLocation:Int;
-    private var matrixUniformLocation:GLUniformLocation;
-    private var imageUniformLocation:GLUniformLocation;
+    private var initialized : Bool = false;
+    private var dataList : Array<GLViewParticleRendererData> = [];
+    private var program : GLProgram;
+    private var vertexAttrLocation : Int;
+    private var textureAttrLocation : Int;
+    private var colorAttrLocation : Int;
+    private var matrixUniformLocation : GLUniformLocation;
+    private var imageUniformLocation : GLUniformLocation;
 
-    public function addParticleSystem(ps:ParticleSystem):ParticleSystemRenderer {
+    public function addParticleSystem(ps : ParticleSystem) : ParticleSystemRenderer {
         if (!initialized) {
             initGl();
             initialized = true;
@@ -61,9 +60,9 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
         var indicesBuffer = GL.createBuffer();
         var indicesData = new Int16Array(INDEX_SIZE * ps.maxParticles);
 
-        var vertexPos:Int = 0;
-        var indexPos:Int = 0;
-        var quadIdx:Int = 0;
+        var vertexPos : Int = 0;
+        var indexPos : Int = 0;
+        var quadIdx : Int = 0;
 
         for (i in 0 ... ps.maxParticles) {
             vertexData[vertexPos + VERTEX_XYZ + 3] = 0.0;
@@ -114,7 +113,7 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
         return this;
     }
 
-    public function removeParticleSystem(ps:ParticleSystem):ParticleSystemRenderer {
+    public function removeParticleSystem(ps : ParticleSystem) : ParticleSystemRenderer {
         var index = 0;
 
         while (index < dataList.length) {
@@ -132,7 +131,7 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
         return this;
     }
 
-    public function initGl():Void {
+    public function initGl() : Void {
         var vertexShaderSource = "
             varying vec4 vColor;
             varying vec2 vTexCoord;
@@ -186,7 +185,7 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
         GL.useProgram(null);
     }
 
-    private function renderGl(rect:Rectangle):Void {
+    private function renderGl(rect : Rectangle) : Void {
         var updated = false;
 
         for (data in dataList) {
@@ -243,7 +242,7 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
             var ps = data.ps;
             var vertexData = data.vertexData;
             var indicesData = data.indicesData;
-            var vertexPos:Int = 0;
+            var vertexPos : Int = 0;
 
             for (i in 0 ... ps.__particleCount) {
                 var particle = ps.__particleList[i];

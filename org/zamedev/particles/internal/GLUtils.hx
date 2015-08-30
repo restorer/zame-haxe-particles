@@ -1,12 +1,14 @@
 package org.zamedev.particles.internal;
 
 import openfl.errors.Error;
+import openfl.gl.GL;
 import openfl.gl.GLProgram;
 import openfl.gl.GLShader;
-import openfl.gl.GL;
+
+// taken from lime.utils.GLUtils (for older openfl versions)
 
 class GLUtils {
-    public static function compileShader(source:String, type:Int):GLShader {
+    public static function compileShader(source : String, type : Int) : GLShader {
         var shader = GL.createShader(type);
         GL.shaderSource(shader, source);
         GL.compileShader(shader);
@@ -27,7 +29,7 @@ class GLUtils {
         return shader;
     }
 
-    public static function createProgram(vertexSource:String, fragmentSource:String):GLProgram {
+    public static function createProgram(vertexSource : String, fragmentSource : String) : GLProgram {
         var vertexShader = compileShader (vertexSource, GL.VERTEX_SHADER);
         var fragmentShader = compileShader (fragmentSource, GL.FRAGMENT_SHADER);
 

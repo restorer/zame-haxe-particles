@@ -9,7 +9,7 @@ import org.zamedev.particles.renderers.DefaultParticleRenderer;
 class App extends Sprite {
     private var particleSystemList:Array<ParticleSystem> = [];
 
-    public function new() {
+    public function new() : Void {
         super();
 
         var particlesRenderer = DefaultParticleRenderer.createInstance();

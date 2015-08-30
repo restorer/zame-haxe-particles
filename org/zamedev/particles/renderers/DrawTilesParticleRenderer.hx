@@ -7,16 +7,16 @@ import openfl.geom.Point;
 import openfl.gl.GL;
 
 typedef DrawTilesParticleRendererData = {
-    ps:ParticleSystem,
-    tilesheet:Tilesheet,
-    tileData:Array<Float>,
-    updated:Bool,
+    ps : ParticleSystem,
+    tilesheet : Tilesheet,
+    tileData : Array<Float>,
+    updated : Bool,
 };
 
 class DrawTilesParticleRenderer extends Sprite implements ParticleSystemRenderer {
     private static inline var TILE_DATA_FIELDS = 9; // x, y, tileId, scale, rotation, red, green, blue, alpha
 
-    private var dataList:Array<DrawTilesParticleRendererData> = [];
+    private var dataList : Array<DrawTilesParticleRendererData> = [];
 
     #if (html5 && dom)
         private var styleIsDirty = true;
@@ -27,7 +27,7 @@ class DrawTilesParticleRenderer extends Sprite implements ParticleSystemRenderer
         mouseEnabled = false;
     }
 
-    public function addParticleSystem(ps:ParticleSystem):ParticleSystemRenderer {
+    public function addParticleSystem(ps : ParticleSystem) : ParticleSystemRenderer {
         if (dataList.length == 0) {
             addEventListener(Event.ENTER_FRAME, onEnterFrame);
         }
@@ -42,7 +42,7 @@ class DrawTilesParticleRenderer extends Sprite implements ParticleSystemRenderer
         );
 
         var tileData = new Array<Float>();
-        tileData[Std.int(ps.maxParticles * TILE_DATA_FIELDS - 1)] = 0.0; // Std.int(...) required for neko
+        tileData[Std.int(ps.maxParticles * TILE_DATA_FIELDS - 1)] = 0.0; // Std.int(...) is required for neko
 
         dataList.push({
             ps: ps,
@@ -54,7 +54,7 @@ class DrawTilesParticleRenderer extends Sprite implements ParticleSystemRenderer
         return this;
     }
 
-    public function removeParticleSystem(ps:ParticleSystem):ParticleSystemRenderer {
+    public function removeParticleSystem(ps : ParticleSystem) : ParticleSystemRenderer {
         var index = 0;
 
         while (index < dataList.length) {
@@ -72,7 +72,7 @@ class DrawTilesParticleRenderer extends Sprite implements ParticleSystemRenderer
         return this;
     }
 
-    private function onEnterFrame(_):Void {
+    private function onEnterFrame(_) : Void {
         var updated = false;
 
         for (data in dataList) {
@@ -102,8 +102,8 @@ class DrawTilesParticleRenderer extends Sprite implements ParticleSystemRenderer
 
             var ps = data.ps;
             var tileData = data.tileData;
-            var index:Int = 0;
-            var ethalonSize:Float = ps.textureBitmapData.width;
+            var index : Int = 0;
+            var ethalonSize : Float = ps.textureBitmapData.width;
 
             var flags = (ps.blendFuncSource == GL.SRC_ALPHA && ps.blendFuncDestination == GL.ONE
                 ? Tilesheet.TILE_BLEND_ADD

@@ -1,6 +1,6 @@
 package org.zamedev.particles.util;
 
 typedef ParticleVector = {
-    x:Float,
-    y:Float,
+    x : Float,
+    y : Float,
 };

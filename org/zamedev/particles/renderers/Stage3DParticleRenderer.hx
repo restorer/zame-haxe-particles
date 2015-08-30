@@ -11,10 +11,10 @@ import openfl.geom.Point;
 import openfl.gl.GL;
 
 typedef Stage3DRendererData = {
-    ps:ParticleSystem,
-    tilesheet:TilesheetStage3D,
-    tileData:Array<Float>,
-    updated:Bool,
+    ps : ParticleSystem,
+    tilesheet : TilesheetStage3D,
+    tileData : Array<Float>,
+    updated : Bool,
 };
 
 /**
@@ -26,14 +26,14 @@ typedef Stage3DRendererData = {
 class Stage3DParticleRenderer extends Sprite implements ParticleSystemRenderer {
     private static inline var TILE_DATA_FIELDS = 9; // x, y, tileId, scale, rotation, red, green, blue, alpha
 
-    private var dataList:Array<Stage3DRendererData> = [];
+    private var dataList : Array<Stage3DRendererData> = [];
 
     public function new() {
         super();
         mouseEnabled = false;
     }
 
-    public function addParticleSystem(ps:ParticleSystem):ParticleSystemRenderer {
+    public function addParticleSystem(ps : ParticleSystem) : ParticleSystemRenderer {
         if (dataList.length == 0) {
             addEventListener(Event.ENTER_FRAME, onEnterFrame);
         }
@@ -61,7 +61,7 @@ class Stage3DParticleRenderer extends Sprite implements ParticleSystemRenderer {
         return this;
     }
 
-    public function removeParticleSystem(ps:ParticleSystem):ParticleSystemRenderer {
+    public function removeParticleSystem(ps : ParticleSystem) : ParticleSystemRenderer {
         var index = 0;
 
         while (index < dataList.length) {
@@ -79,7 +79,7 @@ class Stage3DParticleRenderer extends Sprite implements ParticleSystemRenderer {
         return this;
     }
 
-    private function onEnterFrame(_):Void {
+    private function onEnterFrame(_) : Void {
         var updated = false;
 
         for (data in dataList) {
@@ -102,8 +102,8 @@ class Stage3DParticleRenderer extends Sprite implements ParticleSystemRenderer {
 
             var ps = data.ps;
             var tileData = data.tileData;
-            var index:Int = 0;
-            var ethalonSize:Float = ps.textureBitmapData.width;
+            var index : Int = 0;
+            var ethalonSize : Float = ps.textureBitmapData.width;
 
             var flags = (ps.blendFuncSource == GL.SRC_ALPHA && ps.blendFuncDestination == GL.ONE
                 ? Tilesheet.TILE_BLEND_ADD
@@ -127,6 +127,7 @@ class Stage3DParticleRenderer extends Sprite implements ParticleSystemRenderer {
                 index += TILE_DATA_FIELDS;
             }
 
+            // workaround
             if (index == 0) {
                 tileData[index] = 0.0; // x
                 tileData[index + 1] = 0.0; // y

@@ -1,0 +1,13 @@
+{
+    "name": "zame-particles",
+    "url": "https://github.com/restorer/zame-haxe-particles/",
+    "license": "BSD",
+    "tags": ["cross", "openfl", "game", "particle", "particles", "emitter"],
+    "description": "Particle system for OpenFl.",
+    "version": "1.0.0",
+    "releasenote": "Initial release.",
+    "contributors": ["restorer"],
+    "dependencies": {
+        "format": ""
+    }
+}

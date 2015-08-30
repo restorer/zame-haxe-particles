@@ -15,9 +15,16 @@ Features:
 
 ## Installation
 
+Stable version from haxelib:
+
+```
+haxelib install zame-particles
+```
+
+Latest development version:
+
 ```
 haxelib git zame-particles https://github.com/restorer/zame-haxe-particles.git
-haxelib git zame-miscutils https://github.com/restorer/zame-haxe-miscutils.git
 ```
 
 ## Usage
@@ -25,10 +32,8 @@ haxelib git zame-miscutils https://github.com/restorer/zame-haxe-miscutils.git
 First of all, append following to your project.xml:
 
 ```xml
-<haxelib name="format" />
-<haxelib name="zame-miscutils" />
-<haxelib name="zame-particles" />
 <haxedef name="haxeJSON" />
+<haxelib name="zame-particles" />
 ```
 
 Next, in code, create particle renderer and add it as child to container:
@@ -52,6 +57,24 @@ ps.emit(stage.stageWidth / 2, stage.stageHeight / 2);
 ```
 
 **See minimal example under samples/minimal for more info.**
+
+If you have multiple particle systems (particle emitters), you should use only one renderer for them:
+
+```
+var renderer = DefaultParticleRenderer.createInstance();
+addChild(cast renderer);
+
+var ps1 = ParticleLoader.load("particle/ps1.plist");
+renderer.addParticleSystem(ps1);
+
+var ps2 = ParticleLoader.load("particle/ps2.plist");
+renderer.addParticleSystem(ps2);
+
+var ps3 = ParticleLoader.load("particle/ps3.plist");
+renderer.addParticleSystem(ps3);
+```
+
+In some cases you may need several renderers, for example some particles on background layer, than player sprite, than some particles over player sprite. It is safe to use several renderers, but there is one important note about GL renderer for html5 with `-Ddom`. Browser give you limited number of WebGL contexts, so don't use too much renderers and test you game in various browsers.
 
 ## Export notes
 

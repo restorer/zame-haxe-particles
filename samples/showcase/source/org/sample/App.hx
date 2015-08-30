@@ -18,12 +18,12 @@ import org.zamedev.particles.renderers.DefaultParticleRenderer;
 #end
 
 class App extends Sprite {
-    private var mousePressed:Bool = false;
-    private var particleSystemList:Array<ParticleSystem> = [];
-    private var infoTextField:TextField;
-    private var currentIndex:Int = 0;
+    private var mousePressed : Bool = false;
+    private var particleSystemList : Array<ParticleSystem> = [];
+    private var infoTextField : TextField;
+    private var currentIndex : Int = 0;
 
-    public function new() {
+    public function new() : Void {
         super();
 
         #if (flash11 && zameparticles_stage3d)
@@ -35,7 +35,7 @@ class App extends Sprite {
         #end
     }
 
-    private function ready(result:String) {
+    private function ready(result : String) : Void {
         #if (flash11 && zameparticles_stage3d)
             if (result != "success") {
                 trace("Stage3D error. Probably wrong wmode.");
@@ -55,7 +55,7 @@ class App extends Sprite {
         addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
     }
 
-    private function addClickableArea():Void {
+    private function addClickableArea() : Void {
         #if (flash11 && zameparticles_stage3d)
             var shape = new openfl.display.Shape();
             shape.graphics.beginFill(0x030b2d);
@@ -71,20 +71,21 @@ class App extends Sprite {
         #end
     }
 
-    private function addInterface():Void {
+    private function addInterface() : Void {
         addTextField(20, 20, 100, 0xfab91e, 0x000000, "Prev");
         infoTextField = addTextField(120, 20, 100, -1, 0xffffff);
         addTextField(220, 20, 100, 0xfab91e, 0x000000, "Next");
         addTextField(20, 55, 300, -1, 0xffffff, "Click to emit");
     }
 
-    private function addTextField(x:Float, y:Float, width:Float, backgroundColor:Int, textColor:Int, ?text:String):TextField {
+    private function addTextField(x : Float, y : Float, width : Float, backgroundColor : Int, textColor : Int, ?text : String) : TextField {
         var textField = new TextField();
         textField.x = x;
         textField.y = y;
         textField.width = width;
         textField.height = #if !html5 30 #else 25 #end;
         textField.embedFonts = true;
+        textField.selectable = false;
 
         if (backgroundColor >= 0) {
             textField.background = true;
@@ -107,7 +108,7 @@ class App extends Sprite {
         return textField;
     }
 
-    private function loadAndAddParticles():Void {
+    private function loadAndAddParticles() : Void {
         var particlesRenderer = DefaultParticleRenderer.createInstance();
         addChild(cast particlesRenderer);
 
@@ -134,13 +135,13 @@ class App extends Sprite {
         }
     }
 
-    private function updateInfo():Void {
+    private function updateInfo() : Void {
         infoTextField.text = Std.string(currentIndex + 1) + ":" + Std.string(particleSystemList.length);
         particleSystemList[currentIndex].emit(stage.stageWidth / 2, stage.stageHeight / 2);
     }
 
-    private function onMouseDown(e:Event):Void {
-        var me:MouseEvent = cast e;
+    private function onMouseDown(e : Event) : Void {
+        var me : MouseEvent = cast e;
 
         if (me.stageY >= 20 && me.stageY <= #if !html5 50 #else 45 #end) {
             if (me.stageX >= 20 && me.stageX <= 120) {
@@ -162,14 +163,14 @@ class App extends Sprite {
         mousePressed = true;
     }
 
-    private function onMouseMove(e:Event):Void {
+    private function onMouseMove(e : Event) : Void {
         if (mousePressed) {
-            var me:MouseEvent = cast e;
+            var me : MouseEvent = cast e;
             particleSystemList[currentIndex].emit(me.stageX, me.stageY);
         }
     }
 
-    private function onMouseUp(e:Event):Void {
+    private function onMouseUp(e : Event) : Void {
         mousePressed = false;
     }
 }

@@ -7,7 +7,7 @@ import openfl.gl.GLTexture;
 import openfl.utils.UInt8Array;
 
 class GLUtilsExt {
-    public static function texImage2D(bitmapData:BitmapData):Void {
+    public static function texImage2D(bitmapData : BitmapData) : Void {
         #if js
             var pixelData = bitmapData.getPixels(bitmapData.rect).byteView;
         #else
@@ -17,7 +17,7 @@ class GLUtilsExt {
         GL.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, bitmapData.width, bitmapData.height, 0, GL.RGBA, GL.UNSIGNED_BYTE, pixelData);
     }
 
-    public static function createTexture(bitmapData:BitmapData, wrapSParam:Null<Int> = null, wrapTParam:Null<Int> = null):GLTexture {
+    public static function createTexture(bitmapData : BitmapData, ?wrapSParam : Null<Int>, ?wrapTParam : Null<Int>) : GLTexture {
         if (wrapSParam == null) {
             wrapSParam = GL.CLAMP_TO_EDGE;
         }
@@ -37,7 +37,7 @@ class GLUtilsExt {
         return texture;
     }
 
-    public static function createAndUseProgram(vertexSource:String, fragmentSource:String):GLProgram {
+    public static function createAndUseProgram(vertexSource : String, fragmentSource : String) : GLProgram {
         var program = GLUtils.createProgram(vertexSource, fragmentSource);
         GL.useProgram(program);
         return program;

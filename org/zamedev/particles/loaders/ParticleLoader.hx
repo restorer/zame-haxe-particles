@@ -11,7 +11,7 @@ import org.zamedev.particles.ParticleSystem;
 import org.zamedev.particles.internal.tiff.TiffDecoder;
 
 class ParticleLoader {
-    public static function load(path:String):ParticleSystem {
+    public static function load(path : String) : ParticleSystem {
         var ext = Path.extension(path).toLowerCase();
 
         switch (ext) {
@@ -29,7 +29,7 @@ class ParticleLoader {
         }
     }
 
-    public static function loadTexture(textureImageData:String, textureFileName:String, path:String):BitmapData {
+    public static function loadTexture(textureImageData : String, textureFileName : String, path : String) : BitmapData {
         if (textureImageData == null || textureImageData.length == 0) {
             return Assets.getBitmapData(Path.directory(path) + "/" + textureFileName);
         }
@@ -48,7 +48,7 @@ class ParticleLoader {
         var decoded = TiffDecoder.decode(data);
 
         var result = new BitmapData(decoded.width, decoded.height, true, 0);
-        result.setPixels(new Rectangle(0, 0, decoded.width, decoded.height), decoded.pixels);
+        result.setPixels(new Rectangle(0.0, 0.0, decoded.width, decoded.height), decoded.pixels);
 
         return result;
     }

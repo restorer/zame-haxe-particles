@@ -6,11 +6,11 @@ import openfl.utils.ByteArray;
 // http://partners.adobe.com/public/developer/en/tiff/TIFF6.pdf
 
 class TiffDecoder {
-    private var data:Bytes;
-    private var isBigEndian:Bool;
-    private var ifdOffset:Int;
+    private var data : Bytes;
+    private var isBigEndian : Bool;
+    private var ifdOffset : Int;
 
-    public function new(data:Bytes):Void {
+    public function new(data : Bytes) : Void {
         if (data.length < 8) {
             throw "invalid header: size";
         }
@@ -36,11 +36,11 @@ class TiffDecoder {
         }
     }
 
-    public function run():TiffImage {
+    public function run() : TiffImage {
         return parseIfd(ifdOffset);
     }
 
-    private function parseIfd(pos:Int):TiffImage {
+    private function parseIfd(pos : Int) : TiffImage {
         var numDirEntries = getUShort(pos);
         pos += 2;
 
@@ -57,7 +57,7 @@ class TiffDecoder {
         return parseImage(tagMap);
     }
 
-    private function parseImage(tagMap:Map<Int, Array<Int>>):TiffImage {
+    private function parseImage(tagMap : Map<Int, Array<Int>>) : TiffImage {
         if (!tagMap.exists(cast TagId.ImageWidth)
             || !tagMap.exists(cast TagId.ImageLength)
             || !tagMap.exists(cast TagId.PhotometricInterpretation)
@@ -139,7 +139,7 @@ class TiffDecoder {
         }
 
         var imageWidth = tagMap[cast TagId.ImageWidth][0];
-        var computedSize = Lambda.fold(stripByteCounts, function(a:Int, b:Int):Int { return a + b; }, 0);
+        var computedSize = Lambda.fold(stripByteCounts, function(a : Int, b : Int) : Int { return a + b; }, 0);
 
         if (imageWidth * imageLength * 4 != computedSize) {
             throw "invalid StripByteCounts value";
@@ -203,11 +203,11 @@ class TiffDecoder {
         };
     }
 
-    private function getOrDefault(tagMap:Map<Int, Array<Int>>, tagId:TagId, def:Array<Int>):Array<Int> {
+    private function getOrDefault(tagMap : Map<Int, Array<Int>>, tagId : TagId, def : Array<Int>) : Array<Int> {
         return (tagMap.exists(cast tagId) ? tagMap[cast tagId] : def);
     }
 
-    private function compareArray(a:Array<Int>, b:Array<Int>):Bool {
+    private function compareArray(a : Array<Int>, b : Array<Int>) : Bool {
         if (a.length != b.length) {
             return false;
         }
@@ -221,8 +221,8 @@ class TiffDecoder {
         return true;
     }
 
-    private function parseTag(pos:Int, tagMap:Map<Int, Array<Int>>):Void {
-        var tagId:TagId = cast getUShort(pos);
+    private function parseTag(pos : Int, tagMap : Map<Int, Array<Int>>) : Void {
+        var tagId : TagId = cast getUShort(pos);
 
         switch (tagId) {
             case ImageWidth
@@ -244,8 +244,8 @@ class TiffDecoder {
         }
     }
 
-    private function parseTagData(pos:Int):Array<Int> {
-        var dataType:DataType = cast getUShort(pos + 2);
+    private function parseTagData(pos : Int) : Array<Int> {
+        var dataType : DataType = cast getUShort(pos + 2);
         var dataCount = getULong(pos + 4);
 
         if (dataCount == 0) {
@@ -296,12 +296,12 @@ class TiffDecoder {
         return result;
     }
 
-    private function getSByte(pos:Int):Int {
+    private function getSByte(pos : Int) : Int {
         var value = data.get(pos);
         return (value <= 0x7f ? value : value - 0x100);
     }
 
-    private function getUShort(pos:Int):Int {
+    private function getUShort(pos : Int) : Int {
         if (isBigEndian) {
             return (data.get(pos) << 8) | data.get(pos + 1);
         } else {
@@ -309,12 +309,12 @@ class TiffDecoder {
         }
     }
 
-    private function getSShort(pos:Int):Int {
+    private function getSShort(pos : Int) : Int {
         var value = getUShort(pos);
         return (value <= 0x7fff ? value : value - 0x10000);
     }
 
-    private function getULong(pos:Int):Int {
+    private function getULong(pos : Int) : Int {
         if (isBigEndian) {
             return (data.get(pos) << 24) | (data.get(pos + 1) << 16) | (data.get(pos + 2) << 8) | data.get(pos + 3);
         } else {
@@ -322,12 +322,12 @@ class TiffDecoder {
         }
     }
 
-    private function getSLong(pos:Int):Int {
+    private function getSLong(pos : Int) : Int {
         var value = getULong(pos);
         return (value <= 0x7fffffff ? value : ((value - 0x7fffffff) - 0x7fffffff) - 2);
     }
 
-    public static function decode(data:Bytes):TiffImage {
+    public static function decode(data : Bytes) : TiffImage {
         var decoder = new TiffDecoder(data);
         return decoder.run();
     }

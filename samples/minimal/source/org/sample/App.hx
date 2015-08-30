@@ -11,7 +11,7 @@ import org.zamedev.particles.renderers.DefaultParticleRenderer;
 #end
 
 class App extends Sprite {
-    public function new() {
+    public function new() : Void {
         super();
 
         #if (flash11 && zameparticles_stage3d)
@@ -23,7 +23,7 @@ class App extends Sprite {
         #end
     }
 
-    private function ready(result:String) {
+    private function ready(result : String) : Void {
         #if (flash11 && zameparticles_stage3d)
             if (result != "success") {
                 trace("Stage3D error. Probably wrong wmode.");

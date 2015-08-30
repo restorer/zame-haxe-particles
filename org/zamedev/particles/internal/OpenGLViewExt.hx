@@ -12,7 +12,7 @@ import openfl.gl.GL;
 
 @:access(lime.graphics.opengl.GL)
 class OpenGLViewExt extends OpenGLView {
-    public function new() {
+    public function new() : Void {
         super();
 
         if (!OpenGLView.isSupported) {
@@ -21,7 +21,7 @@ class OpenGLViewExt extends OpenGLView {
     }
 
     @:noCompletion
-    public override function __renderDOM(renderSession:RenderSession):Void {
+    public override function __renderDOM(renderSession : RenderSession) : Void {
         if (stage != null && __worldVisible && __renderable) {
             if (!__added) {
                 renderSession.element.appendChild(__canvas);
@@ -40,7 +40,7 @@ class OpenGLViewExt extends OpenGLView {
                 GL.context = cast __context;
 
                 if (scrollRect == null) {
-                    __render(new Rectangle(0, 0, __canvas.width, __canvas.height));
+                    __render(new Rectangle(0.0, 0.0, __canvas.width, __canvas.height));
                 } else {
                     __render(new Rectangle(x + scrollRect.x, y + scrollRect.y, scrollRect.width, scrollRect.height));
                 }

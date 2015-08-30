@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
-	<meta title="Particles" package="org.sample" version="1.0.0" company="ZameDev" />
+    <meta title="Particles" package="org.sample" version="1.0.0" company="ZameDev" />
 
-	<app main="org.sample.App" path="export" file="sample" />
-	<icon path="assets/icon.png" />
+    <app main="org.sample.App" path="export" file="sample" />
+    <icon path="assets/icon.png" />
 
-	<haxelib name="openfl" />
-	<haxelib name="format" />
-	<haxelib name="zame-miscutils" />
-	<haxelib name="zame-particles" />
+    <set name="legacy" if="native" />
+    <set name="SWF_VERSION" value="11.2" if="flash" />
 
-	<haxedef name="haxeJSON" />
-	<haxedef name="zameparticles_stage3d" if="flash" />
+    <haxedef name="haxeJSON" />
+    <haxedef name="zameparticles_stage3d" if="flash" />
 
-	<window
-		hardware="true"
-		background="#0a0b29"
-		resizable="false"
-		vsync="true"
-		fps="60"
-	/>
+    <haxelib name="openfl" />
+    <haxelib name="zame-particles" />
 
-	<window width="0" height="0" if="dom || mobile" />
-	<window width="800" height="600" unless="dom || mobile" />
-	<window fullscreen="true" orientation="landscape" if="mobile" />
+    <window
+        hardware="true"
+        background="#0a0b29"
+        resizable="false"
+        vsync="true"
+        fps="60"
+    />
 
-	<source path="source" />
+    <window width="0" height="0" if="dom || mobile" />
+    <window width="800" height="600" unless="dom || mobile" />
+    <window fullscreen="true" orientation="landscape" if="mobile" />
 
-	<assets path="assets/font" exclude="*.eot|*.svg|*.woff" rename="font" />
-	<assets path="assets/particle" rename="particle" />
+    <source path="source" />
 
-	<!-- <architecture name="armv6" if="android" /> -->
-	<architecture name="x86" if="android" />
-	<set name="SWF_VERSION" value="11.2" if="flash" />
+    <assets path="assets/font" exclude="*.eot|*.svg|*.woff" rename="font" />
+    <assets path="assets/particle" rename="particle" />
+
+    <!-- <architecture name="armv6" if="android" /> -->
+    <architecture name="x86" if="android" />
 </project>

@@ -4,24 +4,24 @@ import org.zamedev.particles.util.ParticleColor;
 import org.zamedev.particles.util.ParticleVector;
 
 class Particle {
-    public var startPos:ParticleVector;
-    public var position:ParticleVector;
-    public var direction:ParticleVector;
-    public var color:ParticleColor;
-    public var colorDelta:ParticleColor;
-    public var rotation:Float;
-    public var rotationDelta:Float;
-    public var radius:Float;
-    public var radiusDelta:Float;
-    public var angle:Float;
-    public var angleDelta:Float;
-    public var particleSize:Float;
-    public var particleSizeDelta:Float;
-    public var radialAcceleration:Float;
-    public var tangentialAcceleration:Float;
-    public var timeToLive:Float;
+    public var startPos : ParticleVector;
+    public var position : ParticleVector;
+    public var direction : ParticleVector;
+    public var color : ParticleColor;
+    public var colorDelta : ParticleColor;
+    public var rotation : Float;
+    public var rotationDelta : Float;
+    public var radius : Float;
+    public var radiusDelta : Float;
+    public var angle : Float;
+    public var angleDelta : Float;
+    public var particleSize : Float;
+    public var particleSizeDelta : Float;
+    public var radialAcceleration : Float;
+    public var tangentialAcceleration : Float;
+    public var timeToLive : Float;
 
-    public function new() {
+    public function new() : Void {
         position = { x: 0.0, y: 0.0 };
         direction = { x: 0.0, y: 0.0 };
         startPos = { x: 0.0, y: 0.0 };
@@ -29,7 +29,7 @@ class Particle {
         colorDelta = { r: 0.0, g: 0.0, b: 0.0, a: 0.0 };
     }
 
-    public function update(ps:ParticleSystem, dt:Float):Bool {
+    public function update(ps : ParticleSystem, dt : Float) : Bool {
         timeToLive -= dt;
 
         if (timeToLive <= 0.0) {

@@ -2,16 +2,16 @@ package org.zamedev.particles.loaders;
 
 import haxe.Json;
 import openfl.Assets;
-import org.zamedev.lib.DynamicExt;
 import org.zamedev.particles.ParticleSystem;
+import org.zamedev.particles.util.DynamicExt;
 import org.zamedev.particles.util.MathHelper;
 import org.zamedev.particles.util.ParticleColor;
 import org.zamedev.particles.util.ParticleVector;
 
-using org.zamedev.lib.DynamicTools;
+using org.zamedev.particles.util.DynamicTools;
 
 class JsonParticleLoader {
-    public static function load(path:String):ParticleSystem {
+    public static function load(path : String) : ParticleSystem {
         var map:DynamicExt = Json.parse(Assets.getText(path));
         var ps = new ParticleSystem();
 
@@ -58,14 +58,14 @@ class JsonParticleLoader {
         return ps;
     }
 
-    private static function asVector(map:DynamicExt, prefix:String):ParticleVector {
+    private static function asVector(map : DynamicExt, prefix : String) : ParticleVector {
         return {
             x: map['${prefix}x'].asFloat(),
             y: map['${prefix}y'].asFloat(),
         };
     }
 
-    private static function asColor(map:DynamicExt, prefix:String):ParticleColor {
+    private static function asColor(map : DynamicExt, prefix : String) : ParticleColor {
         return {
             r: map['${prefix}Red'].asFloat(),
             g: map['${prefix}Green'].asFloat(),

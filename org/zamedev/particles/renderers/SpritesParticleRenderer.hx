@@ -8,21 +8,21 @@ import openfl.geom.Point;
 import openfl.gl.GL;
 
 typedef SpriteInfo = {
-    sprite:Sprite,
-    colorTransform:ColorTransform,
-    visible:Bool,
+    sprite : Sprite,
+    colorTransform : ColorTransform,
+    visible : Bool,
 };
 
 typedef SpritesParticleRendererData = {
-    ps:ParticleSystem,
-    spriteList:Array<SpriteInfo>,
-    updated:Bool,
+    ps : ParticleSystem,
+    spriteList : Array<SpriteInfo>,
+    updated : Bool,
 };
 
 class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
-    private var dataList:Array<SpritesParticleRendererData> = [];
+    private var dataList : Array<SpritesParticleRendererData> = [];
 
-    public function addParticleSystem(ps:ParticleSystem):ParticleSystemRenderer {
+    public function addParticleSystem(ps : ParticleSystem) : ParticleSystemRenderer {
         if (dataList.length == 0) {
             addEventListener(Event.ENTER_FRAME, onEnterFrame);
         }
@@ -57,7 +57,7 @@ class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
         return this;
     }
 
-    public function removeParticleSystem(ps:ParticleSystem):ParticleSystemRenderer {
+    public function removeParticleSystem(ps : ParticleSystem) : ParticleSystemRenderer {
         var index = 0;
 
         while (index < dataList.length) {
@@ -79,7 +79,7 @@ class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
         return this;
     }
 
-    private function onEnterFrame(_):Void {
+    private function onEnterFrame(_) : Void {
         var updated = false;
 
         for (data in dataList) {
@@ -99,7 +99,7 @@ class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
 
             var ps = data.ps;
             var spriteList = data.spriteList;
-            var ethalonSize:Float = ps.textureBitmapData.width;
+            var ethalonSize : Float = ps.textureBitmapData.width;
 
             for (i in 0 ... ps.__particleCount) {
                 var particle = ps.__particleList[i];
