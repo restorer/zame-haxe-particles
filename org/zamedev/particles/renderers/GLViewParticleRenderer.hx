@@ -211,7 +211,7 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
             GL.enable(GL.TEXTURE_2D);
         #end
 
-        var worldMatrix = __getTransform();
+        var worldMatrix = __getWorldTransform();
         var worldMatrixInv = worldMatrix.clone();
         worldMatrixInv.tx = 0.0;
         worldMatrixInv.ty = 0.0;
