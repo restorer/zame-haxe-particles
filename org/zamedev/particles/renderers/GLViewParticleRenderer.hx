@@ -158,7 +158,7 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
             vec4 color;
 
             void main(void) {
-                color = texture2D(uImage, vTexCoord).gbar;
+                color = texture2D(uImage, vTexCoord);
 
                 gl_FragColor = vec4(
                     color.r * color.a * vColor.r,

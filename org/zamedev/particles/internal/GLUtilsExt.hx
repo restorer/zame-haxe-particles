@@ -9,7 +9,7 @@ import openfl.utils.UInt8Array;
 class GLUtilsExt {
     public static function texImage2D(bitmapData : BitmapData) : Void {
         #if js
-            var pixelData = bitmapData.getPixels(bitmapData.rect).byteView;
+            var pixelData = bitmapData.image.data;
         #else
             var pixelData = new UInt8Array(bitmapData.getPixels(bitmapData.rect));
         #end

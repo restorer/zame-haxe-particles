@@ -118,10 +118,10 @@ class DrawTilesParticleRenderer extends Sprite implements ParticleSystemRenderer
                 tileData[index + 2] = 0.0; // tileId
                 tileData[index + 3] = particle.particleSize / ethalonSize * ps.particleScaleSize; // scale
                 tileData[index + 4] = particle.rotation; // rotation
-                tileData[index + 5] = particle.color.r;
+                tileData[index + 5] = #if webgl particle.color.b #else particle.color.r #end;
                 tileData[index + 6] = particle.color.g;
-                tileData[index + 7] = particle.color.b;
-                tileData[index + 8] = particle.color.a;
+                tileData[index + 7] = #if webgl particle.color.r #else particle.color.b #end;
+                tileData[index + 8] = particle.color.a; // a
 
                 index += TILE_DATA_FIELDS;
             }

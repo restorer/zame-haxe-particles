@@ -4,11 +4,13 @@ import openfl.display.OpenGLView;
 
 #if (html5 && dom)
 
-import openfl._internal.renderer.RenderSession;
+import js.Browser;
 import openfl._internal.renderer.dom.DOMRenderer;
+import openfl._internal.renderer.RenderSession;
 import openfl.errors.Error;
 import openfl.geom.Rectangle;
 import openfl.gl.GL;
+import openfl.Lib;
 
 @:access(lime.graphics.opengl.GL)
 class OpenGLViewExt extends OpenGLView {
@@ -17,6 +19,33 @@ class OpenGLViewExt extends OpenGLView {
 
         if (!OpenGLView.isSupported) {
             throw new Error("OpenGL context required");
+        }
+
+        if (__initialized) {
+            __context = null;
+            __canvas = null;
+
+            __canvas = cast Browser.document.createElement ("canvas");
+            __canvas.width = Lib.current.stage.stageWidth;
+            __canvas.height = Lib.current.stage.stageHeight;
+
+            __context = cast __canvas.getContext("webgl", {
+                alpha : true,
+                premultipliedAlpha : true,
+                antialias : false,
+                depth : false,
+                stencil : false
+            });
+
+            if (__context == null) {
+                __context = cast __canvas.getContext ("experimental-webgl");
+            }
+
+            #if debug
+                __context = untyped WebGLDebugUtils.makeDebugContext (__context);
+            #end
+
+            GL.context = cast __context;
         }
     }
 
