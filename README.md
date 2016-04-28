@@ -107,5 +107,6 @@ All other targets should use drawTiles renderer:
 - [x] Create importer for particles in luxeengine
 - [x] Implement SpritesRenderer
 - [x] Implement Stage3DRenderer
+- [ ] Implement TilemapRenderer
 - [ ] Support for lime / snow directly without openfl / luxeengine
 - [ ] Support for HaxeFlixel and / or HaxePunk?

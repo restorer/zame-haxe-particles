@@ -50,9 +50,9 @@ class App extends Sprite {
 
         addChild(new FPS(0, 0, 0xff0000));
 
-        addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-        addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-        addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+        stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+        stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+        stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
     }
 
     private function addClickableArea() : Void {
