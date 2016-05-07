@@ -96,7 +96,7 @@ If you use [TilesheetStage3D](https://github.com/as3boyan/TilesheetStage3D) libr
 
 All other targets should use drawTiles renderer:
 
-  - html5 in canvas mode - still pretty fast, doesn't support color effects. Can render incorrectly due to bug in openfl, please apply [this patch](https://github.com/openfl/openfl/pull/434) if you encounter it.
+  - html5 in canvas mode - still pretty fast, doesn't support color effects. Can render incorrectly due to bug in openfl, please apply [this patch](https://github.com/openfl/openfl/pull/1113) ([or this for earlier versions of openfl](https://github.com/openfl/openfl/pull/434)) if you encounter it.
   - native - fast, support color effects, hovewer in some cases GL renderer looks better.
 
 ## Roadmap for future
