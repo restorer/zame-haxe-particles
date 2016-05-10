@@ -9,12 +9,12 @@ class Vector4 {
 
     public var length(get, null) : Float;
     public var lengthSquared(get, null) : Float;
-    public var w:Float;
-    public var x:Float;
-    public var y:Float;
-    public var z:Float;
+    public var w : Float;
+    public var x : Float;
+    public var y : Float;
+    public var z : Float;
 
-    public function new(x:Float = 0.0, y:Float = 0.0, z:Float = 0.0, w:Float = 0.0) : Void {
+    public function new(x : Float = 0.0, y : Float = 0.0, z : Float = 0.0, w : Float = 0.0) : Void {
         this.w = w;
         this.x = x;
         this.y = y;

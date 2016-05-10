@@ -12,7 +12,7 @@ using org.zamedev.particles.util.DynamicTools;
 
 class JsonParticleLoader {
     public static function load(path : String) : ParticleSystem {
-        var map:DynamicExt = Json.parse(Assets.getText(path));
+        var map : DynamicExt = Json.parse(Assets.getText(path));
         var ps = new ParticleSystem();
 
         ps.emitterType = map["emitterType"].asInt();

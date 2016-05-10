@@ -25,7 +25,7 @@ class OpenGLViewExt extends OpenGLView {
             __context = null;
             __canvas = null;
 
-            __canvas = cast Browser.document.createElement ("canvas");
+            __canvas = cast Browser.document.createElement("canvas");
             __canvas.width = Lib.current.stage.stageWidth;
             __canvas.height = Lib.current.stage.stageHeight;
 
@@ -38,11 +38,11 @@ class OpenGLViewExt extends OpenGLView {
             });
 
             if (__context == null) {
-                __context = cast __canvas.getContext ("experimental-webgl");
+                __context = cast __canvas.getContext("experimental-webgl");
             }
 
             #if debug
-                __context = untyped WebGLDebugUtils.makeDebugContext (__context);
+                __context = untyped WebGLDebugUtils.makeDebugContext(__context);
             #end
 
             GL.context = cast __context;
