@@ -121,7 +121,8 @@ class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
                 colorTransform.blueMultiplier = particle.color.b;
                 colorTransform.alphaMultiplier = particle.color.a;
                 sprite.transform.colorTransform = colorTransform;
-
+                sprite.alpha = particle.color.a;
+                
                 if (!info.visible) {
                     info.visible = true;
                     sprite.visible = true;
