@@ -61,7 +61,7 @@ class ParticleSystem {
     public var yCoordMultiplier : Float;
 
     private var prevTime : Float;
-    private var emissionRate : Float;
+    public var emissionRate : Float;
     private var emitCounter : Float;
     private var elapsedTime : Float;
 
@@ -74,6 +74,7 @@ class ParticleSystem {
         particleScaleX = 1.0;
         particleScaleY = 1.0;
         particleScaleSize = 1.0;
+        emissionRate = 0.0;
     }
 
     public function __initialize() : ParticleSystem {
@@ -86,7 +87,10 @@ class ParticleSystem {
         }
 
         prevTime = -1.0;
-        emissionRate = maxParticles / Math.max(0.0001, particleLifespan);
+        if (emissionRate <= 0.0)
+        {
+            emissionRate = maxParticles / Math.max(0.0001, particleLifespan);
+        }
         emitCounter = 0.0;
         elapsedTime = 0.0;
 
@@ -183,6 +187,7 @@ class ParticleSystem {
             b: MathHelper.clamp(startColor.b + startColorVariance.b * MathHelper.rnd1to1()),
             a: MathHelper.clamp(startColor.a + startColorVariance.a * MathHelper.rnd1to1()),
         };
+
 
         p.colorDelta = {
             r: (MathHelper.clamp(finishColor.r + finishColorVariance.r * MathHelper.rnd1to1()) - p.color.r) / p.timeToLive,
