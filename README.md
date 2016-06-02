@@ -110,3 +110,6 @@ All other targets should use drawTiles renderer:
 - [ ] Implement TilemapRenderer
 - [ ] Support for lime / snow directly without openfl / luxeengine
 - [ ] Support for HaxeFlixel and / or HaxePunk?
+- [x] Partial support for pixi particles
+- [ ] Full support for pixi particles
+- [ ] Fix rotation calculations (to be the same for all renderers)

@@ -10,6 +10,7 @@ import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import org.zamedev.particles.ParticleSystem;
 import org.zamedev.particles.loaders.ParticleLoader;
+import org.zamedev.particles.loaders.PixiParticleLoader;
 import org.zamedev.particles.renderers.DefaultParticleRenderer;
 
 #if (flash11 && zameparticles_stage3d)
@@ -129,6 +130,8 @@ class App extends Sprite {
         particleSystemList.push(ParticleLoader.load("particle/iris.plist"));
         particleSystemList.push(ParticleLoader.load("particle/hyperflash.plist"));
         particleSystemList.push(ParticleLoader.load("particle/dust.plist"));
+        particleSystemList.push(PixiParticleLoader.load("particle/pixi-flame.json", "pixi-flame-2.png"));
+        particleSystemList.push(PixiParticleLoader.load("particle/pixi-gas.json", "pixi-gas-1.png"));
 
         for (particleSystem in particleSystemList) {
             particlesRenderer.addParticleSystem(particleSystem);

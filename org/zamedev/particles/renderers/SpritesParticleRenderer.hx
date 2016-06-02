@@ -35,8 +35,8 @@ class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
             sprite.visible = false;
 
             var bitmap = new Bitmap(ps.textureBitmapData);
-            bitmap.x = - ps.textureBitmapData.width / 2.0;
-            bitmap.y = - ps.textureBitmapData.height / 2.0;
+            bitmap.x = - ps.textureBitmapData.width * 0.5;
+            bitmap.y = - ps.textureBitmapData.height * 0.5;
             sprite.addChild(bitmap);
 
             spriteList.push({
@@ -113,7 +113,7 @@ class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
                 sprite.scaleX = scale;
                 sprite.scaleY = scale;
 
-                sprite.rotation = particle.rotation * 180.0 / Math.PI;
+                sprite.rotation = particle.rotation * 180.0 / Math.PI + 90.0;
 
                 var colorTransform = info.colorTransform;
                 colorTransform.redMultiplier = particle.color.r;
@@ -121,8 +121,13 @@ class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
                 colorTransform.blueMultiplier = particle.color.b;
                 colorTransform.alphaMultiplier = particle.color.a;
                 sprite.transform.colorTransform = colorTransform;
-                sprite.alpha = particle.color.a;
-                
+
+                #if html5
+                    // TODO: it seems that alphaMultiplier in colorTransform
+                    // should work well even in html5, but users reports that it isn't true
+                    sprite.alpha = particle.color.a;
+                #end
+
                 if (!info.visible) {
                     info.visible = true;
                     sprite.visible = true;

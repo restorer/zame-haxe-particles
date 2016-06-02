@@ -38,7 +38,7 @@ class DrawTilesParticleRenderer extends Sprite implements ParticleSystemRenderer
 
         tilesheet.addTileRect(
             ps.textureBitmapData.rect.clone(),
-            new Point(ps.textureBitmapData.rect.width / 2, ps.textureBitmapData.rect.height / 2)
+            new Point(ps.textureBitmapData.rect.width * 0.5, ps.textureBitmapData.rect.height * 0.5)
         );
 
         var tileData = new Array<Float>();
@@ -117,7 +117,7 @@ class DrawTilesParticleRenderer extends Sprite implements ParticleSystemRenderer
                 tileData[index + 1] = particle.position.y * ps.particleScaleY; // y
                 tileData[index + 2] = 0.0; // tileId
                 tileData[index + 3] = particle.particleSize / ethalonSize * ps.particleScaleSize; // scale
-                tileData[index + 4] = particle.rotation; // rotation
+                tileData[index + 4] = particle.rotation + Math.PI * 0.5; // rotation
                 tileData[index + 5] = #if webgl particle.color.b #else particle.color.r #end;
                 tileData[index + 6] = particle.color.g;
                 tileData[index + 7] = #if webgl particle.color.r #else particle.color.b #end;
