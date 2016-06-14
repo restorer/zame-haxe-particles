@@ -67,6 +67,7 @@ class DrawTilesParticleRenderer extends Sprite implements ParticleSystemRenderer
 
         if (dataList.length == 0) {
             removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+			graphics.clear();
         }
 
         return this;
