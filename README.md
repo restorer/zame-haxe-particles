@@ -113,3 +113,8 @@ All other targets should use drawTiles renderer:
 - [x] Partial support for pixi particles
 - [ ] Full support for pixi particles
 - [ ] Fix rotation calculations (to be the same for all renderers)
+- [ ] Support KHA directly in this library
+
+## KHA port by RafaelOliveira
+
+https://github.com/RafaelOliveira/z-particles
