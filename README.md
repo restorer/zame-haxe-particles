@@ -1,5 +1,7 @@
 # Particle system for OpenFl
 
+*(and for KHA, see below)*
+
 ![](http://blog.zame-dev.org/wp-content/uploads/2015/03/Screen-Shot-2015-03-18-at-12.53.43.png)
 
 [Demo](http://blog.zame-dev.org/pub/particles/html5-dom-v3/)
