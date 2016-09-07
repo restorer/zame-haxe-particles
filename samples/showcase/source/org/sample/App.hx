@@ -13,7 +13,7 @@ import org.zamedev.particles.loaders.ParticleLoader;
 import org.zamedev.particles.loaders.PixiParticleLoader;
 import org.zamedev.particles.renderers.DefaultParticleRenderer;
 
-#if (flash11 && zameparticles_stage3d)
+#if (flash11 && zameparticles_stage3d && openfl < "4.0")
     import com.asliceofcrazypie.flash.TilesheetStage3D;
     import openfl.display3D.Context3DRenderMode;
 #end
@@ -27,7 +27,7 @@ class App extends Sprite {
     public function new() : Void {
         super();
 
-        #if (flash11 && zameparticles_stage3d)
+        #if (flash11 && zameparticles_stage3d && openfl < "4.0")
             addEventListener(Event.ADDED_TO_STAGE, function(_) {
                 TilesheetStage3D.init(stage, 0, 5, ready, Context3DRenderMode.AUTO);
             });
@@ -37,7 +37,7 @@ class App extends Sprite {
     }
 
     private function ready(result : String) : Void {
-        #if (flash11 && zameparticles_stage3d)
+        #if (flash11 && zameparticles_stage3d && openfl < "4.0")
             if (result != "success") {
                 trace("Stage3D error. Probably wrong wmode.");
                 return;
@@ -57,7 +57,7 @@ class App extends Sprite {
     }
 
     private function addClickableArea() : Void {
-        #if (flash11 && zameparticles_stage3d)
+        #if (flash11 && zameparticles_stage3d && openfl < "4.0")
             var shape = new openfl.display.Shape();
             shape.graphics.beginFill(0x030b2d);
             shape.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);

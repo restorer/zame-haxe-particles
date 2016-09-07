@@ -2,6 +2,10 @@ package org.zamedev.particles.renderers;
 
 #if (flash11 && zameparticles_stage3d)
 
+#if (openfl >= "4.0")
+#error "ERROR: Tilesheet was removed from OpenFL 4"
+#end
+
 import com.asliceofcrazypie.flash.TilesheetStage3D;
 import openfl.display.Sprite;
 import openfl.display.Tilesheet;

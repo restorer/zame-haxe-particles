@@ -1,5 +1,9 @@
 package org.zamedev.particles.renderers;
 
+#if (openfl >= "4.0")
+#error "ERROR: Tilesheet was removed from OpenFL 4"
+#end
+
 import openfl.display.Sprite;
 import openfl.display.Tilesheet;
 import openfl.events.Event;

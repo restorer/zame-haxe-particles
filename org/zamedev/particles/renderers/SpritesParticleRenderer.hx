@@ -113,7 +113,7 @@ class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
                 sprite.scaleX = scale;
                 sprite.scaleY = scale;
 
-                sprite.rotation = particle.rotation * 180.0 / Math.PI + 90.0;
+                sprite.rotation = particle.rotation * 180.0 / Math.PI #if (openfl < "4.0") + 90.0 #end;
 
                 var colorTransform = info.colorTransform;
                 colorTransform.redMultiplier = particle.color.r;
