@@ -11,9 +11,29 @@ Features:
  - Can load files from Particle Designer or [Particle Designer 2](https://71squared.com/en/particledesigner).
  - Support for embedded textures, both zipped or not.
  - Can load files from [Starling Particle Editor](http://onebyonedesign.com/flash/particleeditor/).
- - Has 4 renderers - sprites, drawTiles, stage3d, and GL renderer.
+ - Has 5 renderers - sprites, drawTiles (OpenFL 3) / tilemap (OpenFL 4), stage3d (OpenFL 4), and GL renderer.
 
 **NOTE: work in progress, more features coming.**
+
+## Important note about OpenFL 4
+
+**Tilesheet and tilemap**
+
+Tilesheet support was removed from OpenFL 4 in favour of new Tilemap / Tilesheet classes. That's fine, but:
+
+- new API doesn't support rotating about arbitrary pivot point;
+- new API doesn't support color transform;
+- new API doesn't support blending modes.
+
+You can use this renderer, it fast, but ugly.
+
+**Sprites**
+
+Work well for flash, work very slow for other targets (http://community.openfl.org/t/openfl-4-sprites-and-or-haxe-3-3-slow-as-hell/8132).
+
+**GL renderer**
+
+Still work fine, but only for html5 and only in `-Ddom` mode.
 
 ## Installation
 
@@ -109,7 +129,7 @@ All other targets should use drawTiles renderer:
 - [x] Create importer for particles in luxeengine
 - [x] Implement SpritesRenderer
 - [x] Implement Stage3DRenderer
-- [ ] Implement TilemapRenderer
+- [x] Implement TilemapRenderer
 - [ ] Support for lime / snow directly without openfl / luxeengine
 - [ ] Support for HaxeFlixel and / or HaxePunk?
 - [x] Partial support for pixi particles
