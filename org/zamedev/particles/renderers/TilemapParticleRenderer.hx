@@ -97,7 +97,7 @@ class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
 
             for (i in 0 ... ps.__particleCount) {
                 var particle = ps.__particleList[i];
-                var tile;
+                var tile : Tile;
 
                 if (i < tileList.length) {
                     tile = tileList[i];
@@ -107,18 +107,19 @@ class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
                     data.tilemap.addTile(tile);
                 }
 
-                var sn = Math.sin(particle.rotation);
-                var cs = Math.cos(particle.rotation);
-                var scale = particle.particleSize / ethalonSize * ps.particleScaleSize;
+                var scale : Float = particle.particleSize / ethalonSize * ps.particleScaleSize;
+                var mat = tile.matrix;
 
-                var matrix = tile.matrix;
-                matrix.a = Math.cos(particle.rotation) * scale;
-                matrix.c = Math.sin(particle.rotation) * scale;
-                matrix.b = - matrix.c;
-                matrix.d = matrix.a;
+                mat.a = Math.cos(particle.rotation) * scale;
+                mat.c = Math.sin(particle.rotation) * scale;
+                mat.b = - mat.c;
+                mat.d = mat.a;
 
-                tile.x = particle.position.x * ps.particleScaleX - halfWidth * scale;
-                tile.y = particle.position.y * ps.particleScaleY - halfHeight * scale;
+                // set matrix **before** setting x and y, because they are setters, and they set
+                // internal flag __transformDirty
+                tile.x = particle.position.x * ps.particleScaleX - halfWidth * mat.a - halfHeight * mat.c;
+                tile.y = particle.position.y * ps.particleScaleY - halfWidth * mat.b - halfHeight * mat.d;
+
                 tile.alpha = particle.color.a;
 
                 /*
@@ -129,6 +130,8 @@ class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
             }
 
             /*
+             * tile.visible currently not working for neko (at least)
+             *
             for (i in ps.__particleCount ... tileList.length) {
                 var tile = tileList[i];
 

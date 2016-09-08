@@ -21,11 +21,13 @@ Features:
 
 Tilesheet support was removed from OpenFL 4 in favour of new Tilemap / Tilesheet classes. That's fine, but:
 
-- new API doesn't support rotating about arbitrary pivot point;
+- new API doesn't support rotating about arbitrary pivot point (however this can be achieved by direct modification of transform matrix);
 - new API doesn't support color transform;
 - new API doesn't support blending modes.
 
 You can use this renderer, it fast, but ugly.
+
+P.S. Old drawTiles API in OpenFL 3 is much faster.
 
 **Sprites**
 
