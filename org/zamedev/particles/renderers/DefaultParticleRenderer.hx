@@ -5,7 +5,7 @@ import openfl.display.OpenGLView;
 class DefaultParticleRenderer {
     public static function createInstance() : ParticleSystemRenderer {
         #if (html5 && dom)
-            if (OpenGLView.isSupported && false) {
+            if (OpenGLView.isSupported) {
                 return new GLViewParticleRenderer();
             } else {
                 #if (openfl < "4.0")
