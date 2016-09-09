@@ -27,8 +27,6 @@ Tilesheet support was removed from OpenFL 4 in favour of new Tilemap / Tilesheet
 
 You can use this renderer, it fast, but ugly.
 
-P.S. Old drawTiles API in OpenFL 3 is much faster.
-
 **Sprites**
 
 Work well for flash, work very slow for other targets (http://community.openfl.org/t/openfl-4-sprites-and-or-haxe-3-3-slow-as-hell/8132).
