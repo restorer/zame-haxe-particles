@@ -4,7 +4,7 @@ import openfl.display.OpenGLView;
 
 class DefaultParticleRenderer {
     public static function createInstance() : ParticleSystemRenderer {
-        return new TilemapParticleRenderer();
+        // return new TilemapParticleRenderer();
 
         #if (html5 && dom)
             if (OpenGLView.isSupported) {
