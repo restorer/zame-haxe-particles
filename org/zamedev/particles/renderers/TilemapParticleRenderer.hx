@@ -32,15 +32,15 @@ class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
         var tilemap = new Tilemap(stage.stageWidth, stage.stageHeight, tileset);
         addChild(tilemap);
 
-        /*
-        for (i in 0 ... ps.maxParticles) {
-            var tile = new Tile(0);
-            tile.visible = false;
+        #if debug_use_tile_visibility
+            for (i in 0 ... ps.maxParticles) {
+                var tile = new Tile(0);
+                tile.visible = false;
 
-            tileList.push(tile);
-            tilemap.addTile(tile);
-        }
-        */
+                tileList.push(tile);
+                tilemap.addTile(tile);
+            }
+        #end
 
         dataList.push({
             ps: ps,
@@ -97,15 +97,20 @@ class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
 
             for (i in 0 ... ps.__particleCount) {
                 var particle = ps.__particleList[i];
-                var tile : Tile;
 
-                if (i < tileList.length) {
-                    tile = tileList[i];
-                } else {
-                    tile = new Tile(0);
-                    tileList.push(tile);
-                    data.tilemap.addTile(tile);
-                }
+                #if debug_use_tile_visibility
+                    var tile : Tile = tileList[i];
+                #else
+                    var tile : Tile;
+
+                    if (i < tileList.length) {
+                        tile = tileList[i];
+                    } else {
+                        tile = new Tile(0);
+                        tileList.push(tile);
+                        data.tilemap.addTile(tile);
+                    }
+                #end
 
                 var scale : Float = particle.particleSize / ethalonSize * ps.particleScaleSize;
                 var mat = tile.matrix;
@@ -122,29 +127,29 @@ class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
 
                 tile.alpha = particle.color.a;
 
-                /*
-                if (!tile.visible) {
-                    tile.visible = true;
+                #if debug_use_tile_visibility
+                    // if (!tile.visible) {
+                        tile.visible = true;
+                    // }
+                #end
+            }
+
+            #if debug_use_tile_visibility
+                // tile.visible currently not working for neko (at least)
+
+                for (i in ps.__particleCount ... tileList.length) {
+                    var tile = tileList[i];
+
+                    // if (tile.visible) {
+                        tile.visible = false;
+                    // }
                 }
-                */
-            }
-
-            /*
-             * tile.visible currently not working for neko (at least)
-             *
-            for (i in ps.__particleCount ... tileList.length) {
-                var tile = tileList[i];
-
-                if (tile.visible) {
-                    tile.visible = false;
+            #else
+                if (tileList.length > ps.__particleCount) {
+                    data.tilemap.removeTiles(ps.__particleCount, tileList.length);
+                    tileList.splice(ps.__particleCount, tileList.length - ps.__particleCount + 1);
                 }
-            }
-            */
-
-            if (tileList.length > ps.__particleCount) {
-                data.tilemap.removeTiles(ps.__particleCount, tileList.length);
-                tileList.splice(ps.__particleCount, tileList.length - ps.__particleCount + 1);
-            }
+            #end
         }
     }
 }

@@ -121,6 +121,20 @@ All other targets should use drawTiles renderer:
   - html5 in canvas mode - still pretty fast, doesn't support color effects. Can render incorrectly due to bug in openfl, please apply [this patch](https://github.com/openfl/openfl/pull/1113) ([or this for earlier versions of openfl](https://github.com/openfl/openfl/pull/434)) if you encounter it.
   - native - fast, support color effects, hovewer in some cases GL renderer looks better.
 
+## Product support
+
+Product still is in development (but not active).
+
+| Feature | Support status |
+|---|---|
+| New features | Yes |
+| Non-critical bugfixes | Yes |
+| Critical bugfixes | Yes |
+| Pull requests | Accepted (after review) |
+| Issues | Monitored |
+| OpenFL version planned to support | Up to 4.x, and probably later, if Tilemap wouldn't be deprecated like Tilesheet |
+| Estimated end-of-life | Up to 2019 |
+
 ## Roadmap for future
 
 - [x] Support for .json output format
