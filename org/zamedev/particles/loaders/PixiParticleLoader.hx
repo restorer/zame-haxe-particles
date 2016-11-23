@@ -86,7 +86,7 @@ class PixiParticleLoader {
         ps.startColor.a = alpha["start"].asFloat();
         ps.finishColor.a = alpha["end"].asFloat();
 
-        // Pixi uses start,end speed, while pex uses a min and max radius for the radial emitter
+        // Pixi uses start, end speed, while pex uses a min and max radius for the radial emitter
         var startSpeed = speedMap["start"].asFloat();
         var endSpeed = speedMap["end"].asFloat();
         var averageSpeed = (startSpeed + endSpeed) * 0.5;
@@ -106,7 +106,7 @@ class PixiParticleLoader {
         var rotSpeedMax = rotSpeedMap["max"].asFloat();
 
         // TODO: rotationStart and rotationStartVariance currently equal to angle and angleVariance, is it right?
-        ps.rotationStart = MathHelper.deg2rad((startRotMin + startRotMax) * 0.5 - 90.0);
+        ps.rotationStart = MathHelper.deg2rad((startRotMin + startRotMax) * 0.5);
         ps.rotationStartVariance = MathHelper.deg2rad((startRotMax - startRotMin) * 0.5);
 
         var rotMin = rotSpeedMin * averageLife;
@@ -143,6 +143,8 @@ class PixiParticleLoader {
         ps.radialAccelerationVariance = 0.0;
         ps.tangentialAcceleration = 0.0;
         ps.tangentialAccelerationVariance = 0.0;
+
+        ps.forceSquareTexture = false;
 
         return ps;
     }

@@ -8,7 +8,7 @@
     <set name="legacy" if="native" />
     <set name="SWF_VERSION" value="11.2" if="flash" />
 
-    <haxedef name="haxeJSON" />
+    <!-- <haxedef name="haxeJSON" /> -->
     <!-- <haxedef name="zameparticles_stage3d" if="flash" /> -->
 
     <haxelib name="openfl" />

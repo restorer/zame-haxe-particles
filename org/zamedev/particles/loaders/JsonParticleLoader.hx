@@ -54,6 +54,7 @@ class JsonParticleLoader {
         ps.blendFuncDestination = map["blendFuncDestination"].asInt();
         ps.textureBitmapData = ParticleLoader.loadTexture(map["textureImageData"].asString(), map["textureFileName"].asString(), path);
         ps.yCoordMultiplier = (map["yCoordFlipped"].asInt() == 1 ? -1.0 : 1.0);
+        ps.forceSquareTexture = true;
 
         return ps;
     }

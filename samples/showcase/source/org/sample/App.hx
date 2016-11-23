@@ -132,6 +132,7 @@ class App extends Sprite {
         particleSystemList.push(ParticleLoader.load("particle/dust.plist"));
         particleSystemList.push(PixiParticleLoader.load("particle/pixi-flame.json", "pixi-flame-2.png"));
         particleSystemList.push(PixiParticleLoader.load("particle/pixi-gas.json", "pixi-gas-1.png"));
+        particleSystemList.push(ParticleLoader.load("particle/arrow.json"));
 
         for (particleSystem in particleSystemList) {
             particlesRenderer.addParticleSystem(particleSystem);

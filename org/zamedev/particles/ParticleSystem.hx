@@ -60,6 +60,7 @@ class ParticleSystem {
     public var particleScaleSize : Float;
     public var yCoordMultiplier : Float;
     public var emissionFreq : Float;
+    public var forceSquareTexture : Bool;
 
     private var prevTime : Float;
     private var emitCounter : Float;

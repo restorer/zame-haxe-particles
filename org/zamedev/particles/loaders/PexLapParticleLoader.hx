@@ -62,6 +62,7 @@ class PexLapParticleLoader {
         ps.blendFuncDestination = parseIntNode(map["blendFuncDestination"]);
         ps.textureBitmapData = ParticleLoader.loadTexture(map["texture"].get("data"), map["texture"].get("name"), path);
         ps.yCoordMultiplier = (parseIntNode(map["yCoordFlipped"]) == 1 ? -1.0 : 1.0);
+        ps.forceSquareTexture = true;
 
         return ps;
     }

@@ -1,11 +1,11 @@
 package org.zamedev.particles.renderers;
 
+import openfl.display.BlendMode;
 import openfl.display.Sprite;
 import openfl.display.Tile;
 import openfl.display.Tilemap;
 import openfl.display.Tileset;
 import openfl.events.Event;
-import openfl.geom.Point;
 import openfl.gl.GL;
 
 typedef TilemapParticleRendererData = {
@@ -14,6 +14,9 @@ typedef TilemapParticleRendererData = {
     tileList : Array<Tile>,
     updated : Bool,
 };
+
+// Use -Dzameparticles_use_tile_visibility to enable tile pool
+// But actually this is slower than array manipulations (significantly on neko)
 
 class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
     private var dataList : Array<TilemapParticleRendererData> = [];
@@ -32,7 +35,7 @@ class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
         var tilemap = new Tilemap(stage.stageWidth, stage.stageHeight, tileset);
         addChild(tilemap);
 
-        #if debug_use_tile_visibility
+        #if zameparticles_use_tile_visibility
             for (i in 0 ... ps.maxParticles) {
                 var tile = new Tile(0);
                 tile.visible = false;
@@ -90,15 +93,45 @@ class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
             }
 
             var ps = data.ps;
-            var tileList = data.tileList;
-            var ethalonSize : Float = ps.textureBitmapData.width;
-            var halfWidth : Float = ethalonSize * 0.5;
+
+            if (ps.blendFuncSource == GL.DST_COLOR) {
+                data.tilemap.blendMode = BlendMode.MULTIPLY;
+            } else if (ps.blendFuncDestination == GL.ONE) {
+                data.tilemap.blendMode = BlendMode.ADD;
+            } else {
+                data.tilemap.blendMode = BlendMode.NORMAL;
+            }
+
+            var widthMult : Float;
+            var heightMult : Float;
+            var ethalonSize : Float;
+
+            if (!ps.forceSquareTexture
+                || ps.textureBitmapData.width == ps.textureBitmapData.height
+                || ps.textureBitmapData.width == 0
+                || ps.textureBitmapData.height == 0
+            ) {
+                widthMult = 1.0;
+                heightMult = 1.0;
+                ethalonSize = ps.textureBitmapData.width;
+            } else if (ps.textureBitmapData.width > ps.textureBitmapData.height) {
+                widthMult = ps.textureBitmapData.height / ps.textureBitmapData.width;
+                heightMult = 1.0;
+                ethalonSize = ps.textureBitmapData.height;
+            } else {
+                widthMult = 1.0;
+                heightMult = ps.textureBitmapData.width / ps.textureBitmapData.height;
+                ethalonSize = ps.textureBitmapData.width;
+            }
+
+            var halfWidth : Float = ps.textureBitmapData.width * 0.5;
             var halfHeight : Float = ps.textureBitmapData.height * 0.5;
+            var tileList = data.tileList;
 
             for (i in 0 ... ps.__particleCount) {
                 var particle = ps.__particleList[i];
 
-                #if debug_use_tile_visibility
+                #if zameparticles_use_tile_visibility
                     var tile : Tile = tileList[i];
                 #else
                     var tile : Tile;
@@ -113,36 +146,31 @@ class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
                 #end
 
                 var scale : Float = particle.particleSize / ethalonSize * ps.particleScaleSize;
+                var scaleX : Float = scale * widthMult;
+                var scaleY : Float = scale * heightMult;
+
+                var rotationSine : Float = Math.sin(particle.rotation);
+                var rotationCosine : Float = Math.cos(particle.rotation);
+
                 var mat = tile.matrix;
+                mat.a = rotationCosine * scaleX;
+                mat.b = rotationSine * scaleX;
+                mat.c = - rotationSine * scaleY;
+                mat.d = rotationCosine * scaleY;
+                mat.tx = particle.position.x * ps.particleScaleX - halfWidth * mat.a - halfHeight * mat.c;
+                mat.ty = particle.position.y * ps.particleScaleY - halfWidth * mat.b - halfHeight * mat.d;
 
-                mat.a = Math.cos(particle.rotation) * scale;
-                mat.c = Math.sin(particle.rotation) * scale;
-                mat.b = - mat.c;
-                mat.d = mat.a;
-
-                // set matrix **before** setting x and y, because they are setters, and they set
-                // internal flag __transformDirty
-                tile.x = particle.position.x * ps.particleScaleX - halfWidth * mat.a - halfHeight * mat.c;
-                tile.y = particle.position.y * ps.particleScaleY - halfWidth * mat.b - halfHeight * mat.d;
-
+                tile.matrix = mat;
                 tile.alpha = particle.color.a;
 
-                #if debug_use_tile_visibility
-                    // if (!tile.visible) {
-                        tile.visible = true;
-                    // }
+                #if zameparticles_use_tile_visibility
+                    tile.visible = true;
                 #end
             }
 
-            #if debug_use_tile_visibility
-                // tile.visible currently not working for neko (at least)
-
+            #if zameparticles_use_tile_visibility
                 for (i in ps.__particleCount ... tileList.length) {
-                    var tile = tileList[i];
-
-                    // if (tile.visible) {
-                        tile.visible = false;
-                    // }
+                    tileList[i].visible = false;
                 }
             #else
                 if (tileList.length > ps.__particleCount) {

@@ -4,8 +4,8 @@
     "license": "BSD",
     "tags": ["cross", "openfl", "game", "particle", "particles", "emitter"],
     "description": "Particle system for OpenFl.",
-    "version": "1.0.1",
-    "releasenote": "Fixed for latest version of OpenFl.",
+    "version": "1.0.2",
+    "releasenote": "OpenFL 4 support (also this is latest version with OpenFL 3 support).",
     "contributors": ["restorer"],
     "dependencies": {
         "format": ""

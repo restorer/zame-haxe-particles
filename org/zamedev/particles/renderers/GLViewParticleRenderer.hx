@@ -244,45 +244,72 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
             var indicesData = data.indicesData;
             var vertexPos : Int = 0;
 
+            var widthMult : Float;
+            var heightMult : Float;
+            var sizeMult : Float;
+
+            if (ps.forceSquareTexture
+                || ps.textureBitmapData.width == ps.textureBitmapData.height
+                || ps.textureBitmapData.width == 0
+                || ps.textureBitmapData.height == 0
+            ) {
+                widthMult = 1.0;
+                heightMult = 1.0;
+                sizeMult = 1.0;
+            } else if (ps.textureBitmapData.width > ps.textureBitmapData.height) {
+                widthMult = ps.textureBitmapData.width / ps.textureBitmapData.height;
+                heightMult = 1.0;
+                sizeMult = ps.textureBitmapData.height / ps.textureBitmapData.width;
+            } else {
+                widthMult = 1.0;
+                heightMult = ps.textureBitmapData.height / ps.textureBitmapData.width;
+                sizeMult = ps.textureBitmapData.width / ps.textureBitmapData.height;
+            }
+
+            sizeMult *= ps.particleScaleSize * 0.5;
+
             for (i in 0 ... ps.__particleCount) {
                 var particle = ps.__particleList[i];
 
-                var tx = particle.position.x * ps.particleScaleX;
-                var ty = particle.position.y * ps.particleScaleY;
-                var cr = particle.color.r;
-                var cg = particle.color.g;
-                var cb = particle.color.b;
-                var ca = particle.color.a;
-                var sn = Math.sin(particle.rotation);
-                var cs = Math.cos(particle.rotation);
-                var halfSize = particle.particleSize * ps.particleScaleSize * 0.5;
+                var tx : Float = particle.position.x * ps.particleScaleX;
+                var ty : Float = particle.position.y * ps.particleScaleY;
+                var cr : Float = particle.color.r;
+                var cg : Float = particle.color.g;
+                var cb : Float = particle.color.b;
+                var ca : Float = particle.color.a;
+                var sn : Float = Math.sin(particle.rotation);
+                var cs : Float = Math.cos(particle.rotation);
 
-                vertexData[vertexPos + VERTEX_XYZ + 0] = halfSize * cs - halfSize * sn + tx;
-                vertexData[vertexPos + VERTEX_XYZ + 1] = halfSize * sn + halfSize * cs + ty;
+                var halfSize : Float = particle.particleSize * sizeMult;
+                var halfWidth : Float = halfSize * widthMult;
+                var halfHeight : Float = halfSize * heightMult;
+
+                vertexData[vertexPos + VERTEX_XYZ + 0] = halfWidth * cs - halfHeight * sn + tx;
+                vertexData[vertexPos + VERTEX_XYZ + 1] = halfWidth * sn + halfHeight * cs + ty;
                 vertexData[vertexPos + VERTEX_RGBA + 0] = cr;
                 vertexData[vertexPos + VERTEX_RGBA + 1] = cg;
                 vertexData[vertexPos + VERTEX_RGBA + 2] = cb;
                 vertexData[vertexPos + VERTEX_RGBA + 3] = ca;
                 vertexPos += VERTEX_SIZE;
 
-                vertexData[vertexPos + VERTEX_XYZ + 0] = (-halfSize) * cs - halfSize * sn + tx;
-                vertexData[vertexPos + VERTEX_XYZ + 1] = (-halfSize) * sn + halfSize * cs + ty;
+                vertexData[vertexPos + VERTEX_XYZ + 0] = (-halfWidth) * cs - halfHeight * sn + tx;
+                vertexData[vertexPos + VERTEX_XYZ + 1] = (-halfWidth) * sn + halfHeight * cs + ty;
                 vertexData[vertexPos + VERTEX_RGBA + 0] = cr;
                 vertexData[vertexPos + VERTEX_RGBA + 1] = cg;
                 vertexData[vertexPos + VERTEX_RGBA + 2] = cb;
                 vertexData[vertexPos + VERTEX_RGBA + 3] = ca;
                 vertexPos += VERTEX_SIZE;
 
-                vertexData[vertexPos + VERTEX_XYZ + 0] = halfSize * cs - (-halfSize) * sn + tx;
-                vertexData[vertexPos + VERTEX_XYZ + 1] = halfSize * sn + (-halfSize) * cs + ty;
+                vertexData[vertexPos + VERTEX_XYZ + 0] = halfWidth * cs - (-halfHeight) * sn + tx;
+                vertexData[vertexPos + VERTEX_XYZ + 1] = halfWidth * sn + (-halfHeight) * cs + ty;
                 vertexData[vertexPos + VERTEX_RGBA + 0] = cr;
                 vertexData[vertexPos + VERTEX_RGBA + 1] = cg;
                 vertexData[vertexPos + VERTEX_RGBA + 2] = cb;
                 vertexData[vertexPos + VERTEX_RGBA + 3] = ca;
                 vertexPos += VERTEX_SIZE;
 
-                vertexData[vertexPos + VERTEX_XYZ + 0] = (-halfSize) * cs - (-halfSize) * sn + tx;
-                vertexData[vertexPos + VERTEX_XYZ + 1] = (-halfSize) * sn + (-halfSize) * cs + ty;
+                vertexData[vertexPos + VERTEX_XYZ + 0] = (-halfWidth) * cs - (-halfHeight) * sn + tx;
+                vertexData[vertexPos + VERTEX_XYZ + 1] = (-halfWidth) * sn + (-halfHeight) * cs + ty;
                 vertexData[vertexPos + VERTEX_RGBA + 0] = cr;
                 vertexData[vertexPos + VERTEX_RGBA + 1] = cg;
                 vertexData[vertexPos + VERTEX_RGBA + 2] = cb;
