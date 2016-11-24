@@ -13,6 +13,11 @@ import org.zamedev.particles.loaders.ParticleLoader;
 import org.zamedev.particles.loaders.PixiParticleLoader;
 import org.zamedev.particles.renderers.DefaultParticleRenderer;
 
+#if (flash11 && zameparticles_stage3d && openfl < "4.0")
+    import com.asliceofcrazypie.flash.TilesheetStage3D;
+    import openfl.display3D.Context3DRenderMode;
+#end
+
 class App extends Sprite {
     private var mousePressed : Bool = false;
     private var particleSystemList : Array<ParticleSystem> = [];
@@ -21,10 +26,24 @@ class App extends Sprite {
 
     public function new() : Void {
         super();
-        ready();
+
+        #if (flash11 && zameparticles_stage3d && openfl < "4.0")
+            addEventListener(Event.ADDED_TO_STAGE, function(_) {
+                TilesheetStage3D.init(stage, 0, 5, ready, Context3DRenderMode.AUTO);
+            });
+        #else
+            ready(null);
+        #end
     }
 
-    private function ready() : Void {
+    private function ready(result : String) : Void {
+        #if (flash11 && zameparticles_stage3d && openfl < "4.0")
+            if (result != "success") {
+                trace("Stage3D error. Probably wrong wmode.");
+                return;
+            }
+        #end
+
         addClickableArea();
         addInterface();
         loadAndAddParticles();
@@ -38,10 +57,19 @@ class App extends Sprite {
     }
 
     private function addClickableArea() : Void {
-        graphics.clear();
-        graphics.beginFill(0x030b2d);
-        graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
-        graphics.endFill();
+        #if (flash11 && zameparticles_stage3d && openfl < "4.0")
+            var shape = new openfl.display.Shape();
+            shape.graphics.beginFill(0x030b2d);
+            shape.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+            shape.graphics.endFill();
+            shape.alpha = 0.0;
+            addChild(shape);
+        #else
+            graphics.clear();
+            graphics.beginFill(0x030b2d);
+            graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+            graphics.endFill();
+        #end
     }
 
     private function addInterface() : Void {

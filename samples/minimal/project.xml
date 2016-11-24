@@ -5,11 +5,7 @@
     <app main="org.sample.App" path="export" file="sample" />
     <icon path="assets/icon.png" />
 
-    <set name="legacy" if="native" />
     <set name="SWF_VERSION" value="11.2" if="flash" />
-
-    <!-- <haxedef name="haxeJSON" /> -->
-    <haxedef name="zameparticles_stage3d" if="flash" />
 
     <haxelib name="openfl" />
     <haxelib name="zame-particles" />

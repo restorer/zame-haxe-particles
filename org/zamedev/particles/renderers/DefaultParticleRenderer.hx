@@ -5,42 +5,26 @@ package org.zamedev.particles.renderers;
 #end
 
 class DefaultParticleRenderer {
-    public static function createInstance() : ParticleSystemRenderer {
+    public static function createInstance(manualUpdate : Bool = false) : ParticleSystemRenderer {
         #if html5
             #if dom
-                if (OpenGLView.isSupported) {
+                if (!manualUpdate && OpenGLView.isSupported) {
                     return new GLViewParticleRenderer();
                 } else {
-                    #if (openfl >= "4.0")
-                        return new TilemapParticleRenderer();
-                    #else
-                        return new DrawTilesParticleRenderer();
-                    #end
+                    return new TilemapParticleRenderer();
                 }
             #elseif webgl
-                #if (openfl >= "4.0")
-                    return new SpritesParticleRenderer();
-                #else
-                    return new DrawTilesParticleRenderer();
-                #end
+                return new SpritesParticleRenderer();
             #else
                 return new TilemapParticleRenderer();
             #end
         #elseif flash
-            #if (flash11 && zameparticles_stage3d && openfl < "4.0")
-                return new Stage3DParticleRenderer();
-            #else
-                return new SpritesParticleRenderer();
-            #end
+            return new SpritesParticleRenderer();
         #else // native
-            #if (openfl >= "4.0")
-                #if cpp
-                    return new SpritesParticleRenderer();
-                #else
-                    return new TilemapParticleRenderer();
-                #end
+            #if cpp
+                return new SpritesParticleRenderer();
             #else
-                return new DrawTilesParticleRenderer();
+                return new TilemapParticleRenderer();
             #end
         #end
     }

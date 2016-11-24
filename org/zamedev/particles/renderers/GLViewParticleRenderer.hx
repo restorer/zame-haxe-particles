@@ -3,6 +3,7 @@ package org.zamedev.particles.renderers;
 #if (html5 && dom)
 
 import openfl.geom.Rectangle;
+import openfl.errors.Error;
 import openfl.gl.GL;
 import openfl.gl.GLBuffer;
 import openfl.gl.GLProgram;
@@ -43,6 +44,14 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
     private var colorAttrLocation : Int;
     private var matrixUniformLocation : GLUniformLocation;
     private var imageUniformLocation : GLUniformLocation;
+
+    public function new(manualUpdate : Bool = false) {
+        super();
+
+        if (manualUpdate) {
+            throw new Error("Manual update is not supported by GLViewParticleRenderer");
+        }
+    }
 
     public function addParticleSystem(ps : ParticleSystem) : ParticleSystemRenderer {
         if (!initialized) {
@@ -131,7 +140,11 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
         return this;
     }
 
-    public function initGl() : Void {
+    public function update() : Void {
+        throw new Error("Manual update is not supported by GLViewParticleRenderer");
+    }
+
+    private function initGl() : Void {
         var vertexShaderSource = "
             varying vec4 vColor;
             varying vec2 vTexCoord;

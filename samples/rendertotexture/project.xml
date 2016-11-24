@@ -12,7 +12,7 @@
 
     <window
         hardware="true"
-        background="#0a0b29"
+        background="#888888"
         resizable="false"
         vsync="true"
         fps="60"
@@ -24,7 +24,6 @@
 
     <source path="source" />
 
-    <assets path="assets/font" exclude="*.eot|*.svg|*.woff" rename="font" />
     <assets path="assets/particle" rename="particle" />
 
     <!-- <architecture name="armv6" if="android" /> -->

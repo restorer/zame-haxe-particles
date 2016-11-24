@@ -19,10 +19,16 @@ typedef TilemapParticleRendererData = {
 // But actually this is slower than array manipulations (significantly on neko)
 
 class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
+    private var manualUpdate : Bool;
     private var dataList : Array<TilemapParticleRendererData> = [];
 
+    public function new(manualUpdate : Bool = false) {
+        super();
+        this.manualUpdate = manualUpdate;
+    }
+
     public function addParticleSystem(ps : ParticleSystem) : ParticleSystemRenderer {
-        if (dataList.length == 0) {
+        if (dataList.length == 0 && !manualUpdate) {
             addEventListener(Event.ENTER_FRAME, onEnterFrame);
         }
 
@@ -32,7 +38,9 @@ class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
         var tileset = new Tileset(ps.textureBitmapData);
         tileset.addRect(ps.textureBitmapData.rect);
 
-        var tilemap = new Tilemap(stage.stageWidth, stage.stageHeight, tileset);
+        var currentStage = (stage != null ? stage : openfl.Lib.current.stage);
+
+        var tilemap = new Tilemap(currentStage.stageWidth, currentStage.stageHeight, tileset);
         addChild(tilemap);
 
         #if zameparticles_use_tile_visibility
@@ -67,14 +75,14 @@ class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
             }
         }
 
-        if (dataList.length == 0) {
+        if (dataList.length == 0 && !manualUpdate) {
             removeEventListener(Event.ENTER_FRAME, onEnterFrame);
         }
 
         return this;
     }
 
-    private function onEnterFrame(_) : Void {
+    public function update() : Void {
         var updated = false;
 
         for (data in dataList) {
@@ -179,5 +187,9 @@ class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
                 }
             #end
         }
+    }
+
+    private function onEnterFrame(_) : Void {
+        update();
     }
 }

@@ -5,19 +5,14 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.gl.GL;
 
-#if flash
-    import flash.display.BlendMode;
-    import flash.filters.ColorMatrixFilter;
-#end
-
-#if ((openfl >= "4.0") && (native || webgl))
+#if (native || webgl || flash)
     import openfl.display.BlendMode;
     import openfl.filters.ColorMatrixFilter;
 #end
 
 typedef SpriteInfo = {
     bitmap : Bitmap,
-    #if (((openfl >= "4.0") && (native || webgl)) || flash)
+    #if (native || webgl || flash)
         colorMatrixFilter : ColorMatrixFilter,
     #end
     #if zameparticles_use_sprite_visibility
@@ -27,28 +22,26 @@ typedef SpriteInfo = {
 
 typedef SpritesParticleRendererData = {
     ps : ParticleSystem,
-    #if (((openfl >= "4.0") && (native || webgl)) || flash)
-        containerSprite : Sprite,
-    #end
     spriteList : Array<SpriteInfo>,
     updated : Bool,
 };
 
-// Use -zameparticles_use_sprite_visibility to enable sprite pool
+// Use -Dzameparticles_use_sprite_visibility to enable sprite pool
 // But actually this is slower than array manipulations
 
 class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
+    private var manualUpdate : Bool;
     private var dataList : Array<SpritesParticleRendererData> = [];
 
+    public function new(manualUpdate : Bool = false) {
+        super();
+        this.manualUpdate = manualUpdate;
+    }
+
     public function addParticleSystem(ps : ParticleSystem) : ParticleSystemRenderer {
-        if (dataList.length == 0) {
+        if (dataList.length == 0 && !manualUpdate) {
             addEventListener(Event.ENTER_FRAME, onEnterFrame);
         }
-
-        #if (((openfl >= "4.0") && (native || webgl)) || flash)
-            var containerSprite = new Sprite();
-            addChild(containerSprite);
-        #end
 
         ps.__initialize();
         var spriteList = new Array<SpriteInfo>();
@@ -61,24 +54,17 @@ class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
                 spriteList.push({
                     bitmap: bitmap,
                     visible: false,
-                    #if (((openfl >= "4.0") && (native || webgl)) || flash)
+                    #if (native || webgl || flash)
                         colorMatrixFilter: new ColorMatrixFilter(),
                     #end
                 });
 
-                #if (((openfl >= "4.0") && (native || webgl)) || flash)
-                    containerSprite.addChild(bitmap);
-                #else
-                    addChild(bitmap);
-                #end
+                addChild(bitmap);
             }
         #end
 
         dataList.push({
             ps: ps,
-            #if (((openfl >= "4.0") && (native || webgl)) || flash)
-                containerSprite: containerSprite,
-            #end
             spriteList: spriteList,
             updated: false,
         });
@@ -91,13 +77,9 @@ class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
 
         while (index < dataList.length) {
             if (dataList[index].ps == ps) {
-                #if (((openfl >= "4.0") && (native || webgl)) || flash)
-                    removeChild(dataList[index].containerSprite);
-                #else
-                    for (info in dataList[index].spriteList) {
-                        removeChild(info.bitmap);
-                    }
-                #end
+                for (info in dataList[index].spriteList) {
+                    removeChild(info.bitmap);
+                }
 
                 dataList.splice(index, 1);
             } else {
@@ -105,14 +87,14 @@ class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
             }
         }
 
-        if (dataList.length == 0) {
+        if (dataList.length == 0 && !manualUpdate) {
             removeEventListener(Event.ENTER_FRAME, onEnterFrame);
         }
 
         return this;
     }
 
-    private function onEnterFrame(_) : Void {
+    public function update() : Void {
         var updated = false;
 
         for (data in dataList) {
@@ -132,13 +114,18 @@ class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
 
             var ps = data.ps;
 
-            #if (((openfl >= "4.0") && (native || webgl)) || flash)
-                if (ps.blendFuncSource == GL.DST_COLOR) {
-                    data.containerSprite.blendMode = BlendMode.MULTIPLY;
+            #if (native || webgl || flash)
+                var blendMode = if (ps.blendFuncSource == GL.DST_COLOR) {
+                    BlendMode.MULTIPLY;
+                } else if (
+                    (ps.blendFuncSource == GL.ZERO || ps.blendFuncSource == GL.SRC_ALPHA_SATURATE)
+                    && ps.blendFuncDestination == GL.ONE_MINUS_SRC_ALPHA
+                ) {
+                    BlendMode.SUBTRACT;
                 } else if (ps.blendFuncDestination == GL.ONE) {
-                    data.containerSprite.blendMode = BlendMode.ADD;
+                    BlendMode.ADD;
                 } else {
-                    data.containerSprite.blendMode = BlendMode.NORMAL;
+                    BlendMode.NORMAL;
                 }
             #end
 
@@ -180,18 +167,13 @@ class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
 
                         info = {
                             bitmap: bitmap,
-                            #if (((openfl >= "4.0") && (native || webgl)) || flash)
+                            #if (native || webgl || flash)
                                 colorMatrixFilter: new ColorMatrixFilter(),
                             #end
                         };
 
                         spriteList.push(info);
-
-                        #if (((openfl >= "4.0") && (native || webgl)) || flash)
-                            data.containerSprite.addChild(bitmap);
-                        #else
-                            addChild(bitmap);
-                        #end
+                        addChild(bitmap);
                     }
                 #end
 
@@ -214,7 +196,7 @@ class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
                 bitmap.x = particle.position.x * ps.particleScaleX - halfWidth * matA - halfHeight * matB;
                 bitmap.y = particle.position.y * ps.particleScaleY - halfWidth * matC - halfHeight * matD;
 
-                #if (((openfl >= "4.0") && (native || webgl)) || flash)
+                #if (native || webgl || flash)
                     var colorMatrix = info.colorMatrixFilter.matrix;
                     colorMatrix[0] = particle.color.r;
                     colorMatrix[5 + 1] = particle.color.g;
@@ -222,7 +204,8 @@ class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
                     colorMatrix[15 + 3] = particle.color.a;
 
                     info.colorMatrixFilter.matrix = colorMatrix;
-                    info.bitmap.filters = [ info.colorMatrixFilter ];
+                    bitmap.filters = [ info.colorMatrixFilter ];
+                    bitmap.blendMode = blendMode;
                 #end
 
                 #if (html5 && (canvas || dom))
@@ -249,16 +232,16 @@ class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
             #else
                 if (spriteList.length > ps.__particleCount) {
                     for (i in ps.__particleCount ... spriteList.length) {
-                        #if (((openfl >= "4.0") && (native || webgl)) || flash)
-                            data.containerSprite.removeChild(spriteList[i].bitmap);
-                        #else
-                            removeChild(spriteList[i].bitmap);
-                        #end
+                        removeChild(spriteList[i].bitmap);
                     }
 
                     spriteList.splice(ps.__particleCount, spriteList.length - ps.__particleCount + 1);
                 }
             #end
         }
+    }
+
+    private function onEnterFrame(_) : Void {
+        update();
     }
 }
