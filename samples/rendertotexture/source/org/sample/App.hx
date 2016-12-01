@@ -19,8 +19,13 @@ class App extends Sprite {
 
     private function ready() : Void {
         bitmap = new Bitmap();
-        bitmapData = new BitmapData(stage.stageWidth, stage.stageHeight, true, 0);
         addChild(bitmap);
+
+        bitmapData = new BitmapData(stage.stageWidth, stage.stageHeight, true, 0);
+
+        #if (native && !cairo)
+            bitmapData.disposeImage(); // at 2016-12-01 this line works only with openfl from develop
+        #end
 
         renderer = new SpritesParticleRenderer(true);
 

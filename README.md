@@ -143,6 +143,9 @@ Product still is in development (but not active).
 - [x] Fix rotation calculations (to be the same for all renderers)
 - [x] Partial support for pixi particles
 - [ ] Full support for pixi particles
+- [ ] Allow to pass BitmapData to loader
+- [ ] Allow to change particle system parameters dynamically
+- [ ] Move non openfl-related stuff to core (particle, particle system, utils, base loaders)
 - [ ] Support for lime / snow directly without openfl / luxeengine
 - [ ] Support for HaxeFlixel and / or HaxePunk?
 - [ ] Support KHA directly in this library
