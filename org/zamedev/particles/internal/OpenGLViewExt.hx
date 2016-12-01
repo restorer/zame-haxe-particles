@@ -42,7 +42,9 @@ class OpenGLViewExt extends OpenGLView {
             }
 
             #if debug
-                __context = untyped WebGLDebugUtils.makeDebugContext(__context);
+                if (untyped __js__('typeof WebGLDebugUtils !== "undefined"')) {
+                    __context = untyped WebGLDebugUtils.makeDebugContext(__context);
+                }
             #end
 
             GL.context = cast __context;
