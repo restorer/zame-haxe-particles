@@ -1,5 +1,6 @@
 package org.sample;
 
+import lime.graphics.opengl.GL;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.Sprite;
@@ -7,6 +8,7 @@ import openfl.events.Event;
 import org.zamedev.particles.loaders.ParticleLoader;
 import org.zamedev.particles.renderers.SpritesParticleRenderer;
 
+@:access(lime.graphics.opengl.GL)
 class App extends Sprite {
     private var bitmap : Bitmap;
     private var bitmapData : BitmapData;
@@ -21,11 +23,16 @@ class App extends Sprite {
         bitmap = new Bitmap();
         addChild(bitmap);
 
+        // TODO: probably in newer OpenFL:
+        //
+        // var texture = stage.stage3Ds[0].context3D.createTexture(stage.stageWidth, stage.stageHeight, BGRA, true);
+        // var bitmapData = BitmapData.fromTexture(texture);
+
         bitmapData = new BitmapData(stage.stageWidth, stage.stageHeight, true, 0);
 
-        #if (native && !cairo)
-            bitmapData.disposeImage(); // at 2016-12-01 this line works only with openfl from develop
-        #end
+        if (GL.context != null) {
+            bitmapData.disposeImage();
+        }
 
         renderer = new SpritesParticleRenderer(true);
 
