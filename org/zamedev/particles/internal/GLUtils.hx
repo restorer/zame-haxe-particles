@@ -7,6 +7,7 @@ import openfl.gl.GLShader;
 
 // taken from lime.utils.GLUtils (for older openfl versions)
 
+@:access(lime.graphics.opengl.GL)
 class GLUtils {
     public static function compileShader(source : String, type : Int) : GLShader {
         var shader = GL.createShader(type);

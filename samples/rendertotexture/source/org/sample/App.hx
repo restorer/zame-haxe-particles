@@ -25,7 +25,7 @@ class App extends Sprite {
 
         // TODO: probably in newer OpenFL:
         //
-        // var texture = stage.stage3Ds[0].context3D.createTexture(stage.stageWidth, stage.stageHeight, BGRA, true);
+        // var texture = stage.stage3Ds[0].context3D.createTexture(stage.stageWidth, stage.stageHeight, BGRA, true); // P.S. try to use POT texture
         // var bitmapData = BitmapData.fromTexture(texture);
 
         bitmapData = new BitmapData(stage.stageWidth, stage.stageHeight, true, 0);

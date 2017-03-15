@@ -12,8 +12,19 @@ import openfl.geom.Rectangle;
 import openfl.gl.GL;
 import openfl.Lib;
 
+#if (lime >= "4.0.0")
+    import lime.graphics.GLRenderContext;
+
+    @:access(lime.graphics.GLRenderContext)
+    @:access(lime._backend.html5.HTML5GLRenderContext)
+#end
+
 @:access(lime.graphics.opengl.GL)
 class OpenGLViewExt extends OpenGLView {
+    #if (lime >= "4.0.0")
+        private var __glRenderContext : GLRenderContext = null;
+    #end
+
     public function new() : Void {
         super();
 
@@ -41,13 +52,16 @@ class OpenGLViewExt extends OpenGLView {
                 __context = cast __canvas.getContext("experimental-webgl");
             }
 
-            #if debug
-                if (untyped __js__('typeof WebGLDebugUtils !== "undefined"')) {
-                    __context = untyped WebGLDebugUtils.makeDebugContext(__context);
-                }
+            #if webgl_debug
+                __context = untyped WebGLDebugUtils.makeDebugContext(__context);
             #end
 
-            GL.context = cast __context;
+            #if (lime >= "4.0.0")
+                __glRenderContext = new GLRenderContext(cast __context);
+                GL.context = __glRenderContext;
+            #else
+                GL.context = cast __context;
+            #end
         }
     }
 
@@ -68,7 +82,11 @@ class OpenGLViewExt extends OpenGLView {
             }
 
             if (__context != null && __render != null) {
-                GL.context = cast __context;
+                #if (lime >= "4.0.0")
+                    GL.context = __glRenderContext;
+                #else
+                    GL.context = cast __context;
+                #end
 
                 if (scrollRect == null) {
                     __render(new Rectangle(0.0, 0.0, __canvas.width, __canvas.height));
