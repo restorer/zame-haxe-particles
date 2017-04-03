@@ -109,7 +109,7 @@ Usually you don't need to choose renderer manually, just use `DefaultParticleRen
 **Renderers comparison**
 
 | Target / Renderer | GLView | Sprites | Tilemap |
-|---|---|---|---|---|---|
+|---|---|---|---|
 | html5<br />`-Ddom` | **effects:** full,<br />**speed:** fast,<br /><br />**best choise** | **effects:** no,<br />**speed:** very slow | **effects:** no,<br />**speed:** slow |
 | html5<br />`-Dcanvas` | n/a | **effects:** no,<br />**speed:** almost fast | **effects:** no,<br />**speed:** fast,<br /><br />**best choise** |
 | html5<br />`-Dwebgl` | n/a | **effects:** almost full,<br />**speed:** almost fast,<br /><br />**best choise** | **effects:** no,<br />**speed:** fast |
