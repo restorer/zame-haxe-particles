@@ -4,8 +4,8 @@
     "license": "BSD",
     "tags": ["cross", "openfl", "game", "particle", "particles", "emitter"],
     "description": "Particle system for OpenFl.",
-    "version": "1.0.2",
-    "releasenote": "OpenFL 4 support (also this is latest version with OpenFL 3 support).",
+    "version": "1.0.3",
+    "releasenote": "1) Fixes for latest OpenFl version. 2) TilemapParticleRenderer updated to take in account parent scale and position.",
     "contributors": ["restorer"],
     "dependencies": {
         "format": ""
