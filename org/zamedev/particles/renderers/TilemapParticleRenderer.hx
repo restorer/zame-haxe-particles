@@ -4,14 +4,14 @@ import openfl.display.BlendMode;
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.display.Tile;
-import openfl.display.Tilemap;
 import openfl.display.Tileset;
 import openfl.events.Event;
 import openfl.gl.GL;
+import org.zamedev.particles.internal.TilemapExt;
 
 typedef TilemapParticleRendererData = {
     ps : ParticleSystem,
-    tilemap : Tilemap,
+    tilemap : TilemapExt,
     tileList : Array<Tile>,
     updated : Bool,
 };
@@ -45,7 +45,7 @@ class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
 
         var currentStage = (stage != null ? stage : openfl.Lib.current.stage);
 
-        var tilemap = new Tilemap(currentStage.stageWidth, currentStage.stageHeight, tileset);
+        var tilemap = new TilemapExt(currentStage.stageWidth, currentStage.stageHeight, tileset);
         addChild(tilemap);
 
         #if zameparticles_use_tile_visibility
