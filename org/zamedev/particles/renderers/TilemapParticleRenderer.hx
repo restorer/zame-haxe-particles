@@ -6,8 +6,13 @@ import openfl.display.Sprite;
 import openfl.display.Tile;
 import openfl.display.Tileset;
 import openfl.events.Event;
-import openfl.gl.GL;
 import org.zamedev.particles.internal.TilemapExt;
+
+#if (openfl < "5.1.0")
+    import openfl.gl.GL;
+#else
+    import lime.graphics.opengl.GL;
+#end
 
 typedef TilemapParticleRendererData = {
     ps : ParticleSystem,

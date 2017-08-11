@@ -4,17 +4,28 @@ package org.zamedev.particles.renderers;
 
 import openfl.geom.Rectangle;
 import openfl.errors.Error;
-import openfl.gl.GL;
-import openfl.gl.GLBuffer;
-import openfl.gl.GLProgram;
-import openfl.gl.GLTexture;
-import openfl.gl.GLUniformLocation;
-import openfl.utils.Float32Array;
-import openfl.utils.Int16Array;
 import org.zamedev.particles.internal.GLUtilsExt;
 import org.zamedev.particles.internal.Matrix4;
 import org.zamedev.particles.internal.OpenGLViewExt;
 import org.zamedev.particles.internal.SizeUtils;
+
+#if (openfl < "5.1.0")
+    import openfl.gl.GL;
+    import openfl.gl.GLBuffer;
+    import openfl.gl.GLProgram;
+    import openfl.gl.GLTexture;
+    import openfl.gl.GLUniformLocation;
+    import openfl.utils.Float32Array;
+    import openfl.utils.Int16Array;
+#else
+    import lime.graphics.opengl.GL;
+    import lime.graphics.opengl.GLBuffer;
+    import lime.graphics.opengl.GLProgram;
+    import lime.graphics.opengl.GLTexture;
+    import lime.graphics.opengl.GLUniformLocation;
+    import lime.utils.Float32Array;
+    import lime.utils.Int16Array;
+#end
 
 // http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/display/Stage3D.html
 // https://github.com/openfl/openfl-samples/blob/master/SimpleOpenGLView/Source/Main.hx
@@ -245,7 +256,11 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
             0.0
         );
 
-        GL.uniformMatrix4fv(matrixUniformLocation, false, matrix);
+        #if (openfl < "5.1.0")
+            GL.uniformMatrix4fv(matrixUniformLocation, false, matrix);
+        #else
+            GL.uniformMatrix4fvWEBGL(matrixUniformLocation, false, matrix);
+        #end
 
         for (data in dataList) {
             if (!data.updated) {
@@ -334,12 +349,24 @@ class GLViewParticleRenderer extends OpenGLViewExt implements ParticleSystemRend
             GL.blendFunc(ps.blendFuncSource, ps.blendFuncDestination);
 
             GL.bindBuffer(GL.ARRAY_BUFFER, data.vertexBuffer);
-            GL.bufferData(GL.ARRAY_BUFFER, vertexData, GL.DYNAMIC_DRAW);
+
+            #if (openfl < "5.1.0")
+                GL.bufferData(GL.ARRAY_BUFFER, vertexData, GL.DYNAMIC_DRAW);
+            #else
+                GL.bufferDataWEBGL(GL.ARRAY_BUFFER, vertexData, GL.DYNAMIC_DRAW);
+            #end
+
             GL.vertexAttribPointer(vertexAttrLocation, 3, GL.FLOAT, false, VERTEX_SIZE * SizeUtils.SIZE_FLOAT32, VERTEX_XYZ);
             GL.vertexAttribPointer(textureAttrLocation, 2, GL.FLOAT, false, VERTEX_SIZE * SizeUtils.SIZE_FLOAT32, VERTEX_UV * SizeUtils.SIZE_FLOAT32);
             GL.vertexAttribPointer(colorAttrLocation, 4, GL.FLOAT, false, VERTEX_SIZE * SizeUtils.SIZE_FLOAT32, VERTEX_RGBA * SizeUtils.SIZE_FLOAT32);
             GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, data.indicesBuffer);
-            GL.bufferData(GL.ELEMENT_ARRAY_BUFFER, indicesData, GL.DYNAMIC_DRAW);
+
+            #if (openfl < "5.1.0")
+                GL.bufferData(GL.ELEMENT_ARRAY_BUFFER, indicesData, GL.DYNAMIC_DRAW);
+            #else
+                GL.bufferDataWEBGL(GL.ELEMENT_ARRAY_BUFFER, indicesData, GL.DYNAMIC_DRAW);
+            #end
+
             GL.drawElements(GL.TRIANGLES, ps.__particleCount * INDEX_SIZE, GL.UNSIGNED_SHORT, 0);
         }
 

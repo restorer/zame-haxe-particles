@@ -3,7 +3,12 @@ package org.zamedev.particles.renderers;
 import openfl.display.Bitmap;
 import openfl.display.Sprite;
 import openfl.events.Event;
-import openfl.gl.GL;
+
+#if (openfl < "5.1.0")
+    import openfl.gl.GL;
+#else
+    import lime.graphics.opengl.GL;
+#end
 
 #if (native || webgl || flash)
     import openfl.display.BlendMode;

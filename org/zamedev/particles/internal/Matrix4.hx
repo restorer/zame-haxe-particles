@@ -1,7 +1,12 @@
 package org.zamedev.particles.internal;
 
 import openfl.errors.Error;
-import openfl.utils.Float32Array;
+
+#if (openfl < "5.1.0")
+    import openfl.utils.Float32Array;
+#else
+    import lime.utils.Float32Array;
+#end
 
 // taken from lime.math.Matrix4 (for older openfl versions)
 

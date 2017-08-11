@@ -3,12 +3,17 @@ package org.zamedev.particles.loaders;
 import haxe.Json;
 import openfl.Assets;
 import openfl.errors.Error;
-import openfl.gl.GL;
 import org.zamedev.particles.ParticleSystem;
 import org.zamedev.particles.util.DynamicExt;
 import org.zamedev.particles.util.MathHelper;
 import org.zamedev.particles.util.ParticleColor;
 import org.zamedev.particles.util.ParticleVector;
+
+#if (openfl < "5.1.0")
+    import openfl.gl.GL;
+#else
+    import lime.graphics.opengl.GL;
+#end
 
 using org.zamedev.particles.util.DynamicTools;
 

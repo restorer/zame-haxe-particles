@@ -1,10 +1,18 @@
 package org.zamedev.particles.internal;
 
 import openfl.display.BitmapData;
-import openfl.gl.GL;
-import openfl.gl.GLProgram;
-import openfl.gl.GLTexture;
-import openfl.utils.UInt8Array;
+
+#if (openfl < "5.1.0")
+    import openfl.gl.GL;
+    import openfl.gl.GLProgram;
+    import openfl.gl.GLTexture;
+    import openfl.utils.UInt8Array;
+#else
+    import lime.graphics.opengl.GL;
+    import lime.graphics.opengl.GLProgram;
+    import lime.graphics.opengl.GLTexture;
+    import lime.utils.UInt8Array;
+#end
 
 class GLUtilsExt {
     public static function texImage2D(bitmapData : BitmapData) : Void {

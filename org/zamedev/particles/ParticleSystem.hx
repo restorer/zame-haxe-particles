@@ -2,10 +2,15 @@ package org.zamedev.particles;
 
 import haxe.Timer;
 import openfl.display.BitmapData;
-import openfl.gl.GL;
 import org.zamedev.particles.util.MathHelper;
 import org.zamedev.particles.util.ParticleColor;
 import org.zamedev.particles.util.ParticleVector;
+
+#if (openfl < "5.1.0")
+    import openfl.gl.GL;
+#else
+    import lime.graphics.opengl.GL;
+#end
 
 class ParticleSystem {
     public static inline var EMITTER_TYPE_GRAVITY : Int = 0;

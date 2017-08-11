@@ -9,8 +9,13 @@ import openfl._internal.renderer.dom.DOMRenderer;
 import openfl._internal.renderer.RenderSession;
 import openfl.errors.Error;
 import openfl.geom.Rectangle;
-import openfl.gl.GL;
 import openfl.Lib;
+
+#if (openfl < "5.1.0")
+    import openfl.gl.GL;
+#else
+    import lime.graphics.opengl.GL;
+#end
 
 #if (lime >= "4.0.0")
     import lime.graphics.GLRenderContext;

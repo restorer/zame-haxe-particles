@@ -11,12 +11,22 @@ class DefaultParticleRenderer {
                 if (!manualUpdate && OpenGLView.isSupported) {
                     return new GLViewParticleRenderer();
                 } else {
-                    return new TilemapParticleRenderer();
+                    #if (openfl < "6.0.0")
+                        return new TilemapParticleRenderer();
+                    #else
+                        // Tilemap is broken in OpenFL 6.0.1
+                        return new SpritesParticleRenderer();
+                    #end
                 }
             #elseif webgl
                 return new SpritesParticleRenderer();
             #else
-                return new TilemapParticleRenderer();
+                #if (openfl < "6.0.0")
+                    return new TilemapParticleRenderer();
+                #else
+                    // Tilemap is broken in OpenFL 6.0.1
+                    return new SpritesParticleRenderer();
+                #end
             #end
         #elseif flash
             return new SpritesParticleRenderer();
@@ -24,7 +34,12 @@ class DefaultParticleRenderer {
             #if cpp
                 return new SpritesParticleRenderer();
             #else
-                return new TilemapParticleRenderer();
+                #if (openfl < "6.0.0")
+                    return new TilemapParticleRenderer();
+                #else
+                    // Tilemap is broken in OpenFL 6.0.1
+                    return new SpritesParticleRenderer();
+                #end
             #end
         #end
     }
