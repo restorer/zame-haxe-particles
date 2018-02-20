@@ -168,10 +168,17 @@ class TiffDecoder {
                 var count = Std.int(stripByteCounts[i] / 4);
 
                 for (j in 0 ... count) {
-                    var r = ba.readUnsignedByte();
-                    var g = ba.readUnsignedByte();
-                    var b = ba.readUnsignedByte();
-                    var a = ba.readUnsignedByte();
+                    #if (openfl > "7.0.0")
+                        var a = ba.readUnsignedByte();
+                        var r = ba.readUnsignedByte();
+                        var g = ba.readUnsignedByte();
+                        var b = ba.readUnsignedByte();
+                    #else
+                        var r = ba.readUnsignedByte();
+                        var g = ba.readUnsignedByte();
+                        var b = ba.readUnsignedByte();
+                        var a = ba.readUnsignedByte();
+                    #end
 
                     pixels.writeByte(a);
                     pixels.writeByte(r);
@@ -185,10 +192,18 @@ class TiffDecoder {
                 var count = Std.int(stripByteCounts[i] / 4);
 
                 for (j in 0 ... count) {
-                    pixels.writeByte(data.get(offset + 3));
-                    pixels.writeByte(data.get(offset + 0));
-                    pixels.writeByte(data.get(offset + 1));
-                    pixels.writeByte(data.get(offset + 2));
+                    #if (openfl > "7.0.0")
+                        pixels.writeByte(data.get(offset + 0));
+                        pixels.writeByte(data.get(offset + 1));
+                        pixels.writeByte(data.get(offset + 2));
+                        pixels.writeByte(data.get(offset + 3));
+                    #else
+                        pixels.writeByte(data.get(offset + 3));
+                        pixels.writeByte(data.get(offset + 0));
+                        pixels.writeByte(data.get(offset + 1));
+                        pixels.writeByte(data.get(offset + 2));
+                    #end
+
                     offset += 4;
                 }
             }
