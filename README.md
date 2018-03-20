@@ -149,6 +149,7 @@ Product still is in development (but not active).
 - [ ] Support for lime / snow directly without openfl / luxeengine
 - [ ] Support for HaxeFlixel and / or HaxePunk?
 - [ ] Support KHA directly in this library
+- [ ] Try to add support for Stencyl
 
 ## KHA port by RafaelOliveira
 
