@@ -114,24 +114,25 @@ class PlistParticleLoader {
         ps.blendFuncDestination = map["blendFuncDestination"].asInt();
         ps.textureBitmapData = ParticleLoader.loadTexture(map["textureImageData"].asString(), map["textureFileName"].asString(), path);
         ps.yCoordMultiplier = (map["yCoordFlipped"].asInt() == 1 ? -1.0 : 1.0);
+        ps.headToVelocity = (map["headToVelocity"].asInt() == 1); // custom property
         ps.forceSquareTexture = true;
 
         return ps;
     }
 
     private static function asVector(map : Map<String, Dynamic>, prefix : String) : ParticleVector {
-        return {
-            x: map['${prefix}x'].asFloat(),
-            y: map['${prefix}y'].asFloat(),
-        };
+        return new ParticleVector(
+            map['${prefix}x'].asFloat(),
+            map['${prefix}y'].asFloat()
+        );
     }
 
     private static function asColor(map : Map<String, Dynamic>, prefix : String) : ParticleColor {
-        return {
-            r: map['${prefix}Red'].asFloat(),
-            g: map['${prefix}Green'].asFloat(),
-            b: map['${prefix}Blue'].asFloat(),
-            a: map['${prefix}Alpha'].asFloat(),
-        };
+        return new ParticleColor(
+            map['${prefix}Red'].asFloat(),
+            map['${prefix}Green'].asFloat(),
+            map['${prefix}Blue'].asFloat(),
+            map['${prefix}Alpha'].asFloat()
+        );
     }
 }

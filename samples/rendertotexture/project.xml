@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
-    <meta title="Particles" package="org.sample" version="1.0.0" company="ZameDev" />
+    <meta title="Particles" package="org.sample" version="1.0.0" company="EightSines" />
 
     <app main="org.sample.App" path="export" file="sample" />
     <icon path="assets/icon.png" />
@@ -23,6 +23,9 @@
     <window fullscreen="true" orientation="landscape" if="mobile" />
 
     <source path="source" />
+
+    <!-- -Ddom not work in OpenFl 8.4.1, this template fixes it -->
+    <template path="templates" />
 
     <assets path="assets/particle" rename="particle" />
 

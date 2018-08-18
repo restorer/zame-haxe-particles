@@ -6,13 +6,14 @@ import openfl.display.BitmapData;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import org.zamedev.particles.loaders.ParticleLoader;
-import org.zamedev.particles.renderers.SpritesParticleRenderer;
+import org.zamedev.particles.renderers.DefaultParticleRenderer;
+import org.zamedev.particles.renderers.ParticleSystemRenderer;
 
 @:access(lime.graphics.opengl.GL)
 class App extends Sprite {
     private var bitmap : Bitmap;
     private var bitmapData : BitmapData;
-    private var renderer : SpritesParticleRenderer;
+    private var renderer : ParticleSystemRenderer;
 
     public function new() : Void {
         super();
@@ -23,10 +24,9 @@ class App extends Sprite {
         bitmap = new Bitmap();
         addChild(bitmap);
 
-        // TODO: probably in newer OpenFL:
-        //
-        // var texture = stage.stage3Ds[0].context3D.createTexture(stage.stageWidth, stage.stageHeight, BGRA, true); // P.S. try to use POT texture
-        // var bitmapData = BitmapData.fromTexture(texture);
+        // P.S. try to use POT texture
+        // var texture = stage.stage3Ds[0].context3D.createTexture(stage.stageWidth, stage.stageHeight, BGRA, true);
+        // bitmapData = BitmapData.fromTexture(texture);
 
         bitmapData = new BitmapData(stage.stageWidth, stage.stageHeight, true, 0);
 
@@ -34,7 +34,7 @@ class App extends Sprite {
             bitmapData.disposeImage();
         }
 
-        renderer = new SpritesParticleRenderer(true);
+        renderer = DefaultParticleRenderer.createInstance(true);
 
         var ps = ParticleLoader.load("particle/fire.plist");
         renderer.addParticleSystem(ps);
@@ -47,7 +47,7 @@ class App extends Sprite {
         renderer.update();
 
         bitmapData.fillRect(bitmapData.rect, 0);
-        bitmapData.draw(renderer);
+        bitmapData.draw(cast renderer);
 
         bitmap.bitmapData = bitmapData;
         bitmap.smoothing = true;

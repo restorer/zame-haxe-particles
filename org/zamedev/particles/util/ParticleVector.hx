@@ -1,6 +1,11 @@
 package org.zamedev.particles.util;
 
-typedef ParticleVector = {
-    x : Float,
-    y : Float,
-};
+class ParticleVector {
+    public var x : Float;
+    public var y : Float;
+
+    public function new(x : Float, y : Float) {
+        this.x = x;
+        this.y = y;
+    }
+}

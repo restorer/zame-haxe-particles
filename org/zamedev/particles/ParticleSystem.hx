@@ -1,16 +1,11 @@
 package org.zamedev.particles;
 
 import haxe.Timer;
+import lime.graphics.opengl.GL;
 import openfl.display.BitmapData;
 import org.zamedev.particles.util.MathHelper;
 import org.zamedev.particles.util.ParticleColor;
 import org.zamedev.particles.util.ParticleVector;
-
-#if (openfl < "5.1.0")
-    import openfl.gl.GL;
-#else
-    import lime.graphics.opengl.GL;
-#end
 
 class ParticleSystem {
     public static inline var EMITTER_TYPE_GRAVITY : Int = 0;
@@ -20,67 +15,62 @@ class ParticleSystem {
     public static inline var POSITION_TYPE_RELATIVE : Int = 1;
     public static inline var POSITION_TYPE_GROUPED : Int = 2;
 
-    public var emitterType : Int;
-    public var maxParticles : Int;
-    public var positionType : Int;
-    public var duration : Float;
-    public var gravity : ParticleVector;
-    public var particleLifespan : Float;
-    public var particleLifespanVariance : Float;
-    public var speed : Float;
-    public var speedVariance : Float;
-    public var sourcePosition : ParticleVector;
-    public var sourcePositionVariance : ParticleVector;
-    public var angle : Float;
-    public var angleVariance : Float;
-    public var startParticleSize : Float;
-    public var startParticleSizeVariance : Float;
-    public var finishParticleSize : Float;
-    public var finishParticleSizeVariance : Float;
-    public var startColor : ParticleColor;
-    public var startColorVariance : ParticleColor;
-    public var finishColor : ParticleColor;
-    public var finishColorVariance : ParticleColor;
-    public var minRadius : Float;
-    public var minRadiusVariance : Float;
-    public var maxRadius : Float;
-    public var maxRadiusVariance : Float;
-    public var rotationStart : Float;
-    public var rotationStartVariance : Float;
-    public var rotationEnd : Float;
-    public var rotationEndVariance : Float;
-    public var radialAcceleration : Float;
-    public var radialAccelerationVariance : Float;
-    public var tangentialAcceleration : Float;
-    public var tangentialAccelerationVariance : Float;
-    public var rotatePerSecond : Float;
-    public var rotatePerSecondVariance : Float;
-    public var blendFuncSource : Int;
-    public var blendFuncDestination : Int;
-    public var textureBitmapData : BitmapData;
-    public var active : Bool;
-    public var restart : Bool;
-    public var particleScaleX : Float;
-    public var particleScaleY : Float;
-    public var particleScaleSize : Float;
-    public var yCoordMultiplier : Float;
-    public var emissionFreq : Float;
-    public var forceSquareTexture : Bool;
+    public var emitterType : Int = 0;
+    public var maxParticles : Int = 0;
+    public var positionType : Int = 0;
+    public var duration : Float = 0.0;
+    public var gravity : ParticleVector = new ParticleVector(0.0, 0.0);
+    public var particleLifespan : Float = 0.0;
+    public var particleLifespanVariance : Float = 0.0;
+    public var speed : Float = 0.0;
+    public var speedVariance : Float = 0.0;
+    public var sourcePosition : ParticleVector = new ParticleVector(0.0, 0.0);
+    public var sourcePositionVariance : ParticleVector = new ParticleVector(0.0, 0.0);
+    public var angle : Float = 0.0;
+    public var angleVariance : Float = 0.0;
+    public var startParticleSize : Float = 0.0;
+    public var startParticleSizeVariance : Float = 0.0;
+    public var finishParticleSize : Float = 0.0;
+    public var finishParticleSizeVariance : Float = 0.0;
+    public var startColor : ParticleColor = new ParticleColor(0.0, 0.0, 0.0, 0.0);
+    public var startColorVariance : ParticleColor = new ParticleColor(0.0, 0.0, 0.0, 0.0);
+    public var finishColor : ParticleColor = new ParticleColor(0.0, 0.0, 0.0, 0.0);
+    public var finishColorVariance : ParticleColor = new ParticleColor(0.0, 0.0, 0.0, 0.0);
+    public var minRadius : Float = 0.0;
+    public var minRadiusVariance : Float = 0.0;
+    public var maxRadius : Float = 0.0;
+    public var maxRadiusVariance : Float = 0.0;
+    public var rotationStart : Float = 0.0;
+    public var rotationStartVariance : Float = 0.0;
+    public var rotationEnd : Float = 0.0;
+    public var rotationEndVariance : Float = 0.0;
+    public var radialAcceleration : Float = 0.0;
+    public var radialAccelerationVariance : Float = 0.0;
+    public var tangentialAcceleration : Float = 0.0;
+    public var tangentialAccelerationVariance : Float = 0.0;
+    public var rotatePerSecond : Float = 0.0;
+    public var rotatePerSecondVariance : Float = 0.0;
+    public var blendFuncSource : Int = 0;
+    public var blendFuncDestination : Int = 0;
+    public var textureBitmapData : Null<BitmapData> = null;
+    public var active : Bool = false;
+    public var restart : Bool = false;
+    public var particleScaleX : Float = 1.0;
+    public var particleScaleY : Float = 1.0;
+    public var particleScaleSize : Float = 1.0;
+    public var yCoordMultiplier : Float = 1.0;
+    public var headToVelocity : Bool = false;
+    public var emissionFreq : Float = 0.0;
+    public var forceSquareTexture : Bool = false;
 
-    private var prevTime : Float;
-    private var emitCounter : Float;
-    private var elapsedTime : Float;
+    private var prevTime : Float = -1.0;
+    private var emitCounter : Float = 0.0;
+    private var elapsedTime : Float = 0.0;
 
-    public var __particleList : Array<Particle>;
-    public var __particleCount : Int;
+    public var __particleList : Array<Particle> = [];
+    public var __particleCount : Int = 0;
 
-    public function new() : Void {
-        active = false;
-        restart = false;
-        particleScaleX = 1.0;
-        particleScaleY = 1.0;
-        particleScaleSize = 1.0;
-        emissionFreq = 0.0;
+    public function new() {
     }
 
     public function __initialize() : ParticleSystem {
@@ -104,7 +94,7 @@ class ParticleSystem {
             }
         }
 
-        __particleList = new Array<Particle>();
+        __particleList = [];
         __particleCount = 0;
 
         for (i in 0 ... maxParticles) {
@@ -190,19 +180,15 @@ class ParticleSystem {
         p.startPos.x = sourcePosition.x / particleScaleX;
         p.startPos.y = sourcePosition.y / particleScaleY;
 
-        p.color = {
-            r: MathHelper.clamp(startColor.r + startColorVariance.r * MathHelper.rnd1to1()),
-            g: MathHelper.clamp(startColor.g + startColorVariance.g * MathHelper.rnd1to1()),
-            b: MathHelper.clamp(startColor.b + startColorVariance.b * MathHelper.rnd1to1()),
-            a: MathHelper.clamp(startColor.a + startColorVariance.a * MathHelper.rnd1to1()),
-        };
+        p.color.r = MathHelper.clamp(startColor.r + startColorVariance.r * MathHelper.rnd1to1());
+        p.color.g = MathHelper.clamp(startColor.g + startColorVariance.g * MathHelper.rnd1to1());
+        p.color.b = MathHelper.clamp(startColor.b + startColorVariance.b * MathHelper.rnd1to1());
+        p.color.a = MathHelper.clamp(startColor.a + startColorVariance.a * MathHelper.rnd1to1());
 
-        p.colorDelta = {
-            r: (MathHelper.clamp(finishColor.r + finishColorVariance.r * MathHelper.rnd1to1()) - p.color.r) / p.timeToLive,
-            g: (MathHelper.clamp(finishColor.g + finishColorVariance.g * MathHelper.rnd1to1()) - p.color.g) / p.timeToLive,
-            b: (MathHelper.clamp(finishColor.b + finishColorVariance.b * MathHelper.rnd1to1()) - p.color.b) / p.timeToLive,
-            a: (MathHelper.clamp(finishColor.a + finishColorVariance.a * MathHelper.rnd1to1()) - p.color.a) / p.timeToLive,
-        };
+        p.colorDelta.r = (MathHelper.clamp(finishColor.r + finishColorVariance.r * MathHelper.rnd1to1()) - p.color.r) / p.timeToLive;
+        p.colorDelta.g = (MathHelper.clamp(finishColor.g + finishColorVariance.g * MathHelper.rnd1to1()) - p.color.g) / p.timeToLive;
+        p.colorDelta.b = (MathHelper.clamp(finishColor.b + finishColorVariance.b * MathHelper.rnd1to1()) - p.color.b) / p.timeToLive;
+        p.colorDelta.a = (MathHelper.clamp(finishColor.a + finishColorVariance.a * MathHelper.rnd1to1()) - p.color.a) / p.timeToLive;
 
         p.particleSize = Math.max(0.0, startParticleSize + startParticleSizeVariance * MathHelper.rnd1to1());
 

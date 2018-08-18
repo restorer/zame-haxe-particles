@@ -1,28 +1,30 @@
 package org.zamedev.particles.renderers;
 
+import lime.graphics.opengl.GL;
 import openfl.display.BlendMode;
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.display.Tile;
 import openfl.display.Tileset;
 import openfl.events.Event;
+import openfl.geom.ColorTransform;
 import org.zamedev.particles.internal.TilemapExt;
 
-#if (openfl < "5.1.0")
-    import openfl.gl.GL;
-#else
-    import lime.graphics.opengl.GL;
-#end
+class TilemapParticleRendererData {
+    public var ps : ParticleSystem;
+    public var tilemap : TilemapExt;
+    public var tileList : Array<Tile>;
+    public var updated : Bool = false;
 
-typedef TilemapParticleRendererData = {
-    ps : ParticleSystem,
-    tilemap : TilemapExt,
-    tileList : Array<Tile>,
-    updated : Bool,
-};
+    public function new(ps : ParticleSystem, tilemap : TilemapExt, tileList : Array<Tile>) {
+        this.ps = ps;
+        this.tilemap = tilemap;
+        this.tileList = tileList;
+    }
+}
 
-// Use -Dzameparticles_use_tile_visibility to enable tile pool
-// But actually this is slower than array manipulations (significantly on neko)
+// Use -Dzameparticles_use_tile_visibility to enable tile pool.
+// This can be faster or slower, depending on the project (especially on neko).
 
 class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
     private var manualUpdate : Bool;
@@ -63,13 +65,7 @@ class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
             }
         #end
 
-        dataList.push({
-            ps: ps,
-            tilemap: tilemap,
-            tileList: tileList,
-            updated: false,
-        });
-
+        dataList.push(new TilemapParticleRendererData(ps, tilemap, tileList));
         return this;
     }
 
@@ -185,6 +181,15 @@ class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
 
                 tile.matrix = mat;
                 tile.alpha = particle.color.a;
+
+                if (tile.colorTransform == null) {
+                    tile.colorTransform = new ColorTransform();
+                }
+
+                tile.colorTransform.redMultiplier = particle.color.r;
+                tile.colorTransform.greenMultiplier = particle.color.g;
+                tile.colorTransform.blueMultiplier = particle.color.b;
+                tile.invalidate();
 
                 #if zameparticles_use_tile_visibility
                     tile.visible = true;

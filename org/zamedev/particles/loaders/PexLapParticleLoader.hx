@@ -62,6 +62,7 @@ class PexLapParticleLoader {
         ps.blendFuncDestination = parseIntNode(map["blendFuncDestination"]);
         ps.textureBitmapData = ParticleLoader.loadTexture(map["texture"].get("data"), map["texture"].get("name"), path);
         ps.yCoordMultiplier = (parseIntNode(map["yCoordFlipped"]) == 1 ? -1.0 : 1.0);
+        ps.headToVelocity = (parseIntNode(map["headToVelocity"]) == 1); // custom property
         ps.forceSquareTexture = true;
 
         return ps;
@@ -77,34 +78,26 @@ class PexLapParticleLoader {
 
     private static function parseVectorNode(node : Xml) : ParticleVector {
         if (node == null) {
-            return {
-                x: 0.0,
-                y: 0.0,
-            };
+            return new ParticleVector(0.0, 0.0);
         }
 
-        return {
-            x: parseFloatString(node.get("x")),
-            y: parseFloatString(node.get("y")),
-        };
+        return new ParticleVector(
+            parseFloatString(node.get("x")),
+            parseFloatString(node.get("y"))
+        );
     }
 
     private static function parseColorNode(node : Xml) : ParticleColor {
         if (node == null) {
-            return {
-                r: 0.0,
-                g: 0.0,
-                b: 0.0,
-                a: 0.0,
-            };
+            return new ParticleColor(0.0, 0.0, 0.0, 0.0);
         }
 
-        return {
-            r: parseFloatString(node.get("red")),
-            g: parseFloatString(node.get("green")),
-            b: parseFloatString(node.get("blue")),
-            a: parseFloatString(node.get("alpha")),
-        };
+        return new ParticleColor(
+            parseFloatString(node.get("red")),
+            parseFloatString(node.get("green")),
+            parseFloatString(node.get("blue")),
+            parseFloatString(node.get("alpha"))
+        );
     }
 
     private static function parseIntString(s : String) : Int {

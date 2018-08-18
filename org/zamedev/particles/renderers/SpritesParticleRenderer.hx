@@ -1,38 +1,44 @@
 package org.zamedev.particles.renderers;
 
+import lime.graphics.opengl.GL;
 import openfl.display.Bitmap;
 import openfl.display.Sprite;
 import openfl.events.Event;
-
-#if (openfl < "5.1.0")
-    import openfl.gl.GL;
-#else
-    import lime.graphics.opengl.GL;
-#end
 
 #if (native || webgl || flash)
     import openfl.display.BlendMode;
     import openfl.filters.ColorMatrixFilter;
 #end
 
-typedef SpriteInfo = {
-    bitmap : Bitmap,
+class SpritesParticleRendererInfo {
+    public var bitmap : Bitmap;
+
     #if (native || webgl || flash)
-        colorMatrixFilter : ColorMatrixFilter,
+        public var colorMatrixFilter : ColorMatrixFilter = new ColorMatrixFilter();
     #end
+
     #if zameparticles_use_sprite_visibility
-        visible : Bool,
+        public var visible : Bool = false;
     #end
-};
 
-typedef SpritesParticleRendererData = {
-    ps : ParticleSystem,
-    spriteList : Array<SpriteInfo>,
-    updated : Bool,
-};
+    public function new(bitmap : Bitmap) {
+        this.bitmap = bitmap;
+    }
+}
 
-// Use -Dzameparticles_use_sprite_visibility to enable sprite pool
-// But actually this is slower than array manipulations
+class SpritesParticleRendererData {
+    public var ps : ParticleSystem;
+    public var spriteList : Array<SpritesParticleRendererInfo>;
+    public var updated : Bool = false;
+
+    public function new(ps : ParticleSystem, spriteList : Array<SpritesParticleRendererInfo>) {
+        this.ps = ps;
+        this.spriteList = spriteList;
+    }
+}
+
+// Use -Dzameparticles_use_sprite_visibility to enable sprite pool.
+// But actually this is slower than array manipulations.
 
 class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
     private var manualUpdate : Bool;
@@ -49,31 +55,18 @@ class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
         }
 
         ps.__initialize();
-        var spriteList = new Array<SpriteInfo>();
+        var spriteList = new Array<SpritesParticleRendererInfo>();
 
         #if zameparticles_use_sprite_visibility
             for (i in 0 ... ps.maxParticles) {
                 var bitmap = new Bitmap(ps.textureBitmapData);
                 bitmap.visible = false;
-
-                spriteList.push({
-                    bitmap: bitmap,
-                    visible: false,
-                    #if (native || webgl || flash)
-                        colorMatrixFilter: new ColorMatrixFilter(),
-                    #end
-                });
-
+                spriteList.push(new SpritesParticleRendererInfo(bitmap));
                 addChild(bitmap);
             }
         #end
 
-        dataList.push({
-            ps: ps,
-            spriteList: spriteList,
-            updated: false,
-        });
-
+        dataList.push(new SpritesParticleRendererData(ps, spriteList));
         return this;
     }
 
@@ -163,19 +156,13 @@ class SpritesParticleRenderer extends Sprite implements ParticleSystemRenderer {
                 #if zameparticles_use_sprite_visibility
                     var info = spriteList[i];
                 #else
-                    var info : SpriteInfo;
+                    var info : SpritesParticleRendererInfo;
 
                     if (i < spriteList.length) {
                         info = spriteList[i];
                     } else {
                         var bitmap = new Bitmap(ps.textureBitmapData);
-
-                        info = {
-                            bitmap: bitmap,
-                            #if (native || webgl || flash)
-                                colorMatrixFilter: new ColorMatrixFilter(),
-                            #end
-                        };
+                        info = new SpritesParticleRendererInfo(bitmap);
 
                         spriteList.push(info);
                         addChild(bitmap);

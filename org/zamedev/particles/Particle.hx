@@ -1,32 +1,29 @@
 package org.zamedev.particles;
 
+import org.zamedev.particles.util.MathHelper;
 import org.zamedev.particles.util.ParticleColor;
 import org.zamedev.particles.util.ParticleVector;
 
 class Particle {
-    public var startPos : ParticleVector;
-    public var position : ParticleVector;
-    public var direction : ParticleVector;
-    public var color : ParticleColor;
-    public var colorDelta : ParticleColor;
-    public var rotation : Float;
-    public var rotationDelta : Float;
-    public var radius : Float;
-    public var radiusDelta : Float;
-    public var angle : Float;
-    public var angleDelta : Float;
-    public var particleSize : Float;
-    public var particleSizeDelta : Float;
-    public var radialAcceleration : Float;
-    public var tangentialAcceleration : Float;
-    public var timeToLive : Float;
+    public var startPos : ParticleVector = new ParticleVector(0.0, 0.0);
+    public var position : ParticleVector = new ParticleVector(0.0, 0.0);
+    public var prevPosition : ParticleVector = new ParticleVector(0.0, 0.0);
+    public var direction : ParticleVector = new ParticleVector(0.0, 0.0);
+    public var color : ParticleColor = new ParticleColor(0.0, 0.0, 0.0, 0.0);
+    public var colorDelta : ParticleColor = new ParticleColor(0.0, 0.0, 0.0, 0.0);
+    public var rotation : Float = 0.0;
+    public var rotationDelta : Float = 0.0;
+    public var radius : Float = 0.0;
+    public var radiusDelta : Float = 0.0;
+    public var angle : Float = 0.0;
+    public var angleDelta : Float = 0.0;
+    public var particleSize : Float = 0.0;
+    public var particleSizeDelta : Float = 0.0;
+    public var radialAcceleration : Float = 0.0;
+    public var tangentialAcceleration : Float = 0.0;
+    public var timeToLive : Float = 0.0;
 
-    public function new() : Void {
-        position = { x: 0.0, y: 0.0 };
-        direction = { x: 0.0, y: 0.0 };
-        startPos = { x: 0.0, y: 0.0 };
-        color = { r: 0.0, g: 0.0, b: 0.0, a: 0.0 };
-        colorDelta = { r: 0.0, g: 0.0, b: 0.0, a: 0.0 };
+    public function new() {
     }
 
     public function update(ps : ParticleSystem, dt : Float) : Bool {
@@ -35,6 +32,9 @@ class Particle {
         if (timeToLive <= 0.0) {
             return false;
         }
+
+        prevPosition.x = position.x;
+        prevPosition.y = position.y;
 
         if (ps.emitterType == ParticleSystem.EMITTER_TYPE_RADIAL) {
             angle += angleDelta * dt;
@@ -81,7 +81,18 @@ class Particle {
         particleSize += particleSizeDelta * dt;
         particleSize = Math.max(0, particleSize);
 
-        rotation += rotationDelta * dt;
+        if (ps.headToVelocity) {
+            var vx = position.x - prevPosition.x;
+            var vy = position.y - prevPosition.y;
+
+            if (Math.abs(vx) > MathHelper.EPSILON || Math.abs(vy) > MathHelper.EPSILON) {
+                rotation = Math.atan2(vy, vx);
+            } else {
+                rotation = Math.atan2(direction.y, direction.x);
+            }
+        } else {
+            rotation += rotationDelta * dt;
+        }
 
         return true;
     }

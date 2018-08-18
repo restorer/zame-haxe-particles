@@ -1,6 +1,7 @@
 package org.zamedev.particles.loaders;
 
 import haxe.Json;
+import lime.graphics.opengl.GL;
 import openfl.Assets;
 import openfl.errors.Error;
 import org.zamedev.particles.ParticleSystem;
@@ -8,12 +9,6 @@ import org.zamedev.particles.util.DynamicExt;
 import org.zamedev.particles.util.MathHelper;
 import org.zamedev.particles.util.ParticleColor;
 import org.zamedev.particles.util.ParticleVector;
-
-#if (openfl < "5.1.0")
-    import openfl.gl.GL;
-#else
-    import lime.graphics.opengl.GL;
-#end
 
 using org.zamedev.particles.util.DynamicTools;
 
@@ -70,7 +65,7 @@ class PixiParticleLoader {
         ps.speedVariance = (speedMax - speedMin) * 0.5;
 
         ps.gravity = asVector(map, "gravity");
-        ps.sourcePosition = { x: 0.0, y: 0.0 };
+        ps.sourcePosition = new ParticleVector(0.0, 0.0);
         ps.sourcePositionVariance = asVector(map, "sourcePositionVariance");
 
         var startRot = map["startRotation"].asDynamic();
@@ -82,10 +77,10 @@ class PixiParticleLoader {
 
         // TODO: color animation not supported in html5
         ps.startColor = asColor(map, "color", "start");
-        ps.startColorVariance = { r: 0.0, g: 0.0, b: 0.0, a: 0.0 };
+        ps.startColorVariance = new ParticleColor(0.0, 0.0, 0.0, 0.0);
 
         ps.finishColor = asColor(map, "color", "end");
-        ps.finishColorVariance = { r: 0.0, g: 0.0, b: 0.0, a: 0.0 };
+        ps.finishColorVariance = new ParticleColor(0.0, 0.0, 0.0, 0.0);
 
         var alpha = map["alpha"].asDynamic();
         ps.startColor.a = alpha["start"].asFloat();
@@ -155,30 +150,25 @@ class PixiParticleLoader {
     }
 
     private static function asVector(map : DynamicExt, prefix : String) : ParticleVector {
-        return {
-            x: map['${prefix}x'].asFloat(),
-            y: map['${prefix}y'].asFloat(),
-        };
+        return new ParticleVector(
+            map['${prefix}x'].asFloat(),
+            map['${prefix}y'].asFloat()
+        );
     }
 
     private static function asColor(map : DynamicExt, param : String, subParam : String) : ParticleColor {
         if (!map.exists(param)) {
-            return {
-                r: 0.0,
-                g: 0.0,
-                b: 0.0,
-                a: 1.0,
-            };
+            return new ParticleColor(0.0, 0.0, 0.0, 1.0);
         }
 
         var str = map[param].asDynamic()[subParam].asString();
         var val = Std.parseInt(StringTools.replace(str, "#", "0x"));
 
-        return {
-            r: ((val >> 16) & 0xff) / 255.0,
-            g: ((val >> 8) & 0xff) / 255.0,
-            b: (val & 0xff) / 255.0,
-            a: 1.0,
-        };
+        return new ParticleColor(
+            ((val >> 16) & 0xff) / 255.0,
+            ((val >> 8) & 0xff) / 255.0,
+            (val & 0xff) / 255.0,
+            1.0
+        );
     }
 }
