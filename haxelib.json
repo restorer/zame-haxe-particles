@@ -4,8 +4,8 @@
     "license": "BSD",
     "tags": ["cross", "openfl", "game", "particle", "particles", "emitter"],
     "description": "Particle system for OpenFl.",
-    "version": "1.0.4",
-    "releasenote": "Fixes for OpenFl 6.0.1. TilemapParticleRenderer temporary disabled, because Tilemap.removeTiles() is not working properly.",
+    "version": "1.0.5",
+    "releasenote": "TiffDecoder fixed for OpenFl 7.x (rgba is now argb).",
     "contributors": ["restorer"],
     "dependencies": {
         "format": ""
