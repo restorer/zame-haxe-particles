@@ -4,6 +4,7 @@ import lime.graphics.opengl.GL;
 import openfl.display.Bitmap;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import org.zamedev.particles.ParticleSystem;
 
 #if (native || webgl || flash)
     import openfl.display.BlendMode;

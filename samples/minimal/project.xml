@@ -18,8 +18,8 @@
         fps="60"
     />
 
-    <window width="0" height="0" if="dom || mobile" />
-    <window width="800" height="600" unless="dom || mobile" />
+    <window width="0" height="0" if="html5 || mobile" />
+    <window width="800" height="600" unless="html5 || mobile" />
     <window fullscreen="true" orientation="landscape" if="mobile" />
 
     <source path="source" />

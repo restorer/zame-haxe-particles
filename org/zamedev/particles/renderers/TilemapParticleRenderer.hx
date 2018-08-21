@@ -9,6 +9,7 @@ import openfl.display.Tileset;
 import openfl.events.Event;
 import openfl.geom.ColorTransform;
 import org.zamedev.particles.internal.TilemapExt;
+import org.zamedev.particles.ParticleSystem;
 
 class TilemapParticleRendererData {
     public var ps : ParticleSystem;

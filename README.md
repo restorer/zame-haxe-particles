@@ -81,7 +81,7 @@ var ps3 = ParticleLoader.load("particle/ps3.plist");
 renderer.addParticleSystem(ps3);
 ```
 
-In some cases you may need several renderers, for example some particles on background layer, than player sprite, than some particles over player sprite. It is safe to use several renderers, but be careful in html5 with `-Ddom`. Browser give you limited number of WebGL contexts, so don't use too much renderers and test you game in various browsers.
+In some cases you may need several renderers, for example some particles on background layer, than player sprite, than some particles over player sprite. It is safe to use many renderers, but it will be better to reduce renderers count.
 
 ## Export notes
 
@@ -104,7 +104,7 @@ Usually you don't need to choose renderer manually, just use `DefaultParticleRen
 
 ## Dropped things
 
-GL renderer was dropped in this version, because OpenFl 8.x doesn't support `OpenGLView` anymore. There is `OpenGLRenderer`, but it is a special thing, not related to standard display list.
+GL renderer was dropped in this version, because OpenFl 8.x doesn't support `OpenGLView` anymore. There is `OpenGLRenderer`, but it is a special thing, not related to standard display list. Currently I'm trying to recreate this functionality.
 
 Importer for luxeengine is dropped also, because Haxe version of luxeengine is not supported anymore.
 
@@ -133,11 +133,12 @@ Product still is in development (but not active).
 - [x] Implement TilemapRenderer
 - [x] Fix rotation calculations (to be the same for all renderers)
 - [x] Partial support for pixi particles
+- [x] Add support for native GL rendering (via `OpenGLRenderer`)
+- [ ] Ability to use GL rendering in `-Ddom` mode
 - [ ] Move non openfl-related stuff to core (particle, particle system, utils, base loaders)
 - [ ] Allow to pass BitmapData to loader
 - [ ] Allow to change particle system parameters dynamically
 - [ ] Full support for pixi particles
-- [ ] Add support for native GL rendering (via `OpenGLRenderer`)
 - [ ] Add support for Stage3D
 - [ ] Support for HaxeFlixel and / or HaxePunk?
 - [ ] Support KHA directly in this library
