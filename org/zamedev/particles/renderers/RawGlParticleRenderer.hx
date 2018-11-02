@@ -17,7 +17,7 @@ import org.zamedev.particles.ParticleSystem;
     import lime.graphics.opengl.WebGLContext in WebGLRenderContext;
 #end
 
-class RawOpenGlParticleRendererData {
+class RawGlParticleRendererData {
     public var ps : ParticleSystem;
     public var vertexData : Float32Array;
     public var indicesData : Int16Array;
@@ -33,7 +33,7 @@ class RawOpenGlParticleRendererData {
     }
 }
 
-class RawOpenGlParticleRenderer implements ParticleSystemRenderer {
+class RawGlParticleRenderer implements ParticleSystemRenderer {
     private static inline var SIZE_FLOAT32 = 4;
 
     private static inline var VERTEX_XYZ : Int = 0;
@@ -87,7 +87,7 @@ class RawOpenGlParticleRenderer implements ParticleSystemRenderer {
         }
     ";
 
-    private var dataList : Array<RawOpenGlParticleRendererData> = [];
+    private var dataList : Array<RawGlParticleRendererData> = [];
     private var program : Null<GLProgram> = null;
     private var vertexAttrLocation : Int;
     private var textureAttrLocation : Int;
@@ -144,7 +144,7 @@ class RawOpenGlParticleRenderer implements ParticleSystemRenderer {
             quadIdx += 4;
         }
 
-        dataList.push(new RawOpenGlParticleRendererData(ps, vertexData, indicesData));
+        dataList.push(new RawGlParticleRendererData(ps, vertexData, indicesData));
         return this;
     }
 
@@ -209,7 +209,7 @@ class RawOpenGlParticleRenderer implements ParticleSystemRenderer {
 
         // Main
 
-        // gl.clearColor(0.0, 0.0, 0.0, 0.0);
+        // gl.clearColor(1.0, 0.0, 0.0, 1.0);
         // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         gl.uniformMatrix4fv(matrixUniformLocation, false, renderer.getMatrix(objectMatrix));

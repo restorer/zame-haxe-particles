@@ -5,9 +5,9 @@ import openfl.events.Event;
 import openfl.events.RenderEvent;
 import org.zamedev.particles.ParticleSystem;
 
-class OpenGlParticleRenderer extends Sprite implements ParticleSystemRenderer {
+class WebGlParticleRenderer extends Sprite implements ParticleSystemRenderer {
     private var manualUpdate : Bool;
-    private var rawRenderer = new RawOpenGlParticleRenderer();
+    private var rawRenderer = new RawGlParticleRenderer();
 
     public function new(manualUpdate : Bool = false) {
         super();
