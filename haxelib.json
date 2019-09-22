@@ -4,8 +4,8 @@
     "license": "BSD",
     "tags": ["cross", "openfl", "game", "particle", "particles", "emitter"],
     "description": "Particle system for OpenFl.",
-    "version": "1.1.0",
-    "releasenote": "Support for OpenFl 8.x (support for earlier versions was droped). GL renderer was dropped in favour of tilemap renderer.",
+    "version": "1.2.0",
+    "releasenote": "TileContainerParticleRenderer (thanks to Milton Candelero).",
     "contributors": ["restorer"],
     "dependencies": {
         "format": ""

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+    <meta title="Particles" package="org.sample" version="1.0.0" company="EightSines" />
+
+    <app main="org.sample.App" path="export" file="sample" />
+    <icon path="assets/icon.png" />
+
+    <set name="SWF_VERSION" value="11.2" if="flash" />
+
+    <haxelib name="openfl" />
+    <haxelib name="zame-particles" />
+
+    <window
+        hardware="true"
+        background="#0a0b29"
+        resizable="false"
+        vsync="true"
+        fps="60"
+    />
+
+    <window width="0" height="0" if="html5 || mobile" />
+    <window width="800" height="600" unless="html5 || mobile" />
+    <window fullscreen="true" orientation="landscape" if="mobile" />
+
+    <source path="source" />
+
+    <assets path="assets/font" exclude="*.eot|*.svg|*.woff" rename="font" />
+    <assets path="assets/particle" rename="particle" />
+
+    <!-- <architecture name="armv6" if="android" /> -->
+    <architecture name="x86" if="android" />
+</project>

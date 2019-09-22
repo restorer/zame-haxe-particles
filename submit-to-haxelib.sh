@@ -9,6 +9,7 @@ zip -r -9 zame-particles.zip * \
     -x 'samples/rendertotexture/export/*' \
     -x 'samples/showcase/export/*' \
     -x 'samples/stresstest/export/*' \
+    -x 'samples/tilecontainer/export/*' \
     -x submit-to-haxelib.sh
 
 [ -e zame-particles.zip ] && haxelib submit zame-particles.zip
