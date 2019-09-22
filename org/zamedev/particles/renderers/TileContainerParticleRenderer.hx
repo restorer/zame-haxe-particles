@@ -26,6 +26,9 @@ class TileContainerParticleRendererData {
 // Use -Dzameparticles_use_tile_visibility to enable tile pool.
 // This can be faster or slower, depending on the project (especially on neko).
 
+/**
+    `removeEvent()` must be called when this renderer is removed from the container.
+**/
 class TileContainerParticleRenderer extends TileContainer implements ParticleSystemRenderer {
     private var manualUpdate : Bool;
     private var dataList : Array<TileContainerParticleRendererData> = [];
