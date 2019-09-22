@@ -11,12 +11,12 @@ import org.zamedev.particles.ParticleSystem;
 import org.zamedev.particles.util.MathHelper;
 
 class TileContainerParticleRendererData {
-    public var ps:ParticleSystem;
-    public var tileContainer:TileContainer;
-    public var tileList:Array<Tile>;
-    public var updated:Bool = false;
+    public var ps : ParticleSystem;
+    public var tileContainer : TileContainer;
+    public var tileList : Array<Tile>;
+    public var updated : Bool = false;
 
-    public function new(ps:ParticleSystem, tileContainer:TileContainer, tileList:Array<Tile>) {
+    public function new(ps : ParticleSystem, tileContainer : TileContainer, tileList : Array<Tile>) {
         this.ps = ps;
         this.tileContainer = tileContainer;
         this.tileList = tileList;
@@ -27,15 +27,15 @@ class TileContainerParticleRendererData {
 // This can be faster or slower, depending on the project (especially on neko).
 
 class TileContainerParticleRenderer extends TileContainer implements ParticleSystemRenderer {
-    private var manualUpdate:Bool;
-    private var dataList:Array<TileContainerParticleRendererData> = [];
+    private var manualUpdate : Bool;
+    private var dataList : Array<TileContainerParticleRendererData> = [];
 
-    public function new(manualUpdate:Bool = false) {
+    public function new(manualUpdate : Bool = false) {
         super();
         this.manualUpdate = manualUpdate;
     }
 
-    public function addParticleSystem(ps:ParticleSystem):ParticleSystemRenderer {
+    public function addParticleSystem(ps : ParticleSystem) : ParticleSystemRenderer {
         if (dataList.length == 0 && !manualUpdate) {
             openfl.Lib.current.stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
         }
@@ -51,20 +51,20 @@ class TileContainerParticleRenderer extends TileContainer implements ParticleSys
         addTile(tileContainer);
 
         #if zameparticles_use_tile_visibility
-        for (i in 0...ps.maxParticles) {
-            var tile = new Tile(0);
-            tile.visible = false;
+            for (i in 0...ps.maxParticles) {
+                var tile = new Tile(0);
+                tile.visible = false;
 
-            tileList.push(tile);
-            tileContainer.addTile(tile);
-        }
+                tileList.push(tile);
+                tileContainer.addTile(tile);
+            }
         #end
 
         dataList.push(new TileContainerParticleRendererData(ps, tileContainer, tileList));
         return this;
     }
 
-    public function removeParticleSystem(ps:ParticleSystem):ParticleSystemRenderer {
+    public function removeParticleSystem(ps : ParticleSystem) : ParticleSystemRenderer {
         var index = 0;
 
         while (index < dataList.length) {
@@ -83,7 +83,7 @@ class TileContainerParticleRenderer extends TileContainer implements ParticleSys
         return this;
     }
 
-    public function update():Void {
+    public function update() : Void {
         var updated = false;
 
         for (data in dataList) {
@@ -111,9 +111,9 @@ class TileContainerParticleRenderer extends TileContainer implements ParticleSys
                 data.tileContainer.blendMode = BlendMode.NORMAL;
             }
 
-            var widthMult:Float;
-            var heightMult:Float;
-            var ethalonSize:Float;
+            var widthMult : Float;
+            var heightMult : Float;
+            var ethalonSize : Float;
 
             if (!ps.forceSquareTexture
                 || ps.textureBitmapData.width == ps.textureBitmapData.height
@@ -133,44 +133,44 @@ class TileContainerParticleRenderer extends TileContainer implements ParticleSys
             }
 
             #if (html5 && dom)
-            // Workaround
+                // Workaround
 
-            if (Math.abs(scaleX) > MathHelper.EPSILON) {
-                widthMult /= scaleX;
-            }
+                if (Math.abs(scaleX) > MathHelper.EPSILON) {
+                    widthMult /= scaleX;
+                }
 
-            if (Math.abs(scaleY) > MathHelper.EPSILON) {
-                heightMult /= scaleY;
-            }
+                if (Math.abs(scaleY) > MathHelper.EPSILON) {
+                    heightMult /= scaleY;
+                }
             #end
 
-            var halfWidth:Float = ps.textureBitmapData.width * 0.5;
-            var halfHeight:Float = ps.textureBitmapData.height * 0.5;
+            var halfWidth : Float = ps.textureBitmapData.width * 0.5;
+            var halfHeight : Float = ps.textureBitmapData.height * 0.5;
             var tileList = data.tileList;
 
-            for (i in 0...ps.__particleCount) {
+            for (i in 0 ... ps.__particleCount) {
                 var particle = ps.__particleList[i];
 
                 #if zameparticles_use_tile_visibility
-                var tile:Tile = tileList[i];
+                    var tile : Tile = tileList[i];
                 #else
-                var tile:Tile;
+                    var tile : Tile;
 
-                if (i < tileList.length) {
-                    tile = tileList[i];
-                } else {
-                    tile = new Tile(0);
-                    tileList.push(tile);
-                    data.tileContainer.addTile(tile);
-                }
+                    if (i < tileList.length) {
+                        tile = tileList[i];
+                    } else {
+                        tile = new Tile(0);
+                        tileList.push(tile);
+                        data.tileContainer.addTile(tile);
+                    }
                 #end
 
-                var particleScale:Float = particle.particleSize / ethalonSize * ps.particleScaleSize;
-                var particleScaleX:Float = particleScale * widthMult;
-                var particleScaleY:Float = particleScale * heightMult;
+                var particleScale : Float = particle.particleSize / ethalonSize * ps.particleScaleSize;
+                var particleScaleX : Float = particleScale * widthMult;
+                var particleScaleY : Float = particleScale * heightMult;
 
-                var rotationSine:Float = Math.sin(particle.rotation);
-                var rotationCosine:Float = Math.cos(particle.rotation);
+                var rotationSine : Float = Math.sin(particle.rotation);
+                var rotationCosine : Float = Math.cos(particle.rotation);
 
                 var mat = tile.matrix;
                 mat.a = rotationCosine * particleScaleX;
@@ -179,12 +179,12 @@ class TileContainerParticleRenderer extends TileContainer implements ParticleSys
                 mat.d = rotationCosine * particleScaleY;
 
                 #if (html5 && dom)
-                // Workaround
-                mat.tx = (particle.position.x * ps.particleScaleX - x) * parentScaleX - halfWidth * mat.a - halfHeight * mat.c;
-                mat.ty = (particle.position.y * ps.particleScaleY - y) * parentScaleY - halfWidth * mat.b - halfHeight * mat.d;
+                    // Workaround
+                    mat.tx = (particle.position.x * ps.particleScaleX - x) * parentScaleX - halfWidth * mat.a - halfHeight * mat.c;
+                    mat.ty = (particle.position.y * ps.particleScaleY - y) * parentScaleY - halfWidth * mat.b - halfHeight * mat.d;
                 #else
-                mat.tx = particle.position.x * ps.particleScaleX - halfWidth * mat.a - halfHeight * mat.c;
-                mat.ty = particle.position.y * ps.particleScaleY - halfWidth * mat.b - halfHeight * mat.d;
+                    mat.tx = particle.position.x * ps.particleScaleX - halfWidth * mat.a - halfHeight * mat.c;
+                    mat.ty = particle.position.y * ps.particleScaleY - halfWidth * mat.b - halfHeight * mat.d;
                 #end
 
                 tile.matrix = mat;
@@ -200,24 +200,24 @@ class TileContainerParticleRenderer extends TileContainer implements ParticleSys
                 tile.invalidate();
 
                 #if zameparticles_use_tile_visibility
-                tile.visible = true;
+                    tile.visible = true;
                 #end
             }
 
             #if zameparticles_use_tile_visibility
-            for (i in ps.__particleCount...tileList.length) {
-                tileList[i].visible = false;
-            }
+                for (i in ps.__particleCount...tileList.length) {
+                    tileList[i].visible = false;
+                }
             #else
-            if (tileList.length > ps.__particleCount) {
-                data.tileContainer.removeTiles(ps.__particleCount, tileList.length);
-                tileList.splice(ps.__particleCount, tileList.length - ps.__particleCount + 1);
-            }
+                if (tileList.length > ps.__particleCount) {
+                    data.tileContainer.removeTiles(ps.__particleCount, tileList.length);
+                    tileList.splice(ps.__particleCount, tileList.length - ps.__particleCount + 1);
+                }
             #end
         }
     }
 
-    private function onEnterFrame(_):Void {
+    private function onEnterFrame(_) : Void {
         update();
     }
 
