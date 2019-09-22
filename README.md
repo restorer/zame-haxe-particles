@@ -15,6 +15,14 @@ Features:
 
 **Work in progress, more features coming.**
 
+## Notes about Haxe 4.0.0 rc5
+
+`format` library should be installed from git (see [#14](/../../issues/14)).
+
+```
+haxelib git format https://github.com/HaxeFoundation/format.git
+```
+
 ## Notes about earlier OpenFl versions
 
 This version supports OpenFl 8 and later.
