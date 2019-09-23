@@ -27,7 +27,7 @@ class TileContainerParticleRendererData {
 // This can be faster or slower, depending on the project (especially on neko).
 
 /**
-    `removeEvent()` must be called when this renderer is removed from the container.
+    `onRemovedFromParent()` must be called when this renderer is removed from the container.
 **/
 class TileContainerParticleRenderer extends TileContainer implements ParticleSystemRenderer {
     private var manualUpdate : Bool;
@@ -225,8 +225,8 @@ class TileContainerParticleRenderer extends TileContainer implements ParticleSys
     }
 
     // Necesary because weak listeners are not implemented.
-    public function removeEvent() {
-        if (dataList.length == 0 && !manualUpdate) {
+    public function onRemovedFromParent() {
+        if (!manualUpdate) {
             openfl.Lib.current.stage.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
         }
     }
