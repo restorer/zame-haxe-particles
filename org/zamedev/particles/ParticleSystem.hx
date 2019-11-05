@@ -15,6 +15,7 @@ class ParticleSystem {
     public static inline var POSITION_TYPE_RELATIVE : Int = 1;
     public static inline var POSITION_TYPE_GROUPED : Int = 2;
 
+    public var colorChangeDelay:Float = 0.0;
     public var emitterType : Int = 0;
     public var maxParticles : Int = 0;
     public var positionType : Int = 0;
@@ -176,6 +177,7 @@ class ParticleSystem {
     private function initParticle(p : Particle) : Void {
         // Common
         p.timeToLive = Math.max(0.0001, particleLifespan + particleLifespanVariance * MathHelper.rnd1to1());
+        p.colorChangeDelay = colorChangeDelay;
 
         p.startPos.x = sourcePosition.x / particleScaleX;
         p.startPos.y = sourcePosition.y / particleScaleY;
@@ -185,10 +187,10 @@ class ParticleSystem {
         p.color.b = MathHelper.clamp(startColor.b + startColorVariance.b * MathHelper.rnd1to1());
         p.color.a = MathHelper.clamp(startColor.a + startColorVariance.a * MathHelper.rnd1to1());
 
-        p.colorDelta.r = (MathHelper.clamp(finishColor.r + finishColorVariance.r * MathHelper.rnd1to1()) - p.color.r) / p.timeToLive;
-        p.colorDelta.g = (MathHelper.clamp(finishColor.g + finishColorVariance.g * MathHelper.rnd1to1()) - p.color.g) / p.timeToLive;
-        p.colorDelta.b = (MathHelper.clamp(finishColor.b + finishColorVariance.b * MathHelper.rnd1to1()) - p.color.b) / p.timeToLive;
-        p.colorDelta.a = (MathHelper.clamp(finishColor.a + finishColorVariance.a * MathHelper.rnd1to1()) - p.color.a) / p.timeToLive;
+        p.colorDelta.r = (MathHelper.clamp(finishColor.r + finishColorVariance.r * MathHelper.rnd1to1()) - p.color.r) / (p.timeToLive - colorChangeDelay);
+        p.colorDelta.g = (MathHelper.clamp(finishColor.g + finishColorVariance.g * MathHelper.rnd1to1()) - p.color.g) / (p.timeToLive - colorChangeDelay);
+        p.colorDelta.b = (MathHelper.clamp(finishColor.b + finishColorVariance.b * MathHelper.rnd1to1()) - p.color.b) / (p.timeToLive - colorChangeDelay);
+        p.colorDelta.a = (MathHelper.clamp(finishColor.a + finishColorVariance.a * MathHelper.rnd1to1()) - p.color.a) / (p.timeToLive - colorChangeDelay);
 
         p.particleSize = Math.max(0.0, startParticleSize + startParticleSizeVariance * MathHelper.rnd1to1());
 
