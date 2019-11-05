@@ -22,6 +22,9 @@ class Particle {
     public var radialAcceleration : Float = 0.0;
     public var tangentialAcceleration : Float = 0.0;
     public var timeToLive : Float = 0.0;
+    public var colorChangeDelay:Float = 0.0;
+
+    private var timePassed:Float = 0.0;
 
     public function new() {
     }
@@ -29,7 +32,10 @@ class Particle {
     public function update(ps : ParticleSystem, dt : Float) : Bool {
         timeToLive -= dt;
 
+        timePassed += dt;
+
         if (timeToLive <= 0.0) {
+            timePassed = 0.0;
             return false;
         }
 
@@ -73,10 +79,13 @@ class Particle {
             position.y = (position.y + direction.y * dt) * ps.yCoordMultiplier + startPos.y;
         }
 
-        color.r += colorDelta.r * dt;
-        color.g += colorDelta.g * dt;
-        color.b += colorDelta.b * dt;
-        color.a += colorDelta.a * dt;
+        if (timePassed > colorChangeDelay)
+        {
+            color.r += colorDelta.r * dt;
+            color.g += colorDelta.g * dt;
+            color.b += colorDelta.b * dt;
+            color.a += colorDelta.a * dt;
+        }
 
         particleSize += particleSizeDelta * dt;
         particleSize = Math.max(0, particleSize);
