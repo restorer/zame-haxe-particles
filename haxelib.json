@@ -8,6 +8,6 @@
     "releasenote": "TileContainerParticleRenderer (thanks to Milton Candelero).",
     "contributors": ["restorer"],
     "dependencies": {
-        "format": ""
+        "format": "git:https://github.com/HaxeFoundation/format.git#d01b01c40a95b2a5aae65e6e39e4e08fbee01436"
     }
 }
