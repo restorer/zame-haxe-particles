@@ -113,6 +113,8 @@ class RawGlParticleRenderer implements ParticleSystemRenderer {
         var quadIdx : Int = 0;
 
         for (i in 0 ... ps.maxParticles) {
+            // TODO: shouldn't it be "VERTEX_XYZ + 2"?
+
             vertexData[vertexPos + VERTEX_XYZ + 3] = 0.0;
             vertexData[vertexPos + VERTEX_UV + 0] = 1.0;
             vertexData[vertexPos + VERTEX_UV + 1] = 1.0;

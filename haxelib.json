@@ -4,8 +4,8 @@
     "license": "BSD",
     "tags": ["cross", "openfl", "game", "particle", "particles", "emitter"],
     "description": "Particle system for OpenFl.",
-    "version": "1.2.0",
-    "releasenote": "TileContainerParticleRenderer (thanks to Milton Candelero).",
+    "version": "1.2.1",
+    "releasenote": "TileContainerParticleRenderer (thanks to Milton Candelero). Dependency fix for Haxe 4 (thanks to CrazyFlasher).",
     "contributors": ["restorer"],
     "dependencies": {
         "format": "git:https://github.com/HaxeFoundation/format.git#d01b01c40a95b2a5aae65e6e39e4e08fbee01436"
