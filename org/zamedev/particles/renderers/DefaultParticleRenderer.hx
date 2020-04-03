@@ -2,7 +2,7 @@ package org.zamedev.particles.renderers;
 
 class DefaultParticleRenderer {
     public static function createInstance(manualUpdate : Bool = false) : ParticleSystemRenderer {
-        #if flash
+        #if (flash || openfl >= "8.0")
             return new SpritesParticleRenderer(manualUpdate);
         #elseif (js && html5 && webgl)
             return new WebGlParticleRenderer(manualUpdate);

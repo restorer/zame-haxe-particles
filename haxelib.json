@@ -4,10 +4,10 @@
     "license": "BSD",
     "tags": ["cross", "openfl", "game", "particle", "particles", "emitter"],
     "description": "Particle system for OpenFl.",
-    "version": "1.2.1",
-    "releasenote": "TileContainerParticleRenderer (thanks to Milton Candelero). Dependency fix for Haxe 4 (thanks to CrazyFlasher).",
+    "version": "1.3.0",
+    "releasenote": "SpritesParticleRenderer is used by default for OpenFl 8 (TilemapParticleRenderer has known issues on OpenFl 8, so as workaround it is not used by default).",
     "contributors": ["restorer"],
     "dependencies": {
-        "format": "git:https://github.com/HaxeFoundation/format.git#d01b01c40a95b2a5aae65e6e39e4e08fbee01436"
+        "format": "git:https://github.com/restorer/format.git"
     }
 }

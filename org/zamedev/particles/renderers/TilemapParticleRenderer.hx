@@ -114,8 +114,8 @@ class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
                 data.tilemap.blendMode = BlendMode.NORMAL;
             }
 
-            var widthMult : Float;
-            var heightMult : Float;
+            var preScaleX : Float;
+            var preScaleY : Float;
             var ethalonSize : Float;
 
             if (!ps.forceSquareTexture
@@ -123,29 +123,23 @@ class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
                 || ps.textureBitmapData.width == 0
                 || ps.textureBitmapData.height == 0
             ) {
-                widthMult = 1.0;
-                heightMult = 1.0;
+                preScaleX = 1.0;
+                preScaleY = 1.0;
                 ethalonSize = ps.textureBitmapData.width;
             } else if (ps.textureBitmapData.width > ps.textureBitmapData.height) {
-                widthMult = ps.textureBitmapData.height / ps.textureBitmapData.width;
-                heightMult = 1.0;
+                preScaleX = ps.textureBitmapData.height / ps.textureBitmapData.width;
+                preScaleY = 1.0;
                 ethalonSize = ps.textureBitmapData.height;
             } else {
-                widthMult = 1.0;
-                heightMult = ps.textureBitmapData.width / ps.textureBitmapData.height;
+                preScaleX = 1.0;
+                preScaleY = ps.textureBitmapData.width / ps.textureBitmapData.height;
                 ethalonSize = ps.textureBitmapData.width;
             }
 
             #if (html5 && dom)
                 // Workaround
-
-                if (Math.abs(scaleX) > MathHelper.EPSILON) {
-                    widthMult /= scaleX;
-                }
-
-                if (Math.abs(scaleY) > MathHelper.EPSILON) {
-                    heightMult /= scaleY;
-                }
+                var postScaleX = (Math.abs(scaleX) > MathHelper.EPSILON) ? (1.0 / scaleX) : 1.0;
+                var postScaleY = (Math.abs(scaleY) > MathHelper.EPSILON) ? (1.0 / scaleY) : 1.0;
             #end
 
             var halfWidth : Float = ps.textureBitmapData.width * 0.5;
@@ -170,23 +164,32 @@ class TilemapParticleRenderer extends Sprite implements ParticleSystemRenderer {
                 #end
 
                 var particleScale : Float = particle.particleSize / ethalonSize * ps.particleScaleSize;
-                var particleScaleX : Float = particleScale * widthMult;
-                var particleScaleY : Float = particleScale * heightMult;
-
                 var rotationSine : Float = Math.sin(particle.rotation);
                 var rotationCosine : Float = Math.cos(particle.rotation);
-
                 var mat = tile.matrix;
-                mat.a = rotationCosine * particleScaleX;
-                mat.b = rotationSine * particleScaleX;
-                mat.c = - rotationSine * particleScaleY;
-                mat.d = rotationCosine * particleScaleY;
 
                 #if (html5 && dom)
                     // Workaround
-                    mat.tx = (particle.position.x * ps.particleScaleX - x) * parentScaleX - halfWidth * mat.a - halfHeight * mat.c;
-                    mat.ty = (particle.position.y * ps.particleScaleY - y) * parentScaleY - halfWidth * mat.b - halfHeight * mat.d;
+
+                    mat.a = rotationCosine * particleScale * preScaleX * postScaleX;
+                    mat.b = rotationSine * particleScale * preScaleX * postScaleY;
+                    mat.c = - rotationSine * particleScale * preScaleY * postScaleX;
+                    mat.d = rotationCosine * particleScale * preScaleY * postScaleY;
+
+                    #if (openfl >= "8.0")
+                        // TODO: all scales from root display object should be taken into account.
+                        var parentScaleX = (parent != null) ? parent.scaleX : 1.0;
+                        var parentScaleY = (parent != null) ? parent.scaleY : 1.0;
+                    #end
+
+                    mat.tx = (particle.position.x * ps.particleScaleX * postScaleX - x) * parentScaleX - halfWidth * mat.a - halfHeight * mat.c;
+                    mat.ty = (particle.position.y * ps.particleScaleY * postScaleY - y) * parentScaleY - halfWidth * mat.b - halfHeight * mat.d;
                 #else
+                    mat.a = rotationCosine * particleScale * preScaleX;
+                    mat.b = rotationSine * particleScale * preScaleX;
+                    mat.c = - rotationSine * particleScale * preScaleY;
+                    mat.d = rotationCosine * particleScale * preScaleY;
+
                     mat.tx = particle.position.x * ps.particleScaleX - halfWidth * mat.a - halfHeight * mat.c;
                     mat.ty = particle.position.y * ps.particleScaleY - halfWidth * mat.b - halfHeight * mat.d;
                 #end
