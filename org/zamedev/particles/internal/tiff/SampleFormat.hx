@@ -1,7 +1,6 @@
 package org.zamedev.particles.internal.tiff;
 
-@:enum
-abstract SampleFormat(Int) {
+enum abstract SampleFormat(Int) {
     var Unsigned = 1; // unsigned integer data
     var Signed = 2; // two's complement signed integer data
     var IEEE = 3; // IEEE floating point data

@@ -1,7 +1,6 @@
 package org.zamedev.particles.internal.tiff;
 
-@:enum
-abstract DataType(Int) {
+enum abstract DataType(Int) {
     var BYTE = 1; // 8-bit unsigned integer
 
     // The value of the Count part of an ASCII field entry includes the NUL. If padding
