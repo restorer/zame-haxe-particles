@@ -1,7 +1,6 @@
 package org.zamedev.particles.internal.tiff;
 
-@:enum
-abstract Compression(Int) {
+enum abstract Compression(Int) {
     var Uncompressed = 1;
     var CCITT_1D = 2;
     var Group_3_Fax = 3;

@@ -1,7 +1,6 @@
 package org.zamedev.particles.internal.tiff;
 
-@:enum
-abstract PhotometricInterpretation(Int) {
+enum abstract PhotometricInterpretation(Int) {
     var WhiteIsZero = 0;
     var BlackIsZero = 1;
     var RGB = 2;

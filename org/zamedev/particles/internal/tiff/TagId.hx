@@ -1,7 +1,6 @@
 package org.zamedev.particles.internal.tiff;
 
-@:enum
-abstract TagId(Int) {
+enum abstract TagId(Int) {
     // hex representation, type, number of values
     var NewSubFileType = 254; // 0x00fe, LONG, 1
     var SubFileType = 255; // 0x00ff, SHORT, 1
